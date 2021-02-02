@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 # 蜻蜓uniapp版本前端
 
 #### Description
 {**When you're done, you can delete the content in this README and update the file with details for others getting started with your repository**}
+=======
+# 蜻蜓Queen版本-qingting-queen-uniapp
+
+#### Description
+蜻蜓Q系统 ，蜻蜓queen皇后版本
+>>>>>>> 1ca06fc4c35ff3cb3a9b9980ba806d865cf0ba67
 
 #### Software Architecture
 Software architecture description
