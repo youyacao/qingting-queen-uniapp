@@ -1,0 +1,265 @@
+<template>
+	<view class="body">
+		<list class="list" @loadmore="_loadmore">
+			<cell v-for="(item, index) in list" :key="index">
+				<view class="item">
+					<view class="item-head">
+						<image class="item-head__avatar" :src="item.avatar" mode=""></image>
+						<view>
+							<text class="item-head__username">{{ item.nickname || item.username }}</text>
+							<text class="item-head__time">{{ item.created_at }}</text>
+						</view>
+					</view>
+					<view class="item-content">
+						<text class="item-content__text">{{ item.content }}</text>
+					</view>
+					<view class="item-images" :class="{'mb-12': i !== _getImages(item.images).length - 1}" v-for="(images, i) in _getImages(item.images)"
+					 :key="`images_${i}`">
+						<view class="item-image__box" :class="{'px-12': _i === 1}" v-for="(src, _i) in images" :key="`image_${_i}`">
+							<image class="item-image" :src="src" mode="aspectFill" @tap="_viewImages(item.images)"></image>
+						</view>
+					</view>
+					<view class="item-foot">
+						<view class="item-foot__col">
+							<image class="item-foot__icon like-icon" src="/static/images/dianzan-red.png" mode="aspectFit" v-if="item.is_like === 1" @tap="_unlike(item, index)"></image>
+							<image class="item-foot__icon like-icon" src="/static/images/dianzan-white.png" mode="aspectFit" v-else></image>
+							<text class="item-foot__text">{{ item.like_num.length > 3 ? item.like_num_str : item.like_num }}</text>
+						</view>
+						<view class="item-foot__col">
+							<image class="item-foot__icon" src="/static/images/comment-icon.png" mode="aspectFit"></image>
+							<text class="item-foot__text">{{ item.comment_num_str }}</text>
+						</view>
+						<view class="item-foot__col">
+							<image class="item-foot__icon" src="/static/images/share-icon.png" mode="aspectFit"></image>
+							<text class="item-foot__text">{{ item.share_num_str }}</text>
+						</view>
+					</view>
+				</view>
+			</cell>
+			<cell v-if="init">
+				<text class="alert">正在加载...</text>
+			</cell>
+			<cell v-if="!init && list.length === 0">
+				<text class="alert">暂无数据</text>
+			</cell>
+			<cell v-if="loading">
+				<text class="alert">加载更多中...</text>
+			</cell>
+			<cell v-if="noData && list.length > 10">
+				<text class="alert">没有更多了</text>
+			</cell>
+		</list>
+	</view>
+</template>
+
+<script>
+	const modal = weex.requireModule('modal')
+	import { LikeVideoList, CancelPraise } from '@/common/api.js'
+	import { toTwoArray } from '@/common/common.js'
+	
+	export default {
+		data() {
+			return {
+				list: [],
+				page: 1,
+				loading: false,
+				noData: false,
+				init: true
+			};
+		},
+		methods: {
+			_unlike(item, index) {
+				CancelPraise({
+					vid: item.id,
+					type: 2
+				}).then(({ code, msg }) => {
+					if (code === 200) {
+						this.list.splice(index, 1)
+						uni.showToast({
+							title: msg,
+							icon: 'success'
+						})
+					} else {
+						uni.showToast({
+							title: msg,
+							icon: 'none'
+						})
+					}
+				})
+			},
+			_loadmore() {
+				if (this.noData) return
+				this.loading = true
+				this.page++
+				this._getLikeMessageList()
+			},
+			_getLikeMessageList() {
+				LikeVideoList({
+					page: this.page,
+					limit: 10,
+					type: 2
+				}).then(({ code, data }) => {
+					if (code === 200) {
+						const { list, total_page, current_page } = data
+						if (current_page === 1) {
+							this.list = list
+						} else {
+							this.list = this.list.concat(list)
+						}
+						if (total_page === 0 || current_page >= total_page) {
+							this.noData = true
+						}
+						this.loading = false
+						this.init = false
+					}
+				})
+			},
+			_getImages(images) {
+				let _arr = []
+				for (let key in images) {
+					_arr.push(images[key])
+				}
+				return toTwoArray(_arr, 3)
+			},
+			_viewImages(images) {
+				uni.previewImage({
+					urls: images,
+					longPressActions: {
+						itemList: ['发送给朋友', '保存图片', '收藏'],
+						success: (data) => {
+							console.log('选中了第' + (data.tapIndex + 1) + '个按钮,第' + (data.index + 1) + '张图片')
+						},
+						fail: (err) => {
+							console.log(err.errMsg);
+						}
+					}
+				})
+			}
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	.mb-12 {
+		margin-bottom: 12rpx;
+	}
+	
+	.px-12 {
+		padding: 0 12rpx;
+	}
+	
+	.item-images {
+		flex-direction: row;
+	}
+	
+	.item-image {
+		width: 220rpx;
+		height: 220rpx;
+	}
+	
+	.item-foot__text {
+		font-size: 28rpx;
+		color: #808080;
+	}
+	
+	.item-foot {
+		flex-direction: row;
+		padding: 24rpx 0;
+	}
+	
+	.item-foot__col {
+		flex-direction: row;
+		align-items: center;
+		flex: 1;
+	}
+	
+	.item-foot__icon {
+		width: 40rpx;
+		height: 40rpx;
+		margin-right: 12rpx;
+	}
+	
+	.item-content {
+		margin: 24rpx 0;
+	}
+	
+	.item-content__text {
+		font-size: 32rpx;
+		color: #FFFFFF;
+	}
+	
+	.item {
+		margin: 32rpx;
+		border-bottom-color: rgba($color: #909399, $alpha: 0.2);
+		border-bottom-width: 1rpx;
+	}
+	
+	.item-head {
+		flex-direction: row;
+	}
+	
+	.item-head__time {
+		color: #808080;
+		font-size: 24rpx;
+	}
+	
+	.item-head__username {
+		color: #FFFFFF;
+		font-size: 28rpx;
+		margin-bottom: 12rpx;
+	}
+	
+	.item-head__avatar {
+		width: 90rpx;
+		height: 90rpx;
+		margin-right: 24rpx;
+		border-radius: 50%;
+	}
+	.cover-foot__right {
+		flex-direction: row;
+		align-items: center;
+	}
+	.like-icon {
+		width: 35rpx;
+		height: 35rpx;
+		margin-right: 12rpx;
+	}
+	.views {
+		font-size: 32rpx;
+		color: #FFFFFF;
+	}
+	.title {
+		flex: 1;
+		padding-right: 32rpx;
+		lines: 1;
+		text-overflow: ellipsis;
+		color: #FFFFFF;
+		font-size: 32rpx;
+	}
+	.cover-foot {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 80rpx;
+		flex-direction: row;
+		align-items: center;
+		padding: 0 24rpx;
+		background-image: linear-gradient(to top, #000, transparent);
+	}
+	.cover {
+		width: 750rpx;
+	}
+	.alert {
+		font-size: 24rpx;
+		color: #999999;
+		text-align: center;
+		padding: 32rpx 0;
+	}
+	.body {
+		flex: 1;
+	}
+	.list {
+		flex: 1;
+	}
+</style>

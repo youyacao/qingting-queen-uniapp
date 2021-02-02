@@ -1,0 +1,99 @@
+<template>
+	<view class="body">
+		<list @loadmore="_loadmore">
+			<cell v-for="(item, index) in list" :key="index">
+				<view class="item">
+					<image class="item-bg" :src="item.thumb" mode="aspectFill"></image>
+					<view class="item-foot">
+						<text class="item-title">{{ item.title }}</text>
+					</view>
+				</view>
+			</cell>
+			<cell v-if="init">
+				<text class="alert">正在加载...</text>
+			</cell>
+			<cell v-if="!init && list.length === 0">
+				<text class="alert">暂无数据</text>
+			</cell>
+			<cell v-if="loading">
+				<text class="alert">加载更多中...</text>
+			</cell>
+			<cell v-if="noData && list.length > 10">
+				<text class="alert">没有更多了</text>
+			</cell>
+		</list>
+	</view>
+</template>
+
+<script>
+	import { DownloadRecords } from '@/common/api.js'
+	
+	export default {
+		data() {
+			return {
+				list: [],
+				loading: false,
+				init: true,
+				noData: false,
+				page: 1
+			};
+		},
+		onShow() {
+			this._getDownloadRecords()
+		},
+		methods: {
+			_loadmore() {
+				if (this.noData) return
+				this.page++
+				this.loading = true
+				this._getDownloadRecords()
+			},
+			_getDownloadRecords() {
+				DownloadRecords({
+					page: this.page,
+					limit: 10
+				}).then(({ code, data }) => {
+					if (code === 200) {
+						const { total_page, current_page, list } = data
+						if (current_page === 1) {
+							this.list = list
+						} else {
+							this.list = this.list.concat(list)
+						}
+						if (total_page === 0 || current_page >= total_page) {
+							this.noData = true
+						}
+						this.loading = false
+						this.init = false
+					}
+				})
+			}
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	.item-title {
+		font-size: 28rpx;
+		color: #FFFFFF;
+		lines: 2;
+		text-overflow: ellipsis;
+	}
+	.item-foot {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		padding: 24rpx;
+		background-image: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+	}
+	.item-bg {
+		width: 750rpx;
+	}
+	.alert {
+		font-size: 24rpx;
+		text-align: center;
+		padding: 24rpx;
+		color: #999999;
+	}
+</style>

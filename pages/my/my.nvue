@@ -1,0 +1,433 @@
+<template>
+	<view class="body">
+		<view class="user">
+			<view :style="{'height': `${statusBarHeight}px`}"></view>
+			<view class="nav">
+				<text class="nav-title__text">我的</text>
+				<image @tap="_settings" class="nav-settings__icon" src="/static/images/huangguan/icon_mine_seting.png" mode=""></image>
+			</view>
+			<view class="user-container">
+				<view class="avatar-box">
+					<image class="avatar" :src="userinfo.avatar" mode=""></image>
+					<image class="vip" src="/static/images/vip.png" mode="" v-if="userinfo.is_vip"></image>
+				</view>
+				<view>
+					<text class="nickname">{{ userinfo.nickname || '未设置' }}</text>
+					<text class="id">ID: {{ userinfo.username }}</text>
+					<text class="desc">{{ userinfo.desc || '这个人很懒，什么也没有留下' }}</text>
+				</view>
+			</view>
+		</view>
+		<view class="head">
+			<view class="head-box">
+				<view class="head-item" @tap="_toFans('/pages/my/fans/fans?current=1')">
+					<text class="head-item__value">{{ userinfo.follow_num || 0 }}</text>
+					<text class="head-item__label">粉丝</text>
+				</view>
+				<view class="head-item" @tap="_toFans('/pages/my/fans/fans?current=0')">
+					<text class="head-item__value">{{ userinfo.my_follow_num || 0 }}</text>
+					<text class="head-item__label">关注</text>
+				</view>
+				<view class="head-item">
+					<text class="head-item__value">{{ userinfo.like_num || 0 }}</text>
+					<text class="head-item__label">获赞</text>
+				</view>
+				<view class="head-item" @tap="_toPromotion">
+					<text class="head-item__value">{{ userinfo.ref_num || 0 }}</text>
+					<text class="head-item__label">推广</text>
+				</view>
+			</view>
+		</view>
+		<view class="vip-bg__box">
+			<image class="vip-bg__image" src="/static/images/huangguan/icon_vip_top_bg.png" mode=""></image>
+			<view class="vip-bg__content">
+				<view class="vip-bg__left">
+					<image class="vip-bg__tag" src="/static/images/huangguan/icon_mine_vip_tag.png" mode=""></image>
+					<text class="vip-bg__tip">开通会员无限看片</text>
+				</view>
+				<text class="vip-bg__btn">立即开通</text>
+			</view>
+		</view>
+		<view class="menu-container">
+			<view class="menu-row mb-45">
+				<navigator url="/pages/my/invite/invite" hover-class="none" class="menu-col">
+					<image class="menu-col__icon" src="/static/images/huangguan/icon_mine_vip_tag.png" mode="aspectFit"></image>
+					<text class="menu-col__title">分享得VIP</text>
+				</navigator>
+				<view class="menu-col">
+					<image class="menu-col__icon" src="/static/images/huangguan/icon_min_vip.png" mode="aspectFit"></image>
+					<text class="menu-col__title">会员中心</text>
+				</view>
+				<view class="menu-col">
+					<image class="menu-col__icon" src="/static/images/huangguan/icon_my_money_pack.png" mode="aspectFit"></image>
+					<text class="menu-col__title">我的钱包</text>
+				</view>
+				<view class="menu-col">
+					<image class="menu-col__icon" src="/static/images/huangguan/icon_mine_shop.png" mode="aspectFit"></image>
+					<text class="menu-col__title">我的购买</text>
+				</view>
+			</view>
+			<view class="menu-row">
+				<navigator url="/pages/my/video-list/video-list" hover-class="none" class="menu-col">
+					<image class="menu-col__icon" src="/static/images/huangguan/icon_mine_like.png" mode="aspectFit"></image>
+					<text class="menu-col__title">我的喜欢</text>
+				</navigator>
+				<view class="menu-col">
+					<image class="menu-col__icon" src="/static/images/huangguan/icon_mine_group.png" mode="aspectFit"></image>
+					<text class="menu-col__title">粉丝团</text>
+				</view>
+				<view class="menu-col">
+					<image class="menu-col__icon" src="/static/images/huangguan/icon_mine_daili_money.png" mode="aspectFit"></image>
+					<text class="menu-col__title">代理赚钱</text>
+				</view>
+				<navigator url="/pages/my/article-list/article-list" hover-class="none" class="menu-col">
+					<image class="menu-col__icon" src="/static/images/huangguan/icon_my_find_video.png" mode="aspectFit"></image>
+					<text class="menu-col__title">我的微贴</text>
+				</navigator>
+			</view>
+		</view>
+		<view class="menu-box">
+			<navigator url="/pages/my/task/task" hover-class="none" class="menu-item">
+				<view class="menu-item__left">
+					<image class="menu-icon" src="/static/images/task.png" mode="aspectFit"></image>
+					<text class="menu-text">任务中心</text>
+				</view>
+				<image class="right-arrow" src="/static/images/huangguan/icon_check_more.png" mode="aspectFit"></image>
+			</navigator>
+			<view class="menu-item" @tap="_activation">
+				<view class="menu-item__left">
+					<image class="menu-icon" src="/static/images/my/quan.png" mode="aspectFit"></image>
+					<text class="menu-text">兑换码激活</text>
+				</view>
+				<image class="right-arrow" src="/static/images/huangguan/icon_check_more.png" mode="aspectFit"></image>
+			</view>
+			<navigator url="/pages/my/message/message" hover-class="none" class="menu-item">
+				<view class="menu-item__left">
+					<image class="menu-icon" src="/static/images/message.png" mode="aspectFit"></image>
+					<text class="menu-text">消息中心</text>
+				</view>
+				<image class="right-arrow" src="/static/images/huangguan/icon_check_more.png" mode="aspectFit"></image>
+			</navigator>
+			<navigator url="" hover-class="none" class="menu-item">
+				<view class="menu-item__left">
+					<image class="menu-icon" src="/static/images/my-video.png" mode="aspectFit"></image>
+					<text class="menu-text">我的视频</text>
+				</view>
+				<image class="right-arrow" src="/static/images/huangguan/icon_check_more.png" mode="aspectFit"></image>
+			</navigator>
+			<view class="menu-item" @tap="_createLive">
+				<view class="menu-item__left">
+					<image class="menu-icon" src="/static/images/live.png" mode="aspectFit"></image>
+					<text class="menu-text">创建直播</text>
+				</view>
+				<image class="right-arrow" src="/static/images/huangguan/icon_check_more.png" mode="aspectFit"></image>
+			</view>
+			<navigator url="/pages/live/record/record" hover-class="none" class="menu-item">
+				<view class="menu-item__left">
+					<image class="menu-icon" src="/static/images/jilu.png" mode="aspectFit"></image>
+					<text class="menu-text">直播历史</text>
+				</view>
+				<image class="right-arrow" src="/static/images/huangguan/icon_check_more.png" mode="aspectFit"></image>
+			</navigator>
+			<navigator url="/pages/my/play-records/play-records" hover-class="none" class="menu-item">
+				<view class="menu-item__left">
+					<image class="menu-icon" src="/static/images/play-records.png" mode="aspectFit"></image>
+					<text class="menu-text">浏览记录</text>
+				</view>
+				<image class="right-arrow" src="/static/images/huangguan/icon_check_more.png" mode="aspectFit"></image>
+			</navigator>
+			<navigator url="/pages/my/download-records/download-records" hover-class="none" class="menu-item">
+				<view class="menu-item__left">
+					<image class="menu-icon" src="/static/images/download-records.png" mode="aspectFit"></image>
+					<text class="menu-text">下载记录</text>
+				</view>
+				<image class="right-arrow" src="/static/images/huangguan/icon_check_more.png" mode="aspectFit"></image>
+			</navigator>
+			<view style="margin-top: 50rpx;">
+				<text class="copy">系统开发商：一颗优雅草科技-蜻蜓S系统（直播）</text>
+				<text class="copy">官网：songshu.youyacao.com</text>
+				<text class="copy">本系统所有内容仅供功能演示不做其他一切商业用途</text>
+				<text class="copy">服务器：腾讯云  内容识别：知道创宇 美颜剪辑：涂图科技</text>
+			</view>
+		</view>
+		<!-- <view class="nav-box">
+			<v-tabbar></v-tabbar>
+		</view> -->
+	</view>
+</template>
+
+<script>
+	const modal = weex.requireModule('modal')
+	import { User, CardSecretExchange } from '@/common/api.js'
+	import { mapState, mapGetters, mapActions } from 'vuex'
+	import VTabbar from '@/components/v-tabbar/v-tabbar.nvue'
+	
+	export default {
+		data() {
+			return {};
+		},
+		components: { VTabbar },
+		computed: {
+			...mapState(['userinfo']),
+			...mapGetters(['statusBarHeight'])
+		},
+		onShow() {
+			this.updateUserinfo()
+		},
+		methods: {
+			...mapActions(['updateUserinfo']),
+			_toFans(url) {
+				uni.navigateTo({ url: `${url}&nickname=${this.userinfo.nickname}` })
+			},
+			_toPromotion() {
+				uni.navigateTo({
+					url: '/pages/my/promotion-record/promotion-record'
+				})
+			},
+			_settings() {
+				uni.navigateTo({
+					url: "/pages/my/setting/setting"
+				})
+			},
+			_activation() {
+				modal.prompt({
+				    message: '请输入卡密',
+					okTitle: '激活',
+					cancelTitle: '取消'
+				}, (res) => {
+					if (res.result === '激活') {
+						if (res.data === '') {
+							return uni.showToast({
+								title: '请输入卡密',
+								icon: 'none'
+							})
+						}
+						CardSecretExchange({
+							code: res.data
+						}).then(({ code, msg }) => {
+							uni.showToast({
+								title: msg,
+								icon: 'none'
+							})
+						})
+					}
+				})
+			},
+			_createLive() {
+				if (this.userinfo.can_live === 0) {
+					modal.alert({
+					  message: '您无权开启直播，如需开启直播功能请向管理员申请成为主播用户。',
+					  okTitle: '确认'
+					}, function () {
+					  console.log('alert callback')
+					})
+				} else {
+					uni.navigateTo({
+						url: '/pages/live/create/create'
+					})
+				}
+			}
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	.mb-45 {
+		margin-bottom: 45rpx;
+	}
+	.menu-container {
+		margin: 50rpx 24rpx 25rpx;
+		padding: 32rpx;
+		box-shadow: 0 0 24rpx rgba(234, 234, 234, 0.5);
+		border-radius: 12rpx;
+		background-color: #FFFFFF;
+	}
+	.menu-col__title {
+		font-size: 28rpx;
+		color: #333333;
+		margin-top: 24rpx;
+	}
+	.menu-col {
+		align-items: center;
+		flex: 1;
+	}
+	.menu-row {
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.menu-col__icon {
+		width: 60rpx;
+		height: 60rpx;
+	}
+	.vip-bg__tip {
+		font-size: 32rpx;
+		color: #a96b11;
+	}
+	.vip-bg__btn {
+		background-color: #a96b11;
+		color: #FFFFFF;
+		height: 55rpx;
+		line-height: 55rpx;
+		padding: 0 30rpx;
+		font-size: 32rpx;
+		border-radius: 27.5rpx;
+	}
+	.vip-bg__left {
+		flex-direction: row;
+		align-items: center;
+		flex: 1;
+	}
+	.vip-bg__content {
+		width: 698rpx;
+		height: 116rpx;
+		padding: 0 40rpx;
+		align-items: center;
+		flex-direction: row;
+	}
+	.vip-bg__tag {
+		width: 66rpx;
+		height: 47rpx;
+		margin-right: 20rpx;
+	}
+	.vip-bg__box {
+		width: 750rpx;
+		height: 116rpx;
+		align-items: center;
+		justify-content: center;
+	}
+	.vip-bg__image {
+		position: absolute;
+		width: 698rpx;
+		height: 116rpx;
+	}
+	.nav-title__text {
+		font-size: 32rpx;
+		color: #333333;
+	}
+	.nav-settings__icon {
+		width: 50rpx;
+		height: 50rpx;
+	}
+	.nav {
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		height: 88rpx;
+		padding: 0 24rpx;
+	}
+	.copy {
+		color: #b1acac;
+		font-size: 24rpx;
+		text-align: center;
+	}
+	
+	.nav-box {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background-color: #FFFFFF;
+	}
+	.nav-box {
+		position: fixed;
+		right: 0;
+		bottom: 0;
+		left: 0;
+	}
+	.menu-text {
+		font-size: 32rpx;
+		color: #333;
+	}
+	.menu-item__left {
+		flex-direction: row;
+		align-items: center;
+	}
+	.menu-item {
+		height: 100rpx;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.menu-icon {
+		width: 40rpx;
+		height: 40rpx;
+		margin-right: 24rpx;
+	}
+	.right-arrow {
+		width: 35rpx;
+		height: 35rpx;
+	}
+	.menu-box {
+		padding: 32rpx;
+	}
+	.head-item__value {
+		font-size: 40rpx;
+		color: #333;
+		text-align: center;
+		margin-bottom: 6rpx;
+	}
+	.head-item__label {
+		font-size: 28rpx;
+		color: #999999;
+		text-align: center;
+	}
+	.head-box {
+		padding: 32rpx 0;
+		border-radius: 12rpx;
+		// box-shadow: 0 0 24rpx rgba($color: #eaeaea, $alpha: 0.2);
+		flex-direction: row;
+		justify-content: space-around;
+	}
+	.head {
+		margin-top: -60rpx;
+		padding: 0 32rpx;
+	}
+	.vip {
+		width: 43.5rpx;
+		height: 36.5rpx;
+		position: absolute;
+		bottom: 0;
+		right: 0;
+	}
+	.avatar-box {
+		width: 140rpx;
+		height: 140rpx;
+		border-radius: 50%;
+		margin-right: 40rpx;
+		background-color: #ebebeb;
+		align-items: center;
+		justify-content: center;
+	}
+	.id {
+		font-size: 28rpx;
+		color: #333;
+		margin-bottom: 12rpx;
+	}
+	.desc {
+		font-size: 28rpx;
+		color: #333;
+	}
+	.nickname {
+		font-size: 40rpx;
+		color: #333;
+		margin-bottom: 12rpx;
+	}
+	.user-container {
+		padding: 32rpx 32rpx 100rpx;
+		flex-direction: row;
+	}
+	.avatar {
+		border-radius: 50%;
+		width: 130rpx;
+		height: 130rpx;
+	}
+	.bg-img {
+		width: 750rpx;
+		height: 350rpx;
+	}
+	.body {
+		background-color: #FFFFFF;
+		margin-bottom: 50px;
+	}
+</style>

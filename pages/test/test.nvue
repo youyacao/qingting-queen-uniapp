@@ -1,0 +1,41 @@
+<template>
+	<view>
+		<button type="default" @tap="_chooseVideo">ChooseVideo</button>
+	</view>
+</template>
+
+<script>
+	const TuSDKEdit = uni.requireNativePlugin('youyacao-TuSDKEdit')
+	
+	export default {
+		data() {
+			return {
+
+			}
+		},
+		methods: {
+			_chooseVideo() {
+				console.log(TuSDKEdit)
+				uni.chooseVideo({
+					count: 1,
+					sourceType: ['camera', 'album'],
+					success: (res) => {
+						TuSDKEdit.edit({
+							list: [ res.tempFilePath ]
+						}, result => {
+							const msg = JSON.stringify(result)
+							uni.showModal({
+								content: msg,
+								showCancel: false
+							})
+						})
+					}
+				})
+			}
+		}
+	}
+</script>
+
+<style>
+
+</style>
