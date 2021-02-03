@@ -429,7 +429,7 @@
 		width: 100rpx;
 		height: 100rpx;
 		position: absolute;
-		top: -50rpx;
+		top: 0;
 	}
 	.shang-box {
 		padding: 82rpx 32rpx 32rpx;
@@ -437,6 +437,7 @@
 		border-radius: 12rpx;
 	}
 	.shang-container {
+		padding-top: 50rpx;
 		border-radius: 12rpx;
 		align-items: center;
 	}
