@@ -3,8 +3,9 @@
 		<view class="user">
 			<view :style="{'height': `${statusBarHeight}px`}"></view>
 			<view class="nav">
-				<text class="nav-title__text">我的</text>
-				<image @tap="_settings" class="nav-settings__icon" src="/static/images/huangguan/icon_mine_seting.png" mode=""></image>
+				<navigator url="/pages/my/message/message" hover-class="none">
+					<image class="nav-settings__icon" src="/static/images/message.png" mode="aspectFit"></image>
+				</navigator>
 			</view>
 			<view class="user-container">
 				<view class="avatar-box">
@@ -101,13 +102,6 @@
 				</view>
 				<image class="right-arrow" src="/static/images/huangguan/icon_check_more.png" mode="aspectFit"></image>
 			</view>
-			<navigator url="/pages/my/message/message" hover-class="none" class="menu-item">
-				<view class="menu-item__left">
-					<image class="menu-icon" src="/static/images/message.png" mode="aspectFit"></image>
-					<text class="menu-text">消息中心</text>
-				</view>
-				<image class="right-arrow" src="/static/images/huangguan/icon_check_more.png" mode="aspectFit"></image>
-			</navigator>
 			<navigator url="" hover-class="none" class="menu-item">
 				<view class="menu-item__left">
 					<image class="menu-icon" src="/static/images/my-video.png" mode="aspectFit"></image>
@@ -182,11 +176,6 @@
 			_toPromotion() {
 				uni.navigateTo({
 					url: '/pages/my/promotion-record/promotion-record'
-				})
-			},
-			_settings() {
-				uni.navigateTo({
-					url: "/pages/my/setting/setting"
 				})
 			},
 			_activation() {
@@ -301,17 +290,13 @@
 		width: 698rpx;
 		height: 116rpx;
 	}
-	.nav-title__text {
-		font-size: 32rpx;
-		color: #333333;
-	}
 	.nav-settings__icon {
 		width: 50rpx;
 		height: 50rpx;
 	}
 	.nav {
 		flex-direction: row;
-		justify-content: space-between;
+		justify-content: flex-end;
 		align-items: center;
 		height: 88rpx;
 		padding: 0 24rpx;
