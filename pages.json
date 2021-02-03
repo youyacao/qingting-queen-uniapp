@@ -365,6 +365,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/my/agent/agent",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的代理",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

@@ -76,10 +76,10 @@
 					<image class="menu-col__icon" src="/static/images/huangguan/icon_mine_group.png" mode="aspectFit"></image>
 					<text class="menu-col__title">粉丝团</text>
 				</view>
-				<view class="menu-col">
+				<navigator url="/pages/my/agent/agent" hover-class="none" class="menu-col">
 					<image class="menu-col__icon" src="/static/images/huangguan/icon_mine_daili_money.png" mode="aspectFit"></image>
 					<text class="menu-col__title">代理赚钱</text>
-				</view>
+				</navigator>
 				<navigator url="/pages/my/article-list/article-list" hover-class="none" class="menu-col">
 					<image class="menu-col__icon" src="/static/images/huangguan/icon_my_find_video.png" mode="aspectFit"></image>
 					<text class="menu-col__title">我的微贴</text>

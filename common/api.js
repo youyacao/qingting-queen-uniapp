@@ -244,3 +244,8 @@ export const Reward = (data) => {
 export const CardSecretExchange = (data) => {
 	return post('cipher/receive', data)
 }
+
+// 代理统计
+export const AgentTotal = () => {
+	return post('agentNum')
+}
