@@ -49,7 +49,7 @@ export const get = (url, params) => {
 }
 
 export const post = (url, data) => {
-	console.log('请求参数：', data || {})
+	// console.log('请求参数：', data || {})
 	// console.log('请求参数加密后：', data ? cryptoEncrypt(data) : {})
 	// return http.post(`${BASE_URL}${url}`, { datas: data ? cryptoEncrypt(data) : {}, timestamp: new Date().getTime() }, {..._config, method: 'POST'})
 	return http.post(`${BASE_URL}${url}`, data, { ..._config,
@@ -95,8 +95,8 @@ http.interceptors.response.use((response) => {
 			}
 		}
 	}
-	console.log(response.config.url)
-	console.log(response.data)
+	// console.log(response.config.url)
+	// console.log(response.data)
 	return response.data
 }, (response) => {
 	console.log(response)

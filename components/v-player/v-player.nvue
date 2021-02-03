@@ -1,9 +1,9 @@
 <template>
-	<view class="body" :style="{'height': `${windowHeight}px`}">
-		<list class="list" :pagingEnabled="true" :show-scrollbar="false" :scrollable="scrollable" :bounce="false" @scroll="onScroll">
-			<cell class="cell" v-for="(item, index) in videoList" :key="`cell_${index}`" :style="{'width': `${windowWidth}px`, 'height': `${windowHeight}px`}">
+	<view class="body">
+		<list :pagingEnabled="true" :show-scrollbar="false" :scrollable="scrollable" @scroll="onScroll">
+			<cell :style="{'height': `${bodyHeight}px`}" v-for="(item, index) in videoList" :key="`cell_${index}`">
 				<v-video v-if="index > (playIndex - 3) && (playIndex + 3) > index" :src="item.video_url" :video="item" :index="index"
-				 :current="playIndex" :ref="`video_${index}`" @play="onPlay" :style="{'height': `${windowHeight}px`, 'width': `${windowWidth}px`}"></v-video>
+				 :current="playIndex" :ref="`video_${index}`" @play="onPlay" :videoStyle="videoStyle"></v-video>
 				<view class="bottom">
 					<view class="bottom-author">
 						<text class="bottom-author__text">@{{ item.nickname || item.username }}</text>
@@ -173,7 +173,8 @@
 						method: '_download'
 					}
 				],
-				progress: 0
+				progress: 0,
+				retryTimes: 0
 			};
 		},
 		components: {
@@ -189,6 +190,9 @@
 				}
 				// return this.windowHeight
 			}
+		},
+		onLoad() {
+			this.videoStyle.height = this.windowHeight
 		},
 		props: {
 			list: {
@@ -412,24 +416,88 @@
 					}
 				})
 			},
-			onScroll(event) {
-				const index = parseInt(Math.abs(event.contentOffset.y / this.bodyHeight))
-				const intIndex = parseInt(Math.abs(event.contentOffset.y / this.bodyHeight))
-				if (index === intIndex && index !== this.playIndex) {
-					this.playIndex = intIndex
-					if (this.videoContext) {
-						this.videoContext.stop()
-					}
-					if (this.videoRef) {
-						this.videoRef._isPuase()
-					}
-					this.videoRef = this.$refs[`video_${this.playIndex}`][0]
-					this.videoRef.play()
-					if ((this.videoList.length - 6) === this.playIndex) {
-						this.getVideoList()
-					}
-				}
+			onScroll(e) {
+				// const index = parseInt(Math.abs(e.contentOffset.y / this.bodyHeight))
+				// // const intIndex = parseInt(Math.abs(e.contentOffset.y / this.windowHeight))
+				// const intIndex = Math.round(Math.abs(e.contentOffset.y / this.bodyHeight))
+				// if (index === intIndex && index !== this.playIndex) {
+				// 	this.playIndex = intIndex
+				// 	if (this.videoContext) {
+				// 		this.videoContext.stop()
+				// 	}
+				// 	this.videoRef = this.$refs[`video_${this.playIndex}`][0]
+				// 	this.videoRef._play()
+				// 	if ((this.videoList.length - 6) === this.playIndex) {
+				// 		this.getVideoList()
+				// 	}
+				// }
+				var index = Math.abs(e.contentOffset.y / this.bodyHeight)
+								const intVaule = Math.round(Math.abs(e.contentOffset.y / this.bodyHeight))
+								
+								if((index + 0.1) > intVaule){
+									index = intVaule
+								}
+								
+								if((index - 1) > this.playIndex || (index + 1) < this.playIndex){
+									if(this.videoContext){
+										this.videoContext.stop()
+										this.playIndex = -1
+									}
+								}
+								if(index == intVaule && index != this.playIndex){
+									if(this.videoList.length>=10 && (this.videoList.length - index) <= 5 && (index - this.last_get_index) > 5){
+										// this.last_get_index = index
+										// this.page++
+										// if(this.totalPage && this.totalPage<this.page){
+										// 	return
+										// }
+										this.getVideoList()
+									}
+									if(this.videoContext){
+										this.videoContext.stop()
+									}
+									// this.isPause = false
+									// this.pageHide = false
+									this.playIndex = index
+									this.$nextTick(() => {
+										if(this.playIndex == index) this.playVideo()
+									});
+								}
 			},
+			playVideo(){
+							try{
+								this.videoContext = this.$refs['video_'+this.playIndex][0]
+								if(!this.videoContext){
+									this.retryTimes++
+									//试10次后放弃
+									if(this.retryTimes>10){
+										this.retryTimes = 0
+										return
+									}
+									//1秒钟后再试一下
+									setTimeout(this.playVideo,1000)
+									return
+								}
+								if(this.videoContext.length){
+									this.videoContext =  this.videoContext[0]
+								}
+								
+								if(this.isPause || this.pageHide) return
+								this.retryTimes = 0
+								if(this.playingIndex == -1 && !this.autoplay){
+									this.autoplay = true
+									return
+								}
+								this.videoContext.play()
+								let data = this.videoList[this.playIndex]
+								// if(data){
+								// 	setPlaycount(data._id)
+								// }
+							}catch(e){
+								console.log("获取播放器对象出错",e)
+							}
+							
+						},
 			onPlay(event) {
 				this.videoRef = this.$refs[`video_${this.playIndex}`][0]
 				this.videoContext = event
@@ -461,7 +529,7 @@
 	}
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 	.share-item__label {
 		margin-top: 12rpx;
 		font-size: 28rpx;
@@ -727,24 +795,13 @@
 	.bottom {
 		position: absolute;
 		right: 150rpx;
-		bottom: 60px;
+		bottom: 10px;
 		left: 0;
 		padding: 12rpx 24rpx;
 	}
 
-	.cell {
-		position: relative;
-	}
-
-	.list {
-		position: absolute;
-		top: 0;
-		right: 0;
-		bottom: 50px;
-		left: 0;
-	}
-
 	.body {
 		background-color: #000000;
+		flex: 1;
 	}
 </style>

@@ -377,7 +377,7 @@
 	    "selectedColor": "#f384a2",
 	    "borderStyle": "black",
 	    "backgroundColor": "#FFFFFF",
-		"fontSize": "14",
+		"fontSize": "13",
 	    "list": [{
 	        "pagePath": "pages/home/home",
 			"iconPath": "static/images/tabbar/jx.png",

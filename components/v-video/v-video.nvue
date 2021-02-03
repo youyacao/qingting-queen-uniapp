@@ -1,34 +1,27 @@
 <template>
 	<view class="body">
-		<image class="poster" :src="video.thumb" mode="aspectFill" :style="{'width': `${windowWidth}px`, 'height': `${windowHeight}px`}" v-if="!isPlay && !isPause"></image>
-		<video id="video" src="" :style="{'width': `${windowWidth}px`, 'height': `${windowHeight}px`}"
-			:controls="controls"
-			:show-center-play-btn="false"
-			:src="video.video_url"
-			:show-loading="false"
-			:enable-progress-gesture="false"
-			:loop="true"
-			@play="onPlay"
-			@pause="onPause"
-			@tap="onTap"
-			@loadedmetadata="loadedmetadata"
-			@timeupdate="timeUpdate"></video>
-			<view class="play-icon__box" v-if="isPause" @tap="onTap">
-				<image class="play-icon" src="/static/images/play-icon.png" mode=""></image>
-			</view>
-		<v-slider
-			class="progress"
-			v-model="sliderValue"
-			:is-start="isPause"
-			@change="_sliderChange" 
-			@changing="_sliderChanging"  />
+		<!-- <image class="poster" :src="video.thumb" mode="aspectFill" :style="{'width': `${windowWidth}px`, 'height': `${windowHeight}px`}"
+		 v-if="!isPlay && !isPause"></image> -->
+		<video id="video" class="video" :controls="controls" :show-center-play-btn="false" :src="video.video_url"
+		 :show-loading="false" :enable-progress-gesture="false" :loop="true" @play="onPlay" @pause="onPause" @tap="onTap"
+		 @loadedmetadata="loadedmetadata" @timeupdate="timeUpdate"></video>
+		<view class="play-icon__box" v-if="isPause" @tap="onTap">
+			<image class="play-icon" src="/static/images/play-icon.png" mode=""></image>
+		</view>
+		<v-slider class="progress" v-model="sliderValue" :is-start="isPause" @change="_sliderChange" @changing="_sliderChanging" />
 	</view>
 </template>
 
 <script>
-	import { mapGetters, mapState } from 'vuex'
-	import { VideoPlayback, AddView } from '@/common/api.js'
-	
+	import {
+		mapGetters,
+		mapState
+	} from 'vuex'
+	import {
+		VideoPlayback,
+		AddView
+	} from '@/common/api.js'
+
 	export default {
 		data() {
 			return {
@@ -60,42 +53,49 @@
 			current: {
 				type: Number,
 				default: null
+			},
+			videoStyle: {
+				default: {}
 			}
 		},
 		mounted() {
 			this.$nextTick(() => {
 				this.videoContext = uni.createVideoContext('video', this)
-				if (this.index === this.current && this.path === '/pages/home/home') {
+				if (this.index === this.current) {
 					this.play()
 				}
 			})
 		},
 		methods: {
-			pause(){
-				if(this.videoContext) {
+			pause() {
+				if (this.videoContext) {
 					this.videoContext.pause()
 				}
 			},
-			stop(){
-				if(this.videoContext) {
+			stop() {
+				if (this.videoContext) {
 					this.videoContext.seek(0)
 					this.sliderValue = 0
 				}
 			},
-			seek(value){
-				if(this.videoContext) {
+			seek(value) {
+				if (this.videoContext) {
 					this.videoContext.seek(value)
 					this.videoContext.play()
 					this.isPause = false
 				}
 			},
-			_sliderChange({ value }) {
+			_sliderChange({
+				value
+			}) {
 				this.seek(value / 100 * this.detail.duration)
 			},
 			_sliderChanging() {
 				this.pause()
 			},
-			timeUpdate({ detail }) {
+			timeUpdate({
+				detail
+			}) {
 				this.detail = detail
 				this.sliderValue = this.detail.currentTime / this.detail.duration * 100
 				if (this.path !== '/pages/home/home') {
@@ -122,11 +122,6 @@
 				}).then(res => {
 					// console.log(res)
 				})
-			},
-			_isPuase() {
-				if (this.isPause) {
-					this.isPause = false
-				}
 			},
 			onTap() {
 				if (this.isPlay) {
@@ -162,12 +157,16 @@
 </script>
 
 <style lang="scss" scoped>
+	.video {
+		flex: 1;
+	}
 	.progress {
 		position: absolute;
 		right: 0;
-		bottom: 50px;
+		bottom: 0;
 		left: 0;
 	}
+
 	.play-icon__box {
 		align-items: center;
 		justify-content: center;
@@ -177,11 +176,13 @@
 		bottom: 0;
 		left: 0;
 	}
+
 	.play-icon {
 		width: 100rpx;
 		height: 100rpx;
 		opacity: 0.25;
 	}
+
 	.body {
 		position: absolute;
 		top: 0;
