@@ -16,14 +16,13 @@
 			})
 			const systemInfo = uni.getSystemInfoSync()
 			this.$store.commit('setSystemInfo', systemInfo)
+			this.$store.dispatch('getConfig')
 		},
 		onShow: function() {
 			console.log('App Show')
-			// this.$store.commit('setAppHide', false)
 		},
 		onHide: function() {
 			console.log('App Hide')
-			// this.$store.commit('setAppHide', true)
 		}
 	}
 </script>

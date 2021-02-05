@@ -4,6 +4,14 @@
 			<cell :style="{'height': `${bodyHeight}px`}" v-for="(item, index) in videoList" :key="`cell_${index}`">
 				<v-video v-if="index > (playIndex - 3) && (playIndex + 3) > index" :src="item.video_url" :video="item" :index="index"
 				 :current="playIndex" :ref="`video_${index}`" @play="onPlay" :videoStyle="videoStyle"></v-video>
+				<cover-view class="alert-cover__view" v-if="noPlay">
+					<view class="alert-view">
+						<text class="alert-title">今日观影券不足</text>
+						<text class="alert-tip">成功推广1人，送3天无限观看，可无限叠加~</text>
+						<text class="alert-btn">推广送VIP</text>
+						<text class="alert-btn1">购买VIP</text>
+					</view>
+				</cover-view>
 				<view class="bottom">
 					<view class="bottom-author">
 						<text class="bottom-author__text">@{{ item.nickname || item.username }}</text>
@@ -174,7 +182,8 @@
 					}
 				],
 				progress: 0,
-				retryTimes: 0
+				retryTimes: 0,
+				noPlay: false
 			};
 		},
 		components: {
@@ -530,6 +539,45 @@
 </script>
 
 <style lang="scss">
+	.alert-cover__view {
+		flex: 1;
+		align-items: center;
+		justify-content: center;
+	}
+	.alert-btn1 {
+		height: 58rpx;
+		line-height: 58rpx;
+		border-radius: 6rpx;
+		background-color: #f7b600;
+		text-align: center;
+		color: #FFFFFF;
+		font-weight: bold;
+		font-size: 32rpx;
+	}
+	.alert-btn {
+		margin-bottom: 20rpx;
+		height: 58rpx;
+		line-height: 58rpx;
+		border-radius: 6rpx;
+		background-color: #f583a0;
+		text-align: center;
+		color: #FFFFFF;
+		font-weight: bold;
+		font-size: 32rpx;
+	}
+	.alert-tip {
+		font-size: 32rpx;
+		color: #FFFFFF;
+		padding: 20rpx 0;
+	}
+	.alert-title {
+		color: #FFFFFF;
+		font-size: 36rpx;
+		text-align: center;
+	}
+	.alert-view {
+		width: 345rpx;
+	}
 	.share-item__label {
 		margin-top: 12rpx;
 		font-size: 28rpx;

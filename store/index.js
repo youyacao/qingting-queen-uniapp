@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import getters from './getters'
-import { User } from '@/common/api.js'
+import { User, Config } from '@/common/api.js'
 
 Vue.use(Vuex)
 
@@ -19,7 +19,8 @@ const store = new Vuex.Store({
 			refcode: 'fMJzUY'
 		},
 		path: '/pages/home/home',
-		pusherMode: 0
+		pusherMode: 0,
+		config: null
 	},
 	mutations: {
 		setSystemInfo(state, data) {
@@ -41,6 +42,9 @@ const store = new Vuex.Store({
 		},
 		setPusherMode(state, data) {
 			state.pusherMode = data
+		},
+		setConfig(state, data) {
+			state.config = data
 		}
 	},
 	actions: {
@@ -48,6 +52,13 @@ const store = new Vuex.Store({
 			User().then(({ code, data }) => {
 				if (code === 200) {
 					commit('setUserinfo', data)
+				}
+			})
+		},
+		getConfig({ commit }) {
+			Config({ key: 'base' }).then(({ code, data }) => {
+				if (code === 200) {
+					commit('setConfig', data)
 				}
 			})
 		}

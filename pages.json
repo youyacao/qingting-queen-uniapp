@@ -374,6 +374,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/latest/latest",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -393,7 +402,7 @@
 			"selectedIconPath": "static/images/tabbar/jx-a.png",
 	        "text": "精选"
 	    }, {
-	        "pagePath": "pages/live/live",
+	        "pagePath": "pages/latest/latest",
 			"iconPath": "static/images/tabbar/zx.png",
 			"selectedIconPath": "static/images/tabbar/zx-a.png",
 	        "text": "最新"
