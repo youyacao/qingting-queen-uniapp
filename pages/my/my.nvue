@@ -4,7 +4,7 @@
 			<view :style="{'height': `${statusBarHeight}px`}"></view>
 			<view class="nav">
 				<navigator url="/pages/my/message/message" hover-class="none">
-					<image class="nav-settings__icon" src="/static/images/message.png" mode="aspectFit"></image>
+					<image class="nav-settings__icon" src="/static/images/hg/mine_message_icon.png" mode="aspectFit"></image>
 				</navigator>
 			</view>
 			<view class="user-container">
@@ -39,17 +39,79 @@
 				</view>
 			</view>
 		</view>
-		<view class="vip-bg__box">
-			<image class="vip-bg__image" src="/static/images/huangguan/icon_vip_top_bg.png" mode=""></image>
-			<view class="vip-bg__content">
-				<view class="vip-bg__left">
-					<image class="vip-bg__tag" src="/static/images/huangguan/icon_mine_vip_tag.png" mode=""></image>
-					<text class="vip-bg__tip">开通会员无限看片</text>
+		<view class="top">
+			<view class="top-head">
+				<text class="top-head__text">观影权限</text>
+				<image class="top-head__icon" src="/static/images/hg/common_help.png" mode=""></image>
+			</view>
+			<view class="top-main">
+				<view class="top-main__item">
+					<image class="top-main__item--bg" src="/static/images/hg/mine_viewing_ticket_bg.png" mode=""></image>
+					<view class="top-main__item--content">
+						<text class="top-main__item--value">0/10</text>
+						<text class="top-main__item--label">今日观影券</text>
+					</view>
 				</view>
-				<text class="vip-bg__btn">立即开通</text>
+				<view class="top-main__item">
+					<image class="top-main__item--bg" src="/static/images/hg/mine_download_ticket_bg.png" mode=""></image>
+					<view class="top-main__item--content">
+						<text class="top-main__item--value">0/10</text>
+						<text class="top-main__item--label">今日下载券</text>
+					</view>
+				</view>
+			</view>
+			<navigator url="/pages/my/invite/invite" hover-class="none" class="top-foot__item">
+				<image class="top-foot__item--bg" src="/static/images/hg/mine_promotion_entrance_bg.webp" mode=""></image>
+				<view class="top-foot__item--box">
+					<view class="top-foot__item--col">
+						<image class="top-foot__item--icon" src="/static/images/hg/mine_coupon.png" mode=""></image>
+						<text class="top-foot__item--title">分享推广</text>
+					</view>
+					<view class="top-foot__item--col">
+						<text class="top-foot__item--text">获取更多观影/下载券</text>
+						<image class="top-foot__item--arrow" src="/static/images/hg/red_right_arrow.png" mode=""></image>
+					</view>
+				</view>
+			</navigator>
+			<view class="top-foot__item">
+				<image class="top-foot__item--bg" src="/static/images/hg/mine_vip_entrance_bg.webp" mode=""></image>
+				<view class="top-foot__item--box">
+					<view class="top-foot__item--col">
+						<image class="top-foot__item--icon1" src="/static/images/hg/mine_vip.png" mode=""></image>
+						<text class="top-foot__item--title1">购买VIP</text>
+					</view>
+					<view class="top-foot__item--col">
+						<text class="top-foot__item--text1">开通VIP无限观影</text>
+						<image class="top-foot__item--arrow" src="/static/images/hg/yellow_right_arrow.png" mode=""></image>
+					</view>
+				</view>
 			</view>
 		</view>
-		<view class="menu-container">
+		<view class="hr"></view>
+		<view class="balance">
+			<view class="balance-left">
+				<image class="balance-left__bg" src="/static/images/hg/mine_balance_flag.png" mode=""></image>
+				<view class="balance-left__content">
+					<text class="balance-left__title">余额</text>
+					<view class="balance-left__foot">
+						<text class="balance-left__value">￥0</text>
+						<text class="balance-left__label">充值/提现></text>
+					</view>
+				</view>
+			</view>
+			<view class="balance-right">
+				<image class="balance-right__bg" src="/static/images/hg/mine_proxy_entrance_bg.webp" mode=""></image>
+				<view class="balance-right__content">
+					<text class="balance-right__title">全名代理</text>
+					<view class="balance-right__foot">
+						<text class="balance-right__text">推广APP，躺着也能赚钱！</text>
+						<image class="balance-right__arrow" src="/static/images/hg/red_right_arrow.png" mode=""></image>
+					</view>
+				</view>
+			</view>
+		</view>
+		<view class="hr"></view>
+		<!-- <view class="menu-container">
 			<view class="menu-row mb-45">
 				<navigator url="/pages/my/invite/invite" hover-class="none" class="menu-col">
 					<image class="menu-col__icon" src="/static/images/huangguan/icon_mine_vip_tag.png" mode="aspectFit"></image>
@@ -86,63 +148,114 @@
 					<text class="menu-col__title">我的微贴</text>
 				</navigator>
 			</view>
+		</view> -->
+		<view class="menu-item">
+			<image class="menu-icon" src="/static/images/hg/mine_official_group.jpg" mode="aspectFit"></image>
+			<view class="menu-item__content">
+				<text class="menu-text">官方福利群</text>
+				<view class="menu-item__right">
+					<text class="menu-item__right--text color-pink">参加活动送VIP</text> 
+					<image class="right-arrow" src="/static/images/hg/right_arrow.png" mode="aspectFit"></image>
+				</view>
+			</view>
 		</view>
-		<view class="menu-box">
-			<navigator url="/pages/my/task/task" hover-class="none" class="menu-item">
-				<view class="menu-item__left">
-					<image class="menu-icon" src="/static/images/task.png" mode="aspectFit"></image>
-					<text class="menu-text">任务中心</text>
+		<view class="border-bottom"></view>
+		<view class="menu-item" @tap="_activation">
+			<image class="menu-icon" src="/static/images/hg/mine_redemption_code.png" mode="aspectFit"></image>
+			<view class="menu-item__content">
+				<text class="menu-text">兑换码激活</text>
+				<view class="menu-item__right">
+					<image class="right-arrow" src="/static/images/hg/right_arrow.png" mode="aspectFit"></image>
 				</view>
-				<image class="right-arrow" src="/static/images/huangguan/icon_check_more.png" mode="aspectFit"></image>
-			</navigator>
-			<view class="menu-item" @tap="_activation">
-				<view class="menu-item__left">
-					<image class="menu-icon" src="/static/images/my/quan.png" mode="aspectFit"></image>
-					<text class="menu-text">兑换码激活</text>
-				</view>
-				<image class="right-arrow" src="/static/images/huangguan/icon_check_more.png" mode="aspectFit"></image>
 			</view>
-			<navigator url="" hover-class="none" class="menu-item">
-				<view class="menu-item__left">
-					<image class="menu-icon" src="/static/images/my-video.png" mode="aspectFit"></image>
-					<text class="menu-text">我的视频</text>
+		</view>
+		<view class="hr"></view>
+		<navigator url="/pages/my/task/task" hover-class="none" class="menu-item">
+			<image class="menu-icon" src="/static/images/hg/mine_task_center.png" mode="aspectFit"></image>
+			<view class="menu-item__content">
+				<text class="menu-text">任务中心</text>
+				<view class="menu-item__right">
+					<text class="menu-item__right--text color-grey">升级提升特权</text> 
+					<image class="right-arrow" src="/static/images/hg/right_arrow.png" mode="aspectFit"></image>
 				</view>
-				<image class="right-arrow" src="/static/images/huangguan/icon_check_more.png" mode="aspectFit"></image>
-			</navigator>
-			<view class="menu-item" @tap="_createLive">
-				<view class="menu-item__left">
-					<image class="menu-icon" src="/static/images/live.png" mode="aspectFit"></image>
-					<text class="menu-text">创建直播</text>
-				</view>
-				<image class="right-arrow" src="/static/images/huangguan/icon_check_more.png" mode="aspectFit"></image>
 			</view>
-			<navigator url="/pages/live/record/record" hover-class="none" class="menu-item">
-				<view class="menu-item__left">
-					<image class="menu-icon" src="/static/images/jilu.png" mode="aspectFit"></image>
-					<text class="menu-text">直播历史</text>
+		</navigator>
+		<view class="border-bottom"></view>
+		<view class="menu-item">
+			<image class="menu-icon" src="/static/images/hg/mine_comment.png" mode="aspectFit"></image>
+			<view class="menu-item__content">
+				<text class="menu-text">我的评论</text>
+				<view class="menu-item__right">
+					<image class="right-arrow" src="/static/images/hg/right_arrow.png" mode="aspectFit"></image>
 				</view>
-				<image class="right-arrow" src="/static/images/huangguan/icon_check_more.png" mode="aspectFit"></image>
-			</navigator>
-			<navigator url="/pages/my/play-records/play-records" hover-class="none" class="menu-item">
-				<view class="menu-item__left">
-					<image class="menu-icon" src="/static/images/play-records.png" mode="aspectFit"></image>
-					<text class="menu-text">浏览记录</text>
-				</view>
-				<image class="right-arrow" src="/static/images/huangguan/icon_check_more.png" mode="aspectFit"></image>
-			</navigator>
-			<navigator url="/pages/my/download-records/download-records" hover-class="none" class="menu-item">
-				<view class="menu-item__left">
-					<image class="menu-icon" src="/static/images/download-records.png" mode="aspectFit"></image>
-					<text class="menu-text">下载记录</text>
-				</view>
-				<image class="right-arrow" src="/static/images/huangguan/icon_check_more.png" mode="aspectFit"></image>
-			</navigator>
-			<view style="margin-top: 50rpx;">
-				<text class="copy">系统开发商：一颗优雅草科技-蜻蜓S系统（直播）</text>
-				<text class="copy">官网：songshu.youyacao.com</text>
-				<text class="copy">本系统所有内容仅供功能演示不做其他一切商业用途</text>
-				<text class="copy">服务器：腾讯云  内容识别：知道创宇 美颜剪辑：涂图科技</text>
 			</view>
+		</view>
+		<view class="border-bottom"></view>
+		<view class="menu-item">
+			<image class="menu-icon" src="/static/images/hg/mine_like.png" mode="aspectFit"></image>
+			<view class="menu-item__content">
+				<text class="menu-text">我的点赞</text>
+				<view class="menu-item__right">
+					<image class="right-arrow" src="/static/images/hg/right_arrow.png" mode="aspectFit"></image>
+				</view>
+			</view>
+		</view>
+		<view class="border-bottom"></view>
+		<navigator url="/pages/my/download-records/download-records" hover-class="none" class="menu-item">
+			<image class="menu-icon" src="/static/images/hg/mine_cache.png" mode="aspectFit"></image>
+			<view class="menu-item__content">
+				<text class="menu-text">我的下载</text>
+				<view class="menu-item__right">
+					<image class="right-arrow" src="/static/images/hg/right_arrow.png" mode="aspectFit"></image>
+				</view>
+			</view>
+		</navigator>
+		<view class="border-bottom"></view>
+		<navigator url="/pages/my/play-records/play-records" hover-class="none" class="menu-item">
+			<image class="menu-icon" src="/static/images/hg/mine_browse_record.png" mode="aspectFit"></image>
+			<view class="menu-item__content">
+				<text class="menu-text">播放记录</text>
+				<view class="menu-item__right">
+					<image class="right-arrow" src="/static/images/hg/right_arrow.png" mode="aspectFit"></image>
+				</view>
+			</view>
+		</navigator>
+		<view class="hr"></view>
+		<navigator url="/pages/my/setting/setting" hover-class="none" class="menu-item">
+			<image class="menu-icon" src="/static/images/hg/mine_setting.png" mode="aspectFit"></image>
+			<view class="menu-item__content">
+				<text class="menu-text">设置</text>
+				<view class="menu-item__right">
+					<image class="right-arrow" src="/static/images/hg/right_arrow.png" mode="aspectFit"></image>
+				</view>
+			</view>
+		</navigator>
+		<!-- <navigator url="" hover-class="none" class="menu-item">
+			<view class="menu-item__left">
+				<image class="menu-icon" src="/static/images/my-video.png" mode="aspectFit"></image>
+				<text class="menu-text">我的视频</text>
+			</view>
+			<image class="right-arrow" src="/static/images/hg/right_arrow.png" mode="aspectFit"></image>
+		</navigator>
+		<view class="menu-item" @tap="_createLive">
+			<view class="menu-item__left">
+				<image class="menu-icon" src="/static/images/live.png" mode="aspectFit"></image>
+				<text class="menu-text">创建直播</text>
+			</view>
+			<image class="right-arrow" src="/static/images/hg/right_arrow.png" mode="aspectFit"></image>
+		</view>
+		<navigator url="/pages/live/record/record" hover-class="none" class="menu-item">
+			<view class="menu-item__left">
+				<image class="menu-icon" src="/static/images/jilu.png" mode="aspectFit"></image>
+				<text class="menu-text">直播历史</text>
+			</view>
+			<image class="right-arrow" src="/static/images/hg/right_arrow.png" mode="aspectFit"></image>
+		</navigator> -->
+		<view style="margin-top: 50rpx;">
+			<text class="copy">系统开发商：一颗优雅草科技-蜻蜓S系统（直播）</text>
+			<text class="copy">官网：songshu.youyacao.com</text>
+			<text class="copy">本系统所有内容仅供功能演示不做其他一切商业用途</text>
+			<text class="copy">服务器：腾讯云  内容识别：知道创宇 美颜剪辑：涂图科技</text>
 		</view>
 		<!-- <view class="nav-box">
 			<v-tabbar></v-tabbar>
@@ -221,6 +334,207 @@
 </script>
 
 <style lang="scss" scoped>
+	.color-grey {
+		color: #a9a9a9;
+	}
+	.color-pink {
+		color: #fc80a2;
+	}
+	.border-bottom {
+		border-bottom-width: 1rpx;
+		border-bottom-color: #ededed;
+		margin-left: 92rpx;
+	}
+	.menu-item__right--text {
+		font-size: 28rpx;
+	}
+	.menu-item__content {
+		flex: 1;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		padding: 40rpx 0;
+	}
+	.balance-right__arrow {
+		width: 28rpx;
+		height: 28rpx;
+		margin-right: 20rpx;
+	}
+	.balance-right__foot {
+		flex-direction: row;
+		align-items: center;
+	}
+	.balance-right {
+		justify-content: center;
+	}
+	.balance-right__content {
+		padding: 0 24rpx;
+	}
+	.balance-right__title {
+		font-size: 32rpx;
+		color: #FFFFFF;
+		font-weight: bold;
+		margin-bottom: 20rpx;
+	}
+	.balance-right__text {
+		font-size: 28rpx;
+		color: #FFFFFF;
+	}
+	.balance-left__value {
+		font-size: 32rpx;
+		color: #FFFFFF;
+		font-weight: bold;
+	}
+	.balance-left__foot {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.balance-left__label {
+		font-size: 24rpx;
+		color: #FFFFFF;
+	}
+	.balance-left__title {
+		font-size: 32rpx;
+		color: #FFFFFF;
+		font-weight: bold;
+		margin-top: 35rpx;
+		margin-bottom: 32rpx;
+	}
+	.balance-left__content {
+		padding-left: 24rpx;
+		padding-right: 36rpx;
+	}
+	.balance-left__bg {
+		width: 86rpx;
+		height: 48rpx;
+		position: absolute;
+		top: 32rpx;
+		right: 0;
+	}
+	.balance-left {
+		width: 245rpx;
+		height: 160rpx;
+		background-color: #f7b600;
+		border-radius: 16rpx;
+	}
+	.balance {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.balance-right__bg {
+		width: 426rpx;
+		height: 160rpx;
+		position: absolute;
+	}
+	.balance-right {
+		width: 426rpx;
+		height: 160rpx;
+	}
+	.balance {
+		padding: 20rpx 28rpx;
+	}
+	.top-foot__item--title1 {
+		font-size: 32rpx;
+		font-weight: bold;
+		color: #8f4503;
+	}
+	.top-foot__item--text1 {
+		font-size: 28rpx;
+		color: #8f4503 ;
+	}
+	.top-foot__item--icon1 {
+		width: 40rpx;
+		height: 36rpx;
+		margin-right: 20rpx;
+	}
+	.top-foot__item--title {
+		font-size: 32rpx;
+		font-weight: bold;
+		color: #ad290b;
+	}
+	.top-foot__item--text {
+		font-size: 28rpx;
+		color: #ad290b;
+	}
+	.top-foot__item--box {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0 32rpx;
+	}
+	.top-foot__item--bg {
+		position: absolute;
+		width: 690rpx;
+		height: 120rpx;
+	}
+	.top-foot__item--col {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.top-foot__item {
+		justify-content: center;
+		width: 690rpx;
+		height: 120rpx;
+		margin-top: 20rpx;
+	}
+	.top-foot__item--arrow {
+		width: 28rpx;
+		height: 28rpx;
+	}
+	.top-foot__item--icon {
+		width: 42rpx;
+		height: 30rpx;
+		margin-right: 20rpx;
+	}
+	.hr {
+		height: 18rpx;
+		background-color: #f5f5f5;
+	}
+	.top-main__item--label {
+		font-size: 28rpx;
+		color: #999999;
+	}
+	.top-main__item--value {
+		font-size: 40rpx;
+		font-weight: bold;
+	}
+	.top-main__item--content {
+		padding: 30rpx;
+	}
+	.top-main__item--bg {
+		width: 336rpx;
+		height: 140rpx;
+		position: absolute;
+	}
+	.top-main__item {
+		width: 336rpx;
+		height: 140rpx;
+	}
+	.top-main {
+		flex-direction: row;
+		justify-content: space-between;
+	}
+	.top-head {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 32rpx;
+	}
+	.top-head__text {
+		font-size: 32rpx;
+	}
+	.top-head__icon {
+		width: 40rpx;
+		height: 40rpx;
+	}
+	.top {
+		padding: 32rpx 28rpx 18rpx;
+		border-top-color: #ededed ;
+		border-top-width: 1rpx;
+	}
 	.mb-45 {
 		margin-bottom: 45rpx;
 	}
@@ -249,49 +563,8 @@
 		width: 60rpx;
 		height: 60rpx;
 	}
-	.vip-bg__tip {
-		font-size: 32rpx;
-		color: #a96b11;
-	}
-	.vip-bg__btn {
-		background-color: #a96b11;
-		color: #FFFFFF;
-		height: 55rpx;
-		line-height: 55rpx;
-		padding: 0 30rpx;
-		font-size: 32rpx;
-		border-radius: 27.5rpx;
-	}
-	.vip-bg__left {
-		flex-direction: row;
-		align-items: center;
-		flex: 1;
-	}
-	.vip-bg__content {
-		width: 698rpx;
-		height: 116rpx;
-		padding: 0 40rpx;
-		align-items: center;
-		flex-direction: row;
-	}
-	.vip-bg__tag {
-		width: 66rpx;
-		height: 47rpx;
-		margin-right: 20rpx;
-	}
-	.vip-bg__box {
-		width: 750rpx;
-		height: 116rpx;
-		align-items: center;
-		justify-content: center;
-	}
-	.vip-bg__image {
-		position: absolute;
-		width: 698rpx;
-		height: 116rpx;
-	}
 	.nav-settings__icon {
-		width: 50rpx;
+		width: 58rpx;
 		height: 50rpx;
 	}
 	.nav {
@@ -324,7 +597,7 @@
 		font-size: 32rpx;
 		color: #333;
 	}
-	.menu-item__left {
+	.menu-item__right {
 		flex-direction: row;
 		align-items: center;
 	}
@@ -333,6 +606,7 @@
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
+		padding: 0 28rpx;
 	}
 	.menu-icon {
 		width: 40rpx;
@@ -340,11 +614,8 @@
 		margin-right: 24rpx;
 	}
 	.right-arrow {
-		width: 35rpx;
-		height: 35rpx;
-	}
-	.menu-box {
-		padding: 32rpx;
+		width: 28rpx;
+		height: 28rpx;
 	}
 	.head-item__value {
 		font-size: 40rpx;
