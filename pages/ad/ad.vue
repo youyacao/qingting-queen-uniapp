@@ -48,9 +48,9 @@
 				clearInterval(this.timer)
 				this.timer = setInterval(() => {
 					this.countdown--
-					if (this.countdown < 0) {
+					if (this.countdown <= 0) {
 						clearInterval(this.timer)
-						uni.switchTab({
+						uni.redirectTo({
 							url: '/pages/home/home'
 						})
 					}
@@ -58,7 +58,7 @@
 			},
 			_skip() {
 				clearInterval(this.timer)
-				uni.switchTab({
+				uni.redirectTo({
 					url: '/pages/home/home'
 				})
 			}

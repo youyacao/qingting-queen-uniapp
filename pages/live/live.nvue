@@ -23,9 +23,9 @@
 				</view>
 			</cell>
 		</list>
-		<!-- <view class="nav-box">
+		<view class="nav-box">
 			<v-tabbar></v-tabbar>
-		</view> -->
+		</view>
 	</view>
 </template>
 

@@ -29,7 +29,7 @@
 
 <style lang="scss">
 	/*每个页面公共css */
-	// #ifndef APP-NVUE
+	// #ifndef APP-PLUS-NVUE
 	@import "uview-ui/index.scss"
 	// #endif
 </style>

@@ -1,7 +1,7 @@
 <template>
 	<view class="body">
 		<list :pagingEnabled="true" :show-scrollbar="false" :scrollable="scrollable" @scroll="onScroll">
-			<cell :style="{'height': `${bodyHeight}px`}" v-for="(item, index) in videoList" :key="`cell_${index}`">
+			<cell :style="{'height': `${windowHeight}px`}" v-for="(item, index) in videoList" :key="`cell_${index}`">
 				<v-video v-if="index > (playIndex - 3) && (playIndex + 3) > index" :src="item.video_url" :video="item" :index="index"
 				 :current="playIndex" :ref="`video_${index}`" @play="onPlay" :videoStyle="videoStyle"></v-video>
 				<cover-view class="alert-cover__view" v-if="noPlay">
@@ -843,7 +843,7 @@
 	.bottom {
 		position: absolute;
 		right: 150rpx;
-		bottom: 10px;
+		bottom: 60px;
 		left: 0;
 		padding: 12rpx 24rpx;
 	}

@@ -1,20 +1,62 @@
 <template>
 	<view class="nav">
-		<view class="nav-item" @tap="_switchTab('/pages/home/home')">
-			<text class="nav-item__text" :class="{'active': path === '/pages/home/home'}">首页</text>
-		</view>
-		<view class="nav-item" @tap="_switchTab('/pages/live/live')">
-			<text class="nav-item__text" :class="{'active': path === '/pages/live/live'}">直播</text>
-		</view>
-		<view class="nav-item" @tap="_switchTab('/pages/upload-video/upload-video')">
-			<image class="nav-item__icon" src="/static/images/add-icon-1.png" mode=""></image>
-		</view>
-		<view class="nav-item" @tap="_switchTab('/pages/message/message')">
-			<text class="nav-item__text" :class="{'active': path === '/pages/message/message'}">朋友圈</text>
-		</view>
-		<view class="nav-item" @tap="_switchTab('/pages/my/my')">
-			<text class="nav-item__text" :class="{'active': path === '/pages/my/my'}">我的</text>
-		</view>
+		<template v-if="path === home">
+			<view class="nav-item">
+				<image class="nav-item__icon" src="/static/images/tabbar/common_short_video_2_selected.png" mode="aspectFit"></image>
+				<text class="nav-item__icon--white">精选</text>
+			</view>
+			<view class="nav-item" @tap="_jumpPage(latestVideo)">
+				<image class="nav-item__icon" src="/static/images/tabbar/common_film_unselected.png" mode="aspectFit"></image>
+				<text class="nav-item__icon--white">最新</text>
+			</view>
+			<view class="nav-item" @tap="_jumpPage(longVideo)">
+				<image class="nav-item__icon" src="/static/images/tabbar/common_short_video_unselected.png" mode="aspectFit"></image>
+				<text class="nav-item__icon--white">长视频</text>
+			</view>
+			<view class="nav-item" @tap="_jumpPage(shortVideo)">
+				<image class="nav-item__icon" src="/static/images/tabbar/common_game_unselected.png" mode="aspectFit"></image>
+				<text class="nav-item__icon--white">短视频</text>
+			</view>
+			<view class="nav-item" @tap="_jumpPage(community)">
+				<image class="nav-item__icon" src="/static/images/tabbar/common_home_unselected.png" mode="aspectFit"></image>
+				<text class="nav-item__icon--white">社区</text>
+			</view>
+			<view class="nav-item" @tap="_jumpPage(my)">
+				<image class="nav-item__icon" src="/static/images/tabbar/common_mine_unselected.png" mode="aspectFit"></image>
+				<text class="nav-item__icon--white">我的</text>
+			</view>
+		</template>
+		<template v-else>
+			<view class="nav-item" @tap="_jumpPage(home)">
+				<image class="nav-item__icon" src="/static/images/tabbar/common_short_video_2_normal.png" mode="aspectFit"></image>
+				<text class="nav-item__text">精选</text>
+			</view>
+			<view class="nav-item" @tap="_jumpPage(latestVideo)">
+				<image class="nav-item__icon" src="/static/images/tabbar/common_film_selected.png" mode="aspectFit" v-if="path === latestVideo"></image>
+				<image class="nav-item__icon" src="/static/images/tabbar/common_film_normal.png" mode="aspectFit" v-else></image>
+				<text class="nav-item__text" :class="{'active': path === latestVideo}">最新</text>
+			</view>
+			<view class="nav-item" @tap="_jumpPage(longVideo)">
+				<image class="nav-item__icon" src="/static/images/tabbar/common_short_video_selected.png" mode="aspectFit" v-if="path === longVideo"></image>
+				<image class="nav-item__icon" src="/static/images/tabbar/common_short_video_normal.png" mode="aspectFit" v-else></image>
+				<text class="nav-item__text" :class="{'active': path === longVideo}">长视频</text>
+			</view>
+			<view class="nav-item" @tap="_jumpPage(shortVideo)">
+				<image class="nav-item__icon" src="/static/images/tabbar/common_game_selected.png" mode="aspectFit" v-if="path === shortVideo"></image>
+				<image class="nav-item__icon" src="/static/images/tabbar/common_game_normal.png" mode="aspectFit" v-else></image>
+				<text class="nav-item__text" :class="{'active': path === shortVideo}">短视频</text>
+			</view>
+			<view class="nav-item" @tap="_jumpPage(community)">
+				<image class="nav-item__icon" src="/static/images/tabbar/common_home_selected.png" mode="aspectFit" v-if="path === community"></image>
+				<image class="nav-item__icon" src="/static/images/tabbar/common_home_normal.png" mode="aspectFit" v-else></image>
+				<text class="nav-item__text" :class="{'active': path === community}">社区</text>
+			</view>
+			<view class="nav-item" @tap="_jumpPage(my)">
+				<image class="nav-item__icon" src="/static/images/tabbar/common_mine_selected.png" mode="aspectFit" v-if="path === my"></image>
+				<image class="nav-item__icon" src="/static/images/tabbar/common_mine_normal.png" mode="aspectFit" v-else></image>
+				<text class="nav-item__text" :class="{'active': path === my}">我的</text>
+			</view>
+		</template>
 	</view>
 </template>
 
@@ -23,42 +65,48 @@
 	
 	export default {
 		data() {
-			return {};
+			return {
+				home: '/pages/home/home',
+				my: '/pages/my/my',
+				community: '/pages/message/message',
+				longVideo: '/pages/long-video/long-video',
+				latestVideo: '/pages/latest/latest',
+				shortVideo: '/pages/short-video/short-video'
+			};
 		},
 		computed: {
 			...mapState(['path'])
 		},
 		methods: {
 			...mapMutations(['setPath']),
-			_switchTab(url) {
+			_jumpPage(url) {
 				this.setPath(url)
-				uni.switchTab({ url })
+				uni.redirectTo({ url })
 			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
+	.text-white {
+		color: #FFFFFF;
+	}
 	.active {
-		border-bottom-color: #ff004d;
-		color: #ff004d;
+		color: #fc80a2;
+	}
+	.nav-item__icon--white {
+		color: #FFFFFF;
+		font-size: 24rpx;
+		margin-top: 5rpx;
 	}
 	.nav-item__icon {
-		width: 45rpx;
-		height: 45rpx;
+		width: 40rpx;
+		height: 40rpx;
 	}
 	.nav-item__text {
 		color: #333333;
-		height: 50px;
-		line-height: 50px;
-		font-size: 28rpx;
-		/* #ifdef APP-NVUE */
-		border-bottom-width: 2rpx;
-		border-bottom-color: transparent;
-		/* #endif */
-		/* #ifndef APP-NVUE */
-		border-bottom: 2rpx solid transparent;
-		/* #endif */
+		font-size: 24rpx;
+		margin-top: 5rpx;
 	}
 	.nav-item {
 		/* #ifndef APP-NVUE */

@@ -155,9 +155,9 @@
 				<image class="shang-icon" src="/static/images/shang.png" mode=""></image>
 			</view>
 		</uni-popup>
-		<!-- <view class="nav-box">
+		<view class="nav-box">
 			<v-tabbar></v-tabbar>
-		</view> -->
+		</view>
 	</view>
 </template>
 
