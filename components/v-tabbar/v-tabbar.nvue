@@ -111,6 +111,7 @@
 	.nav-item {
 		/* #ifndef APP-NVUE */
 		display: flex;
+		flex-direction: column;
 		/* #endif */
 		height: 50px;
 		flex: 1;

@@ -53,6 +53,7 @@
 		onLoad() {
 			// uni.hideTabBar()
 			VideoList().then(({ data, code }) => {
+				// console.log(data)
 				if (code === 200) {
 					this.list = data.list
 				}

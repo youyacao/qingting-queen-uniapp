@@ -1,5 +1,36 @@
 <template>
 	<view class="body">
+		<view class="top">
+			<view :style="{'height':statusBarHeight}"></view>
+			<view class="nav">
+				<scroll-view scroll-x="true" class="nav-l">
+					<view class="nav-item" v-for="(nav, i) in 10" :key="`nav_${i}`">
+						<text class="nav-text" :class="{'color-pink': i === active}">推荐</text>
+						<view class="nav-text__active" :class="{'bg-pink': i === active}"></view>
+					</view>
+				</scroll-view>
+				<image class="nav-icon" src="/static/images/hg/film_edit.png" mode=""></image>
+			</view>
+			<view class="search">
+				<view class="search-l">
+					<image class="search-l__icon" src="/static/images/hg/film_search.png" mode=""></image>
+					<text class="search-l__text">搜国产</text>
+				</view>
+			</view>
+		</view>
+		<list class="list" show-scrollbar="false">
+			<cell class="row" v-for="(row, i) in 20" :key="i">
+				<view class="item" v-for="(item, index) in 2" :key="index" :class="{'odd': index === 0, 'even': index === 1}">
+					<view class="container">
+						<image class="cover" src="http://api.btstu.cn/sjbz/api.php?lx=meizi&format=images" mode="aspectFill"></image>
+						<view class="title-box">
+							<text class="title">保持纵横比缩放图片，只保证图片的短边能完全显示出来。也就是说，图片通常只在水平或垂直方向是完整的，另一个方向将会发生截取。</text>
+							<text class="time">01:17</text>
+						</view>
+					</view>
+				</view>
+			</cell>
+		</list>
 		<view class="nav-box">
 			<v-tabbar></v-tabbar>
 		</view>
@@ -7,11 +38,16 @@
 </template>
 
 <script>
+	import { mapGetters } from 'vuex'
+	
 	export default {
 		data() {
 			return {
-				
+				active: 0
 			}
+		},
+		computed: {
+			...mapGetters(['statusBarHeight'])
 		},
 		methods: {
 			
@@ -20,11 +56,117 @@
 </script>
 
 <style>
+	.time {
+		font-size: 28rpx;
+		color: #FFFFFF;
+		text-align: right;
+		margin-top: 18rpx;
+	}
+	.title-box {
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		padding: 12rpx;
+	}
+	.title {
+		lines: 1;
+		text-overflow: ellipsis;
+		color: #FFFFFF;
+		font-size: 32rpx;
+	}
+	.cover {
+		position: absolute;
+		width: 357rpx;
+		height: 488rpx;
+		border-radius: 12rpx;
+	}
+	.search-l__text {
+		font-size: 28rpx;
+		color: #939393;
+	}
+	.search-l__icon {
+		width: 30rpx;
+		height: 30rpx;
+		margin-right: 12rpx;
+	}
+	.search-l {
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		background-color: #eeeeee;
+		height: 54rpx;
+		border-radius: 27rpx;
+	}
+	.color-pink {
+		color: #f684a1;
+	}
+	.bg-pink {
+		background-color: #f684a1;
+	}
+	.nav-text__active {
+		width: 42rpx;
+		height: 6rpx;
+		border-radius: 6rpx;
+	}
+	.nav-text {
+		font-size: 36rpx;
+		font-weight: bold;
+		padding-bottom: 14rpx;
+	}
+	.nav-item {
+		width: 120rpx;
+		align-items: center;
+	}
+	.nav-icon {
+		width: 80rpx;
+		height: 86rpx;
+	}
+	.nav-l {
+		flex: 1;
+		flex-direction: row;
+	}
+	.search {
+		height: 90rpx;
+		padding: 0 18rpx;
+		justify-content: center;
+	}
+	.container {
+		background-color: #eeeeee;
+		height: 488rpx;
+		border-radius: 12rpx;
+	}
+	.row {
+		flex-direction: row;
+		padding: 12rpx 18rpx 0;
+	}
+	.nav {
+		padding: 0 18rpx;
+		height: 86rpx;
+		flex-direction: row;
+		align-items: flex-end;
+		border-bottom-color: #e8e8e8;
+		border-bottom-width: 1rpx;
+	}
+	.list {
+		flex: 1;
+		padding-bottom: 50px;
+	}
+	.even {
+		padding-left: 6rpx;
+	}
+	.odd {
+		padding-right: 6rpx;
+	}
+	.item {
+		width: 357rpx;
+	}
 	.nav-box {
 		position: fixed;
 		right: 0;
 		bottom: 0;
 		left: 0;
+		background-color: #FFFFFF;
 	}
 	.body {
 		flex: 1;
