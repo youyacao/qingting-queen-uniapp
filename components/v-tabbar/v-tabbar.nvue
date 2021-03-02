@@ -80,6 +80,8 @@
 		methods: {
 			...mapMutations(['setPath']),
 			_jumpPage(url) {
+				if (this.path === url) return
+				this.path = url
 				this.setPath(url)
 				uni.redirectTo({ url })
 			}

@@ -3,10 +3,14 @@
 		<view class="top">
 			<view :style="{'height':statusBarHeight}"></view>
 			<view class="nav">
-				<scroll-view scroll-x="true" class="nav-l">
-					<view class="nav-item" v-for="(nav, i) in 10" :key="`nav_${i}`">
-						<text class="nav-text" :class="{'color-pink': i === active}">推荐</text>
-						<view class="nav-text__active" :class="{'bg-pink': i === active}"></view>
+				<scroll-view scroll-x="true" class="nav-l" v-if="navList">
+					<view class="nav-item" @tap="_tapNav({}, 0)">
+						<text class="nav-text" :class="{'color-pink': current === 0}">推荐</text>
+						<view class="nav-text__active" :class="{'bg-pink': current === 0}"></view>
+					</view>
+					<view class="nav-item" v-for="(nav, i) in navList.children" :key="`nav_${i}`" @tap="_tapNav(nav, i + 1)">
+						<text class="nav-text" :class="{'color-pink': i + 1 === current}">{{ nav.name }}</text>
+						<view class="nav-text__active" :class="{'bg-pink': i + 1 === current}"></view>
 					</view>
 				</scroll-view>
 				<image class="nav-icon" src="/static/images/hg/film_edit.png" mode=""></image>
@@ -14,23 +18,44 @@
 			<view class="search">
 				<view class="search-l">
 					<image class="search-l__icon" src="/static/images/hg/film_search.png" mode=""></image>
-					<text class="search-l__text">搜国产</text>
+					<text class="search-l__text">搜番号、女优、标题等</text>
+				</view>
+				<view class="search-r">
+					<image class="search-r__icon" src="/static/images/hg/film_recommend_collect.png" mode="aspectFit"></image>
+					<image class="search-r__icon" src="/static/images/hg/mine_browse_record.png" mode="aspectFit"></image>
+					<image class="search-r__icon" src="/static/images/hg/mine_cache.png" mode="aspectFit"></image>
 				</view>
 			</view>
 		</view>
-		<list class="list" show-scrollbar="false">
-			<cell class="row" v-for="(row, i) in 20" :key="i">
-				<view class="item" v-for="(item, index) in 2" :key="index" :class="{'odd': index === 0, 'even': index === 1}">
-					<view class="container">
-						<image class="cover" src="http://api.btstu.cn/sjbz/api.php?lx=meizi&format=images" mode="aspectFill"></image>
-						<view class="title-box">
-							<text class="title">保持纵横比缩放图片，只保证图片的短边能完全显示出来。也就是说，图片通常只在水平或垂直方向是完整的，另一个方向将会发生截取。</text>
-							<text class="time">01:17</text>
+		<swiper class="swiper" :current="current" @change="_change" v-if="navList">
+			<swiper-item v-for="(swiper, i) in navList.children.length + 1" :key="`swiper_${i}`">
+				<list class="list" show-scrollbar="false" @loadmore="_loadmore">
+					<cell class="row" v-for="(row, i) in list[current]" :key="i">
+						<view class="item" v-for="(item, index) in row" :key="index" :class="{'odd': index === 0, 'even': index === 1}">
+							<view class="container" @tap="_play(i * 2 + index)">
+								<image class="cover" :src="item.thumb" mode="aspectFill"></image>
+								<view class="title-box">
+									<text class="title">{{ item.title }}</text>
+									<text class="time">{{ item.duration_str || '00:00' }}</text>
+								</view>
+							</view>
 						</view>
-					</view>
-				</view>
-			</cell>
-		</list>
+					</cell>
+					<cell v-if="init[current]">
+						<text class="alert">正在加载...</text>
+					</cell>
+					<cell v-if="!init[current] && list.length && list[current].length === 0">
+						<text class="alert">暂无数据</text>
+					</cell>
+					<cell v-if="loading[current]">
+						<text class="alert">加载更多中...</text>
+					</cell>
+					<cell v-if="noData[current] && list.length && list[current].length > 10">
+						<text class="alert">没有更多了</text>
+					</cell>
+				</list>
+			</swiper-item>
+		</swiper>
 		<view class="nav-box">
 			<v-tabbar></v-tabbar>
 		</view>
@@ -38,24 +63,132 @@
 </template>
 
 <script>
-	import { mapGetters } from 'vuex'
+	import { mapGetters, mapMutations } from 'vuex'
+	import { toTwoArray } from '@/common/common.js'
+	import { Categories, VList } from '@/common/api.js'
 	
 	export default {
 		data() {
 			return {
-				active: 0
+				current: 0,
+				navList: null,
+				categoryId: '',
+				list: [],
+				page: [],
+				loading: [],
+				init: [],
+				noData: [],
+				videoList: [],
+				id: ''
 			}
 		},
 		computed: {
 			...mapGetters(['statusBarHeight'])
 		},
+		onLoad() {
+			this._getCategory()
+		},
 		methods: {
-			
+			...mapMutations(['setVideoList']),
+			_getCategory () {
+				Categories().then(({ code, data }) => {
+					if (code === 200) {
+						this.navList = data[0]
+						this.id = data[0].id
+						this.categoryId = this.id
+						
+						const _length = this.navList.children.length + 1
+						for (let i = 0; i < _length; i++) {
+							this.list[i] = []
+							this.init[i] = true
+							this.page[i] = 1
+							this.loading[i] = false
+							this.noData[i] = false
+						}
+						this._getVideoList()
+					}
+				})
+			},
+			_tapNav(nav, i) {
+				this.current = i
+			},
+			_change({ detail }) {
+				this.current = detail.current
+			},
+			_loadmore() {
+				if (this.noData[this.current]) {
+					return uni.showToast({
+						title: '没有更多了',
+						icon: 'none'
+					})
+				}
+				this.page[this.current]++
+				this.loading[this.current] = true
+				this._getVideoList()
+			},
+			_getVideoList() {
+				if (this.page[this.current] > 1) {
+					uni.showLoading({
+						title: '加载更多中...'
+					})
+				}
+				VList({
+					page: this.page[this.current],
+					category_id: this.categoryId,
+					limit: 10
+				}).then(({ code, data }) => {
+					if (code === 200) {
+						const { total_page, current_page, list } = data
+						if (current_page === 1) {
+							this.list[this.current] = toTwoArray(list, 2)
+							this.videoList[this.current] = list
+						} else {
+							const _list = this.list[this.current].concat(toTwoArray(list, 2))
+							this.$set(this.list, this.current, _list)
+							this.videoList[this.current] = this.videoList[this.current].concat(list)
+						}
+						if (total_page === 0 || current_page >= total_page) {
+							this.$set(this.noData, this.current, true)
+						}
+						this.$set(this.loading, this.current, false)
+						this.$set(this.init, this.current, false)
+					}
+					if (this.page[this.current] > 1) {
+						uni.hideLoading()
+					}
+				})
+			},
+			_play(index) {
+				this.setVideoList(this.videoList[this.current].slice(index))
+				uni.navigateTo({
+					url: '/pages/latest/player/player'
+				})
+			}
+		},
+		watch: {
+			current(val) {
+				if (this.current === 0) {
+					this.categoryId = this.id
+				} else {
+					this.categoryId = this.navList.children[val - 1].id
+				}
+				if (!this.init[val]) return
+				this._getVideoList()
+			}
 		}
 	}
 </script>
 
 <style>
+	.alert {
+		text-align: center;
+		color: #999999;
+		padding: 18rpx 0;
+		font-size: 24rpx;
+	}
+	.swiper {
+		flex: 1;
+	}
 	.time {
 		font-size: 28rpx;
 		color: #FFFFFF;
@@ -81,6 +214,10 @@
 		height: 488rpx;
 		border-radius: 12rpx;
 	}
+	.search-r__icon {
+		width: 40rpx;
+		height: 40rpx;
+	}
 	.search-l__text {
 		font-size: 28rpx;
 		color: #939393;
@@ -90,10 +227,18 @@
 		height: 30rpx;
 		margin-right: 12rpx;
 	}
+	.search-r {
+		flex: 1;
+		flex-direction: row;
+		justify-content: space-between;
+		padding-left: 40rpx;
+		padding-right: 22rpx;
+	}
 	.search-l {
 		flex-direction: row;
 		align-items: center;
 		justify-content: center;
+		width: 468rpx;
 		background-color: #eeeeee;
 		height: 54rpx;
 		border-radius: 27rpx;
@@ -129,7 +274,8 @@
 	.search {
 		height: 90rpx;
 		padding: 0 18rpx;
-		justify-content: center;
+		flex-direction: row;
+		align-items: center;
 	}
 	.container {
 		background-color: #eeeeee;

@@ -12,7 +12,7 @@
 				<text class="top-text">认证女神</text>
 			</view>
 			<view class="flex-1 top-right__icon">
-				<image class="home-detail__more" src="/static/images/hg/home_detail_more.png" mode=""></image>
+				<image class="home-detail__more" src="/static/images/hg/short_video_more.png" mode=""></image>
 			</view>
 		</view>
 		<view class="top-zhuan" :style="{'top': statusBarHeight + 60}" v-if="showZhuan">
@@ -37,6 +37,7 @@
 	import { mapGetters, mapMutations } from 'vuex'
 	import { VideoList } from '@/common/api.js'
 	import VPlayer from '@/components/v-player/v-player'
+	import PlayerList from '@/components/player-list/player-list'
 	
 	export default {
 		data() {
@@ -49,7 +50,7 @@
 		computed: {
 			...mapGetters(['windowHeight', 'statusBarHeight'])
 		},
-		components: { VPlayer },
+		components: { VPlayer, PlayerList },
 		onLoad() {
 			// uni.hideTabBar()
 			VideoList().then(({ data, code }) => {

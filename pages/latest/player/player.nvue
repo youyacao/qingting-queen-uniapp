@@ -1,0 +1,34 @@
+<template>
+	<view class="body">
+		<player-list :list="videoList"></player-list>
+	</view>
+</template>
+
+<script>
+	import { mapState } from 'vuex'
+	import PlayerList from '@/components/player-list/player-list'
+	
+	export default {
+		data() {
+			return {
+				
+			}
+		},
+		computed: {
+			...mapState(['videoList'])
+		},
+		components: { PlayerList },
+		mounted() {
+			console.log(this.videoList)
+		},
+		methods: {
+			
+		}
+	}
+</script>
+
+<style>
+	.body {
+		flex: 1;
+	}
+</style>

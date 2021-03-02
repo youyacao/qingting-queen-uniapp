@@ -20,7 +20,8 @@ const store = new Vuex.Store({
 		},
 		path: '/pages/home/home',
 		pusherMode: 0,
-		config: null
+		config: null,
+		video_list: []
 	},
 	mutations: {
 		setSystemInfo(state, data) {
@@ -45,6 +46,9 @@ const store = new Vuex.Store({
 		},
 		setConfig(state, data) {
 			state.config = data
+		},
+		setVideoList(state, data) {
+			state.video_list = data
 		}
 	},
 	actions: {
