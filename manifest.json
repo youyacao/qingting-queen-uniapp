@@ -1,9 +1,9 @@
 {
-    "name" : "蜻蜓S系统",
-    "appid" : "__UNI__FDAC1CB",
+    "name" : "蜻蜓Q系统",
+    "appid" : "__UNI__2972880",
     "description" : "",
-    "versionName" : "1.9.0",
-    "versionCode" : 190,
+    "versionName" : "2.3.0",
+    "versionCode" : 230,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
@@ -54,7 +54,9 @@
                 ]
             },
             /* ios打包配置 */
-            "ios" : {},
+            "ios" : {
+                "idfa" : false
+            },
             /* SDK配置 */
             "sdkConfigs" : {
                 "oauth" : {},
@@ -93,29 +95,7 @@
                 }
             }
         },
-        "nativePlugins" : {
-            "youyacao-TuSDKEdit" : {
-                "TuSDKAppid" : "f64591d2151aa9b9-02-c2dws1",
-                "__plugin_info__" : {
-                    "name" : "涂图官方合作伙伴-视频剪辑-视频美颜-视频拼接-视频特效sdk-优雅草科技",
-                    "description" : "一款让你直接可以使用涂图原生剪辑SDK的插件。",
-                    "platforms" : "Android",
-                    "url" : "https://ext.dcloud.net.cn/plugin?id=3694",
-                    "android_package_name" : "com.qingting.live",
-                    "ios_bundle_id" : "",
-                    "isCloud" : true,
-                    "bought" : 1,
-                    "pid" : "3694",
-                    "parameters" : {
-                        "TuSDKAppid" : {
-                            "des" : "TuSDKAppid",
-                            "key" : "TuSDKAppid",
-                            "value" : ""
-                        }
-                    }
-                }
-            }
-        }
+        "nativePlugins" : {}
     },
     /* 快应用特有相关 */
     "quickapp" : {},
