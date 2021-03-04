@@ -34,7 +34,8 @@
 					duration: 0
 				},
 				sliderValue: 0,
-				addViewTimer: null
+				addViewTimer: null,
+				changing: false
 			};
 		},
 		computed: {
@@ -85,13 +86,17 @@
 					this.isPause = false
 				}
 			},
-			_sliderChange({
-				value
-			}) {
+			_sliderChange({ value }) {
+				this.changing = false
+				this.$emit('change', { value: value })
 				this.seek(value / 100 * this.detail.duration)
 			},
 			_sliderChanging() {
-				this.pause()
+				this.$emit('changing', { type: 'slider' })
+				if (!this.changing) {
+					this.changing = true
+					this.pause()
+				}
 			},
 			timeUpdate({
 				detail
@@ -106,6 +111,7 @@
 				console.log(event)
 			},
 			onPlay() {
+				this.changing = false
 				clearTimeout(this.addViewTimer)
 				this.isPlay = true
 				this.addViewTimer = setTimeout(() => {

@@ -3,7 +3,7 @@
 		<list :pagingEnabled="true" :show-scrollbar="false" :scrollable="scrollable" @scroll="onScroll">
 			<cell :style="{'height': `${windowHeight}px`}" v-for="(item, index) in videoList" :key="`cell_${index}`">
 				<v-video v-if="index > (playIndex - 3) && (playIndex + 3) > index" :src="item.video_url" :video="item" :index="index"
-				 :current="playIndex" :ref="`video_${index}`" @play="onPlay" :videoStyle="videoStyle"></v-video>
+				 :current="playIndex" :ref="`video_${index}`" @play="onPlay" :videoStyle="videoStyle" @change="sliderChange" @changing="sliderChanging"></v-video>
 				<cover-view class="alert-cover__view" v-if="noPlay">
 					<view class="alert-view">
 						<text class="alert-title">今日观影券不足</text>
@@ -14,7 +14,8 @@
 				</cover-view>
 				<view class="bottom">
 					<view class="bottom-author">
-						<text class="bottom-author__text">@{{ item.nickname || item.username }}</text>
+						<!-- <text class="bottom-author__text">@{{ item.nickname || item.username }}</text> -->
+						<text class="bottom-author__text" v-for="(tag, i) in _getTags(item.tags)" :key="`tag_${i}`">#{{ tag }}</text>
 					</view>
 					<view class="buttom-title">
 						<text class="bottom-title__text">{{ item.title }}</text>
@@ -183,7 +184,8 @@
 				],
 				progress: 0,
 				retryTimes: 0,
-				noPlay: false
+				noPlay: false,
+				tags: ['完美世界', '荒野独居']
 			};
 		},
 		components: {
@@ -213,6 +215,21 @@
 			VVideo
 		},
 		methods: {
+			sliderChange({value}){
+				this.$emit('change', { value: value })
+				this.scrollable = true
+			},
+			sliderChanging(e){
+				this.$emit('changing', { type: 'slider' })
+				this.scrollable = false
+			},
+			_getTags(tags) {
+				if (tags === '') {
+					return []
+				}
+				let _tags = tags.split(',')
+				return _tags.slice(0, 3)
+			},
 			_openSharePopup(item) {
 				this.$refs.sharePopup.open()
 			},
@@ -825,6 +842,7 @@
 
 	.bottom-author {
 		margin-bottom: 24rpx;
+		flex-direction: row;
 	}
 
 	.bottom-title__text {
@@ -837,7 +855,8 @@
 
 	.bottom-author__text {
 		color: #FFFFFF;
-		font-size: 32rpx;
+		font-size: 28rpx;
+		margin-right: 18rpx;
 	}
 
 	.bottom {

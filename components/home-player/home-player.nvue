@@ -14,8 +14,7 @@
 				</cover-view>
 				<view class="bottom">
 					<view class="bottom-author">
-						<!-- <text class="bottom-author__text">@{{ item.nickname || item.username }}</text> -->
-						<text class="bottom-author__text" v-for="(tag, i) in _getTags(item.tags)" :key="`tag_${i}`">#{{ tag }}</text>
+						<text class="bottom-author__text">@{{ item.nickname || item.username }}</text>
 					</view>
 					<view class="buttom-title">
 						<text class="bottom-title__text">{{ item.title }}</text>
@@ -184,8 +183,7 @@
 				],
 				progress: 0,
 				retryTimes: 0,
-				noPlay: false,
-				tags: ['完美世界', '荒野独居']
+				noPlay: false
 			};
 		},
 		components: {
@@ -222,13 +220,6 @@
 			sliderChanging(e){
 				this.$emit('changing', { type: 'slider' })
 				this.scrollable = false
-			},
-			_getTags(tags) {
-				if (tags === '') {
-					return []
-				}
-				let _tags = tags.split(',')
-				return _tags.slice(0, 3)
 			},
 			_openSharePopup(item) {
 				this.$refs.sharePopup.open()
@@ -842,7 +833,6 @@
 
 	.bottom-author {
 		margin-bottom: 24rpx;
-		flex-direction: row;
 	}
 
 	.bottom-title__text {
@@ -855,8 +845,7 @@
 
 	.bottom-author__text {
 		color: #FFFFFF;
-		font-size: 28rpx;
-		margin-right: 18rpx;
+		font-size: 32rpx;
 	}
 
 	.bottom {

@@ -21,10 +21,10 @@
 		</view>
 		<swiper class="swiper" :disable-touch="disabled">
 			<swiper-item>
-				<v-player :list="list"></v-player>
+				<v-player :list="list" @change="disabled = false" @changing="disabled = true"></v-player>
 			</swiper-item>
 			<swiper-item>
-				<view class="swiper-item">2</view>
+				<!-- <home-player :list="list"></home-player> -->
 			</swiper-item>
 		</swiper>
 		<view class="nav-box">
@@ -37,7 +37,7 @@
 	import { mapGetters, mapMutations } from 'vuex'
 	import { VideoList } from '@/common/api.js'
 	import VPlayer from '@/components/v-player/v-player'
-	import PlayerList from '@/components/player-list/player-list'
+	import HomePlayer from '@/components/home-player/home-player.nvue'
 	
 	export default {
 		data() {
@@ -50,11 +50,10 @@
 		computed: {
 			...mapGetters(['windowHeight', 'statusBarHeight'])
 		},
-		components: { VPlayer, PlayerList },
+		components: { VPlayer, HomePlayer },
 		onLoad() {
-			// uni.hideTabBar()
 			VideoList().then(({ data, code }) => {
-				// console.log(data)
+				console.log(data)
 				if (code === 200) {
 					this.list = data.list
 				}
