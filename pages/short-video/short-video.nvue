@@ -18,7 +18,7 @@
 			<view class="search">
 				<view class="search-l">
 					<image class="search-l__icon" src="/static/images/hg/film_search.png" mode=""></image>
-					<text class="search-l__text">搜国产</text>
+					<text class="search-l__text">搜短视频</text>
 				</view>
 			</view>
 		</view>

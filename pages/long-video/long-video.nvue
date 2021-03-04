@@ -18,7 +18,7 @@
 			<view class="search">
 				<view class="search-l">
 					<image class="search-l__icon" src="/static/images/hg/film_search.png" mode=""></image>
-					<text class="search-l__text">搜番号、女优、标题等</text>
+					<text class="search-l__text">搜作者、番号、标题等</text>
 				</view>
 				<view class="search-r">
 					<image class="search-r__icon" src="/static/images/hg/film_recommend_collect.png" mode="aspectFit"></image>
