@@ -57,12 +57,16 @@
 			},
 			videoStyle: {
 				default: {}
+			},
+			autoplay: {
+				type: Boolean,
+				default: false
 			}
 		},
 		mounted() {
 			this.$nextTick(() => {
 				this.videoContext = uni.createVideoContext('video', this)
-				if (this.index === this.current) {
+				if (this.index === this.current && this.autoplay) {
 					this.play()
 				}
 			})
@@ -111,6 +115,7 @@
 				console.log(event)
 			},
 			onPlay() {
+				this.isPause = false
 				this.changing = false
 				clearTimeout(this.addViewTimer)
 				this.isPlay = true

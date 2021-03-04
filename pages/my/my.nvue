@@ -94,7 +94,7 @@
 				<view class="balance-left__content">
 					<text class="balance-left__title">余额</text>
 					<view class="balance-left__foot">
-						<text class="balance-left__value">￥0</text>
+						<text class="balance-left__value">￥{{ userinfo.amount || 0 }}</text>
 						<text class="balance-left__label">充值/提现></text>
 					</view>
 				</view>
@@ -381,14 +381,14 @@
 		color: #FFFFFF;
 	}
 	.balance-left__value {
-		font-size: 32rpx;
+		font-size: 28rpx;
 		color: #FFFFFF;
 		font-weight: bold;
 	}
 	.balance-left__foot {
 		flex-direction: row;
 		align-items: center;
-		justify-content: space-between;
+		justify-content: space-around;
 	}
 	.balance-left__label {
 		font-size: 24rpx;
@@ -400,11 +400,9 @@
 		font-weight: bold;
 		margin-top: 35rpx;
 		margin-bottom: 32rpx;
-	}
-	.balance-left__content {
 		padding-left: 24rpx;
-		padding-right: 36rpx;
 	}
+	.balance-left__content {}
 	.balance-left__bg {
 		width: 86rpx;
 		height: 48rpx;

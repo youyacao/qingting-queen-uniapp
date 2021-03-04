@@ -3,7 +3,7 @@
 		<list :pagingEnabled="true" :show-scrollbar="false" :scrollable="scrollable" @scroll="onScroll">
 			<cell :style="{'height': `${windowHeight}px`}" v-for="(item, index) in videoList" :key="`cell_${index}`">
 				<v-video v-if="index > (playIndex - 3) && (playIndex + 3) > index" :src="item.video_url" :video="item" :index="index"
-				 :current="playIndex" :ref="`video_${index}`" @play="onPlay" :videoStyle="videoStyle" @change="sliderChange" @changing="sliderChanging"></v-video>
+				 :current="playIndex" :ref="`video_${index}`" @play="onPlay" :videoStyle="videoStyle" @change="sliderChange" @changing="sliderChanging" :autoplay="autoplay"></v-video>
 				<cover-view class="alert-cover__view" v-if="noPlay">
 					<view class="alert-view">
 						<text class="alert-title">今日观影券不足</text>
@@ -14,7 +14,9 @@
 				</cover-view>
 				<view class="bottom">
 					<view class="bottom-author">
-						<text class="bottom-author__text">@{{ item.nickname || item.username }}</text>
+						<image class="vip-icon" src="/static/images/hg/mine_goddess_flag.png" mode="aspectFit"></image>
+						<text class="bottom-author__text">认证女神</text>
+						<!-- <text class="bottom-author__text">@{{ item.nickname || item.username }}</text> -->
 					</view>
 					<view class="buttom-title">
 						<text class="bottom-title__text">{{ item.title }}</text>
@@ -31,16 +33,16 @@
 							</view>
 						</view>
 					</view>
-					<view class="mb-32">
+					<view class="right-menu__item mb-32">
 						<image class="like-icon" src="/static/images/like-red.png" mode="" @tap="_cancelPraise(item)" v-if="item.is_like"></image>
 						<image class="like-icon" src="/static/images/like-white.png" mode="" @tap="_praise(item)" v-else></image>
 						<text class="right-text">{{ item.like_num.length > 3 ? item.like_num_str : item.like_num }}</text>
 					</view>
-					<view class="mb-32" @tap="_openCommentPopup(item)">
+					<view class="right-menu__item mb-32" @tap="_openCommentPopup(item)">
 						<image class="comment-icon" src="/static/images/comment.png" mode=""></image>
 						<text class="right-text">{{ item.comment_num.length > 3 ? item.comment_num_str : item.comment_num }}</text>
 					</view>
-					<view @tap="_openSharePopup(item)">
+					<view class="right-menu__item" @tap="_openSharePopup(item)">
 						<image class="share-icon" src="/static/images/share.png" mode=""></image>
 						<text class="right-text">{{ bodyHeight }}{{ item.share_num_str || 0 }}</text>
 					</view>
@@ -119,7 +121,7 @@
 	} from 'vuex'
 	import VVideo from '@/components/v-video/v-video'
 	import {
-		VideoList,
+		VList,
 		Praise,
 		CancelPraise,
 		Follow,
@@ -207,12 +209,25 @@
 			list: {
 				type: Array,
 				default: []
+			},
+			autoplay: {
+				type: Boolean,
+				default: false
 			}
 		},
 		components: {
 			VVideo
 		},
 		methods: {
+			__play() {
+				if (this.videoContext === null) {
+					this.videoContext = this.$refs['video_'+this.playIndex][0]
+				}
+				this.videoContext.play()
+			},
+			__pause() {
+				this.videoContext.pause()
+			},
 			sliderChange({value}){
 				this.$emit('change', { value: value })
 				this.scrollable = true
@@ -374,9 +389,7 @@
 					}
 				})
 			},
-			_commentPopupChange({
-				show
-			}) {},
+			_commentPopupChange({ show }) {},
 			_follow(item) {
 				Follow({
 					follow_id: item.user_id
@@ -449,80 +462,80 @@
 				// 	}
 				// }
 				var index = Math.abs(e.contentOffset.y / this.bodyHeight)
-								const intVaule = Math.round(Math.abs(e.contentOffset.y / this.bodyHeight))
-								
-								if((index + 0.1) > intVaule){
-									index = intVaule
-								}
-								
-								if((index - 1) > this.playIndex || (index + 1) < this.playIndex){
-									if(this.videoContext){
-										this.videoContext.stop()
-										this.playIndex = -1
-									}
-								}
-								if(index == intVaule && index != this.playIndex){
-									if(this.videoList.length>=10 && (this.videoList.length - index) <= 5 && (index - this.last_get_index) > 5){
-										// this.last_get_index = index
-										// this.page++
-										// if(this.totalPage && this.totalPage<this.page){
-										// 	return
-										// }
-										this.getVideoList()
-									}
-									if(this.videoContext){
-										this.videoContext.stop()
-									}
-									// this.isPause = false
-									// this.pageHide = false
-									this.playIndex = index
-									this.$nextTick(() => {
-										if(this.playIndex == index) this.playVideo()
-									});
-								}
+				const intVaule = Math.round(Math.abs(e.contentOffset.y / this.bodyHeight))
+				
+				if((index + 0.1) > intVaule){
+					index = intVaule
+				}
+				
+				if((index - 1) > this.playIndex || (index + 1) < this.playIndex){
+					if(this.videoContext){
+						this.videoContext.stop()
+						this.playIndex = -1
+					}
+				}
+				if(index == intVaule && index != this.playIndex){
+					if(this.videoList.length>=10 && (this.videoList.length - index) <= 5 && (index - this.last_get_index) > 5){
+						// this.last_get_index = index
+						// this.page++
+						// if(this.totalPage && this.totalPage<this.page){
+						// 	return
+						// }
+						this.getVideoList()
+					}
+					if(this.videoContext){
+						this.videoContext.stop()
+					}
+					// this.isPause = false
+					// this.pageHide = false
+					this.playIndex = index
+					this.$nextTick(() => {
+						if(this.playIndex == index) this.playVideo()
+					})
+				}
 			},
-			playVideo(){
-							try{
-								this.videoContext = this.$refs['video_'+this.playIndex][0]
-								if(!this.videoContext){
-									this.retryTimes++
-									//试10次后放弃
-									if(this.retryTimes>10){
-										this.retryTimes = 0
-										return
-									}
-									//1秒钟后再试一下
-									setTimeout(this.playVideo,1000)
-									return
-								}
-								if(this.videoContext.length){
-									this.videoContext =  this.videoContext[0]
-								}
-								
-								if(this.isPause || this.pageHide) return
-								this.retryTimes = 0
-								if(this.playingIndex == -1 && !this.autoplay){
-									this.autoplay = true
-									return
-								}
-								this.videoContext.play()
-								let data = this.videoList[this.playIndex]
-								// if(data){
-								// 	setPlaycount(data._id)
-								// }
-							}catch(e){
-								console.log("获取播放器对象出错",e)
-							}
-							
-						},
+			playVideo() {
+				try{
+					this.videoContext = this.$refs['video_'+this.playIndex][0]
+					if(!this.videoContext){
+						this.retryTimes++
+						//试10次后放弃
+						if(this.retryTimes>10){
+							this.retryTimes = 0
+							return
+						}
+						//1秒钟后再试一下
+						setTimeout(this.playVideo,1000)
+						return
+					}
+					if(this.videoContext.length){
+						this.videoContext =  this.videoContext[0]
+					}
+					
+					if(this.isPause || this.pageHide) return
+					this.retryTimes = 0
+					if(this.playingIndex == -1 && !this.autoplay){
+						this.autoplay = true
+						return
+					}
+					this.videoContext.play()
+					let data = this.videoList[this.playIndex]
+					// if(data){
+					// 	setPlaycount(data._id)
+					// }
+				} catch (e) {
+					console.log("获取播放器对象出错",e)
+				}
+			},
 			onPlay(event) {
 				this.videoRef = this.$refs[`video_${this.playIndex}`][0]
 				this.videoContext = event
 			},
 			getVideoList() {
 				this.page++
-				VideoList({
-					page: this.page
+				VList({
+					page: this.page,
+					is_auth: 'YES'
 				}).then(({
 					data,
 					code
@@ -547,6 +560,14 @@
 </script>
 
 <style lang="scss">
+	.right-menu__item {
+		align-items: center;
+	}
+	.vip-icon {
+		width: 32rpx;
+		height: 32rpx;
+		margin-right: 10rpx;
+	}
 	.alert-cover__view {
 		flex: 1;
 		align-items: center;
@@ -833,6 +854,13 @@
 
 	.bottom-author {
 		margin-bottom: 24rpx;
+		width: 188rpx;
+		height: 60rpx;
+		background-color: rgba($color: #000000, $alpha: 0.4);
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		border-radius: 6rpx;
 	}
 
 	.bottom-title__text {
@@ -844,7 +872,7 @@
 	}
 
 	.bottom-author__text {
-		color: #FFFFFF;
+		color: #e4b214;
 		font-size: 32rpx;
 	}
 

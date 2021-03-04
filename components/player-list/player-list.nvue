@@ -3,7 +3,7 @@
 		<list :pagingEnabled="true" :show-scrollbar="false" :scrollable="scrollable" @scroll="onScroll">
 			<cell :style="{'height': `${windowHeight}px`}" v-for="(item, index) in videoList" :key="`cell_${index}`">
 				<v-video v-if="index > (playIndex - 3) && (playIndex + 3) > index" :src="item.video_url" :video="item" :index="index"
-				 :current="playIndex" :ref="`video_${index}`" @play="onPlay" :videoStyle="videoStyle" @change="sliderChange" @changing="sliderChanging"></v-video>
+				 :current="playIndex" :ref="`video_${index}`" @play="onPlay" :videoStyle="videoStyle" @change="sliderChange" @changing="sliderChanging" :autoplay="autoplay"></v-video>
 				<cover-view class="alert-cover__view" v-if="noPlay">
 					<view class="alert-view">
 						<text class="alert-title">今日观影券不足</text>
@@ -32,16 +32,16 @@
 							</view>
 						</view>
 					</view>
-					<view class="mb-32">
+					<view class="right-menu__item mb-32">
 						<image class="like-icon" src="/static/images/like-red.png" mode="" @tap="_cancelPraise(item)" v-if="item.is_like"></image>
 						<image class="like-icon" src="/static/images/like-white.png" mode="" @tap="_praise(item)" v-else></image>
 						<text class="right-text">{{ item.like_num.length > 3 ? item.like_num_str : item.like_num }}</text>
 					</view>
-					<view class="mb-32" @tap="_openCommentPopup(item)">
+					<view class="right-menu__item mb-32" @tap="_openCommentPopup(item)">
 						<image class="comment-icon" src="/static/images/comment.png" mode=""></image>
 						<text class="right-text">{{ item.comment_num.length > 3 ? item.comment_num_str : item.comment_num }}</text>
 					</view>
-					<view @tap="_openSharePopup(item)">
+					<view class="right-menu__item" @tap="_openSharePopup(item)">
 						<image class="share-icon" src="/static/images/share.png" mode=""></image>
 						<text class="right-text">{{ bodyHeight }}{{ item.share_num_str || 0 }}</text>
 					</view>
@@ -209,6 +209,10 @@
 			list: {
 				type: Array,
 				default: []
+			},
+			autoplay: {
+				type: Boolean,
+				default: false
 			}
 		},
 		components: {
@@ -556,6 +560,9 @@
 </script>
 
 <style lang="scss">
+	.right-menu__item {
+		align-items: center;
+	}
 	.alert-cover__view {
 		flex: 1;
 		align-items: center;

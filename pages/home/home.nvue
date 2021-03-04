@@ -5,11 +5,10 @@
 				<image class="publish-icon" src="/static/images/hg/publish_icon.png" mode=""></image>
 			</navigator>
 			<view class="flex-3 top-center">
-				<view class="top-text__item mr-70">
-					<text class="top-text top-text__active">推荐</text>
-					<view class="top-text__active--border"></view>
+				<view class="top-text__item" :class="{'mr-70': i === 0}" v-for="(nav, i) in navList" :key="`nav_${i}`">
+					<text class="top-text" :class="{'top-text__active': current === i}">{{ nav }}</text>
+					<view class="top-text__active--border" v-if="current === i"></view>
 				</view>
-				<text class="top-text">认证女神</text>
 			</view>
 			<view class="flex-1 top-right__icon">
 				<image class="home-detail__more" src="/static/images/hg/short_video_more.png" mode=""></image>
@@ -19,12 +18,12 @@
 			<image class="top-zhuan__icon" src="/static/images/hg/zhuan.png" mode="" @tap="_jumpZhuan"></image>
 			<image class="top-close__icon" src="/static/images/hg/short_video_close.png" mode="" @tap="_closeZhuan"></image>
 		</view>
-		<swiper class="swiper" :disable-touch="disabled">
+		<swiper class="swiper" :disable-touch="disabled" @change="_swiperChange">
 			<swiper-item>
-				<v-player :list="list" @change="disabled = false" @changing="disabled = true"></v-player>
+				<v-player ref="video1" :list="list" @change="disabled = false" @changing="disabled = true" :autoplay="true"></v-player>
 			</swiper-item>
 			<swiper-item>
-				<!-- <home-player :list="list"></home-player> -->
+				<home-player ref="video2" :list="videoList" @change="disabled = false" @changing="disabled = true" :autoplay="false"></home-player>
 			</swiper-item>
 		</swiper>
 		<view class="nav-box">
@@ -35,7 +34,7 @@
 
 <script>
 	import { mapGetters, mapMutations } from 'vuex'
-	import { VideoList } from '@/common/api.js'
+	import { VideoList, VList } from '@/common/api.js'
 	import VPlayer from '@/components/v-player/v-player'
 	import HomePlayer from '@/components/home-player/home-player.nvue'
 	
@@ -44,7 +43,10 @@
 			return {
 				disabled: false,
 				list: [],
-				showZhuan: true
+				showZhuan: true,
+				navList: ['推荐', '女神认证'],
+				current: 0,
+				videoList: []
 			};
 		},
 		computed: {
@@ -53,16 +55,38 @@
 		components: { VPlayer, HomePlayer },
 		onLoad() {
 			VideoList().then(({ data, code }) => {
-				console.log(data)
+				// console.log(data)
 				if (code === 200) {
 					this.list = data.list
 				}
 			})
+			this._getVideoList()
 		},
 		onShow() {
 			this.setAppHide(false)
 		},
 		methods: {
+			_getVideoList() {
+				VList({
+					is_auth: 'YES'
+				}).then(({ data, code }) => {
+					console.log(data)
+					if (code === 200) {
+						this.videoList = data.list
+					}
+				})
+			},
+			_swiperChange({ detail }) {
+				const { current } = detail
+				this.current = current
+				if (current === 0) {
+					this.$refs.video2.__pause()
+					this.$refs.video1.__play()
+				} else {
+					this.$refs.video1.__pause()
+					this.$refs.video2.__play()
+				}
+			},
 			...mapMutations(['setAppHide']),
 			_closeZhuan() {
 				this.showZhuan = false
