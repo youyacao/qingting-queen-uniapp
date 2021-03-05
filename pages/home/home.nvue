@@ -5,7 +5,7 @@
 				<image class="publish-icon" src="/static/images/hg/publish_icon.png" mode=""></image>
 			</navigator>
 			<view class="flex-3 top-center">
-				<view class="top-text__item" :class="{'mr-70': i === 0}" v-for="(nav, i) in navList" :key="`nav_${i}`">
+				<view class="top-text__item" :class="{'mr-70': i === 0}" v-for="(nav, i) in navList" :key="`nav_${i}`" @tap="current = i">
 					<text class="top-text" :class="{'top-text__active': current === i}">{{ nav }}</text>
 					<view class="top-text__active--border" v-if="current === i"></view>
 				</view>
@@ -18,7 +18,7 @@
 			<image class="top-zhuan__icon" src="/static/images/hg/zhuan.png" mode="" @tap="_jumpZhuan"></image>
 			<image class="top-close__icon" src="/static/images/hg/short_video_close.png" mode="" @tap="_closeZhuan"></image>
 		</view>
-		<swiper class="swiper" :disable-touch="disabled" @change="_swiperChange">
+		<swiper class="swiper" :disable-touch="disabled" :current="current" @change="_swiperChange">
 			<swiper-item>
 				<v-player ref="video1" :list="list" @change="disabled = false" @changing="disabled = true" :autoplay="true"></v-player>
 			</swiper-item>
