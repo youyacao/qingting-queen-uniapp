@@ -99,7 +99,7 @@
 					</view>
 				</view>
 			</view>
-			<view class="balance-right">
+			<navigator url="/pages/my/agent/agent" hover-class="none" class="balance-right">
 				<image class="balance-right__bg" src="/static/images/hg/mine_proxy_entrance_bg.webp" mode=""></image>
 				<view class="balance-right__content">
 					<text class="balance-right__title">全名代理</text>
@@ -108,7 +108,7 @@
 						<image class="balance-right__arrow" src="/static/images/hg/red_right_arrow.png" mode=""></image>
 					</view>
 				</view>
-			</view>
+			</navigator>
 		</view>
 		<view class="hr"></view>
 		<!-- <view class="menu-container">

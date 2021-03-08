@@ -361,7 +361,7 @@
             "path" : "pages/my/agent/agent",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "我的代理",
+                "navigationBarTitleText": "代理赚钱",
                 "enablePullDownRefresh": false
             }
             
