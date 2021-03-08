@@ -73,7 +73,7 @@
 					</view>
 				</view>
 			</navigator>
-			<view class="top-foot__item">
+			<navigator url="/pages/my/vip/vip" hover-class="none" class="top-foot__item">
 				<image class="top-foot__item--bg" src="/static/images/hg/mine_vip_entrance_bg.webp" mode=""></image>
 				<view class="top-foot__item--box">
 					<view class="top-foot__item--col">
@@ -85,7 +85,7 @@
 						<image class="top-foot__item--arrow" src="/static/images/hg/yellow_right_arrow.png" mode=""></image>
 					</view>
 				</view>
-			</view>
+			</navigator>
 		</view>
 		<view class="hr"></view>
 		<view class="balance">

@@ -396,6 +396,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/my/vip/vip",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "购买VIP",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
