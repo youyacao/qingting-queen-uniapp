@@ -1,6 +1,6 @@
 <template>
 	<view class="body">
-		<player-list :list="videoList"></player-list>
+		<player-list :videoList="video_list" :autoplay="true"></player-list>
 	</view>
 </template>
 
@@ -10,20 +10,13 @@
 	
 	export default {
 		data() {
-			return {
-				
-			}
+			return {}
 		},
 		computed: {
-			...mapState(['videoList'])
+			...mapState(['video_list'])
 		},
 		components: { PlayerList },
-		mounted() {
-			console.log(this.videoList)
-		},
-		methods: {
-			
-		}
+		methods: {}
 	}
 </script>
 

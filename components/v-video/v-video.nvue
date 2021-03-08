@@ -3,8 +3,7 @@
 		<!-- <image class="poster" :src="video.thumb" mode="aspectFill" :style="{'width': `${windowWidth}px`, 'height': `${windowHeight}px`}"
 		 v-if="!isPlay && !isPause"></image> -->
 		<video id="video" class="video" :controls="controls" :show-center-play-btn="false" :src="video.video_url"
-		 :show-loading="false" :enable-progress-gesture="false" :loop="true" @play="onPlay" @pause="onPause" @tap="onTap"
-		 @loadedmetadata="loadedmetadata" @timeupdate="timeUpdate"></video>
+		 :show-loading="false" :enable-progress-gesture="false" :loop="true" @play="onPlay" @pause="onPause" @tap="onTap" @timeupdate="timeUpdate"></video>
 		<view class="play-icon__box" v-if="isPause" @tap="onTap">
 			<image class="play-icon" src="/static/images/play-icon.png" mode=""></image>
 		</view>
@@ -64,14 +63,15 @@
 			}
 		},
 		mounted() {
-			this.$nextTick(() => {
+			this._createVideoContext()
+		},
+		methods: {
+			_createVideoContext() {
 				this.videoContext = uni.createVideoContext('video', this)
 				if (this.index === this.current && this.autoplay) {
 					this.play()
 				}
-			})
-		},
-		methods: {
+			},
 			pause() {
 				if (this.videoContext) {
 					this.videoContext.pause()
@@ -102,17 +102,9 @@
 					this.pause()
 				}
 			},
-			timeUpdate({
-				detail
-			}) {
+			timeUpdate({ detail }) {
 				this.detail = detail
 				this.sliderValue = this.detail.currentTime / this.detail.duration * 100
-				if (this.path !== '/pages/home/home') {
-					this.videoContext.pause()
-				}
-			},
-			loadedmetadata(event) {
-				console.log(event)
 			},
 			onPlay() {
 				this.isPause = false
@@ -127,7 +119,11 @@
 				this.$emit('play', this.videoContext)
 			},
 			play() {
-				this.videoContext.play()
+				if (this.videoContext) {
+					this.videoContext.play()
+				} else {
+					this._createVideoContext()
+				}
 				VideoPlayback({
 					vid: this.video.id
 				}).then(res => {
@@ -150,19 +146,6 @@
 		onHide() {
 			console.log('video Hide')
 			this.videoContext.pause()
-		},
-		watch: {
-			appHide(val) {
-				if (this.index === this.current) {
-					if (val) {
-						this.videoContext.pause()
-					} else {
-						if (!this.isPause) {
-							this.videoContext.play()
-						}
-					}
-				}
-			}
 		}
 	}
 </script>

@@ -2,8 +2,17 @@
 	<view class="body">
 		<list :pagingEnabled="true" :show-scrollbar="false" :scrollable="scrollable" @scroll="onScroll">
 			<cell :style="{'height': `${windowHeight}px`}" v-for="(item, index) in videoList" :key="`cell_${index}`">
-				<v-video v-if="index > (playIndex - 3) && (playIndex + 3) > index" :src="item.video_url" :video="item" :index="index"
-				 :current="playIndex" :ref="`video_${index}`" @play="onPlay" :videoStyle="videoStyle" @change="sliderChange" @changing="sliderChanging" :autoplay="autoplay"></v-video>
+				<v-video
+					:src="item.video_url" 
+					:video="item"
+					:index="index"
+					:current="playIndex"
+					:ref="`video_${index}`"
+					:videoStyle="videoStyle"
+					:autoplay="autoplay"
+					@play="onPlay"
+					@change="sliderChange"
+					@changing="sliderChanging"></v-video>
 				<cover-view class="alert-cover__view" v-if="noPlay">
 					<view class="alert-view">
 						<text class="alert-title">今日观影券不足</text>
@@ -39,7 +48,7 @@
 					</view>
 					<view class="right-menu__item mb-32" @tap="_openCommentPopup(item)">
 						<image class="comment-icon" src="/static/images/comment.png" mode=""></image>
-						<text class="right-text">{{ item.comment_num.length > 3 ? item.comment_num_str : item.comment_num }}</text>
+						<text class="right-text">{{ item.comment_num_str }}</text>
 					</view>
 					<view class="right-menu__item" @tap="_openSharePopup(item)">
 						<image class="share-icon" src="/static/images/share.png" mode=""></image>
@@ -51,7 +60,7 @@
 		<uni-popup ref="popup" type="bottom" @change="_commentPopupChange">
 			<view class="comment-box" :style="{'height': `${windowHeight * 0.7}px`}">
 				<view class="comment-head">
-					<text class="comment-head__text">{{ video.comment_num.length > 3 ? video.comment_num_str : video.comment_num }} 条评论</text>
+					<text class="comment-head__text">{{ video && video.comment_num_str }} 条评论</text>
 					<image class="comment-head__icon" src="/static/images/close.png" mode="" @tap="$refs.popup.close()"></image>
 				</view>
 				<view class="list-box">
@@ -116,7 +125,8 @@
 
 <script>
 	import {
-		mapGetters
+		mapGetters,
+		mapState
 	} from 'vuex'
 	import VVideo from '@/components/v-video/v-video'
 	import {
@@ -184,15 +194,16 @@
 				],
 				progress: 0,
 				retryTimes: 0,
-				noPlay: false,
-				tags: ['完美世界', '荒野独居']
+				noPlay: false
 			};
 		},
 		components: {
-			uniPopup
+			uniPopup,
+			VVideo
 		},
 		computed: {
 			...mapGetters(['windowHeight', 'windowWidth', 'platform']),
+			...mapState(['video_list']),
 			bodyHeight() {
 				if (this.platform === 'android') {
 					return this.windowHeight - 50
@@ -206,7 +217,7 @@
 			this.videoStyle.height = this.windowHeight
 		},
 		props: {
-			list: {
+			videoList: {
 				type: Array,
 				default: []
 			},
@@ -215,8 +226,9 @@
 				default: false
 			}
 		},
-		components: {
-			VVideo
+		mounted() {
+			this.videoContext = this.$refs['video_'+this.playIndex][0]
+			this.videoContext.play()
 		},
 		methods: {
 			sliderChange({value}){
@@ -495,6 +507,7 @@
 								}
 			},
 			playVideo(){
+				console.log('play')
 							try{
 								this.videoContext = this.$refs['video_'+this.playIndex][0]
 								if(!this.videoContext){
@@ -508,22 +521,18 @@
 									setTimeout(this.playVideo,1000)
 									return
 								}
-								if(this.videoContext.length){
-									this.videoContext =  this.videoContext[0]
-								}
+								// if(this.videoContext.length){
+								// 	this.videoContext =  this.videoContext[0]
+								// }
 								
-								if(this.isPause || this.pageHide) return
+								// if(this.isPause || this.pageHide) return
 								this.retryTimes = 0
 								if(this.playingIndex == -1 && !this.autoplay){
 									this.autoplay = true
 									return
 								}
 								this.videoContext.play()
-								let data = this.videoList[this.playIndex]
-								// if(data){
-								// 	setPlaycount(data._id)
-								// }
-							}catch(e){
+							} catch(e) {
 								console.log("获取播放器对象出错",e)
 							}
 							
@@ -547,11 +556,11 @@
 			}
 		},
 		watch: {
-			list(val) {
-				this.videoList = val
-				this.video = this.videoList[this.playIndex]
-				this.init = true
-			},
+			// list(val) {
+			// 	this.videoList = val
+			// 	this.video = this.videoList[this.playIndex]
+			// 	this.init = true
+			// },
 			playIndex(index) {
 				this.video = this.videoList[index]
 			}

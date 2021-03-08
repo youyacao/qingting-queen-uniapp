@@ -189,7 +189,8 @@
 			};
 		},
 		components: {
-			uniPopup
+			uniPopup,
+			VVideo
 		},
 		computed: {
 			...mapGetters(['windowHeight', 'windowWidth', 'platform']),
@@ -214,9 +215,6 @@
 				type: Boolean,
 				default: false
 			}
-		},
-		components: {
-			VVideo
 		},
 		methods: {
 			__play() {
