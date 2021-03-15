@@ -249,3 +249,8 @@ export const CardSecretExchange = (data) => {
 export const AgentTotal = () => {
 	return post('agentNum')
 }
+
+// 评论视频、图文列表
+export const CommentContentList = (data) => {
+	return post('comment/me', data)
+}

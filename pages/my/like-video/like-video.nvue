@@ -2,7 +2,7 @@
 	<view class="body">
 		<list class="list" @loadmore="_loadmore">
 			<cell v-for="(item, index) in list" :key="index">
-				<view class="item">
+				<view class="item" @tap="_play(index)">
 					<view class="cover-box">
 						<image class="cover" :src="item.thumb" mode="aspectFill"></image>
 						<view class="cover-foot">
@@ -34,6 +34,7 @@
 <script>
 	const modal = weex.requireModule('modal')
 	import { LikeVideoList } from '@/common/api.js'
+	import { mapMutations } from 'vuex'
 	
 	export default {
 		data() {
@@ -49,6 +50,7 @@
 			this._getLikeVideoList()
 		},
 		methods: {
+			...mapMutations(['setVideoList']),
 			_loadmore() {
 				if (this.noData) return
 				this.loading = true
@@ -74,6 +76,12 @@
 						this.loading = false
 						this.init = false
 					}
+				})
+			},
+			_play(index) {
+				this.setVideoList(this.list.slice(index))
+				uni.navigateTo({
+					url: '/pages/latest/player/player'
 				})
 			}
 		}

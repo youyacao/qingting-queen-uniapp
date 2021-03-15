@@ -131,10 +131,6 @@
 				</view>
 			</view>
 			<view class="menu-row">
-				<navigator url="/pages/my/video-list/video-list" hover-class="none" class="menu-col">
-					<image class="menu-col__icon" src="/static/images/huangguan/icon_mine_like.png" mode="aspectFit"></image>
-					<text class="menu-col__title">我的喜欢</text>
-				</navigator>
 				<view class="menu-col">
 					<image class="menu-col__icon" src="/static/images/huangguan/icon_mine_group.png" mode="aspectFit"></image>
 					<text class="menu-col__title">粉丝团</text>
@@ -181,7 +177,7 @@
 			</view>
 		</navigator>
 		<view class="border-bottom"></view>
-		<view class="menu-item">
+		<navigator url="/pages/my/comment-list/comment-list" hover-class="none" class="menu-item">
 			<image class="menu-icon" src="/static/images/hg/mine_comment.png" mode="aspectFit"></image>
 			<view class="menu-item__content">
 				<text class="menu-text">我的评论</text>
@@ -189,9 +185,9 @@
 					<image class="right-arrow" src="/static/images/hg/right_arrow.png" mode="aspectFit"></image>
 				</view>
 			</view>
-		</view>
+		</navigator>
 		<view class="border-bottom"></view>
-		<view class="menu-item">
+		<navigator url="/pages/my/like/like" hover-class="none" class="menu-item">
 			<image class="menu-icon" src="/static/images/hg/mine_like.png" mode="aspectFit"></image>
 			<view class="menu-item__content">
 				<text class="menu-text">我的点赞</text>
@@ -199,7 +195,7 @@
 					<image class="right-arrow" src="/static/images/hg/right_arrow.png" mode="aspectFit"></image>
 				</view>
 			</view>
-		</view>
+		</navigator>
 		<view class="border-bottom"></view>
 		<navigator url="/pages/my/download-records/download-records" hover-class="none" class="menu-item">
 			<image class="menu-icon" src="/static/images/hg/mine_cache.png" mode="aspectFit"></image>

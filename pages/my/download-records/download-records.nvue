@@ -2,7 +2,7 @@
 	<view class="body">
 		<list @loadmore="_loadmore">
 			<cell v-for="(item, index) in list" :key="index">
-				<view class="item">
+				<view class="item" @tap="_play(index)">
 					<image class="item-bg" :src="item.thumb" mode="aspectFill"></image>
 					<view class="item-foot">
 						<text class="item-title">{{ item.title }}</text>
@@ -27,6 +27,7 @@
 
 <script>
 	import { DownloadRecords } from '@/common/api.js'
+	import { mapMutations } from 'vuex'
 	
 	export default {
 		data() {
@@ -42,6 +43,7 @@
 			this._getDownloadRecords()
 		},
 		methods: {
+			...mapMutations(['setVideoList']),
 			_loadmore() {
 				if (this.noData) return
 				this.page++
@@ -67,6 +69,12 @@
 						this.init = false
 					}
 				})
+			},
+			_play(index) {
+				// this.setVideoList(this.list.slice(index))
+				// uni.navigateTo({
+				// 	url: '/pages/latest/player/player'
+				// })
 			}
 		}
 	}
