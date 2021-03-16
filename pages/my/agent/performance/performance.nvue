@@ -3,7 +3,7 @@
 		<view class="top-border"></view>
 		<view class="top">
 			<view class="top-image">
-				<image class="top-image__avatar" src="" mode=""></image>
+				<image class="top-image__avatar" :src="userinfo.avatar" mode=""></image>
 				<image class="top-image__level" src="/static/images/hg/mine_proxy_level_0.png" mode=""></image>
 			</view>
 			<view class="top-tip">
@@ -24,16 +24,16 @@
 			</view>
 			<view class="main-list">
 				<view class="main-list__item">
-					<text class="main-list__title">昨日</text>
-					<text class="main-list__value">0</text>
+					<text class="main-list__title">今日收益</text>
+					<text class="main-list__value">￥{{ (agentInfo && agentInfo.today_earnings) || 0 }}</text>
 				</view>
 				<view class="main-list__item main-list__border">
-					<text class="main-list__title">今日</text>
-					<text class="main-list__value">0</text>
+					<text class="main-list__title">今日业绩</text>
+					<text class="main-list__value">￥{{ (agentInfo && agentInfo.today_performance) || 0 }}</text>
 				</view>
 				<view class="main-list__item">
 					<text class="main-list__title">总收入</text>
-					<text class="main-list__value">0</text>
+					<text class="main-list__value">￥{{ (agentInfo && agentInfo.earnings) || 0 }}</text>
 				</view>
 			</view>
 		</view>
@@ -82,16 +82,22 @@
 </template>
 
 <script>
-	import { AgentTotal } from '@/common/api.js'
+	import { mapState } from 'vuex'
+	import { AgentTotal, AgentInfo } from '@/common/api.js'
 		
 	export default {
 		data() {
 			return {
-				agentTotal: ''
+				agentTotal: '',
+				agentInfo: null
 			}
 		},
 		onShow() {
 			this._getAgentTotal()
+			this._getAgentInfo()
+		},
+		computed: {
+			...mapState(['userinfo'])
 		},
 		methods: {
 			_getAgentTotal() {
@@ -104,6 +110,13 @@
 			_viewRecords(i, item) {
 				uni.navigateTo({
 					url: `/pages/my/agent/records/records?level=${i + 1}&title=${item.title}(${item.num})`
+				})
+			},
+			_getAgentInfo() {
+				AgentInfo().then(({ code, data }) => {
+					if (code === 200) {
+						this.agentInfo = data
+					}
 				})
 			}
 		}

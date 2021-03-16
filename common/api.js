@@ -259,3 +259,8 @@ export const CommentContentList = (data) => {
 export const AgentList = (data) => {
 	return post('agentList', data)
 }
+
+// 代理统计
+export const AgentInfo = () => {
+	return post('agentInfo')
+}
