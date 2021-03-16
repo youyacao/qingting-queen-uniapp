@@ -1,0 +1,266 @@
+<template>
+	<view class="body">
+		<view class="top-border"></view>
+		<view class="top">
+			<view class="top-image">
+				<image class="top-image__avatar" src="" mode=""></image>
+				<image class="top-image__level" src="/static/images/hg/mine_proxy_level_0.png" mode=""></image>
+			</view>
+			<view class="top-tip">
+				<text class="top-level__text">升级到</text>
+				<text class="top-level">青铜代理</text>
+			</view>
+			<view class="top-foot">
+				<text class="top-level__text">分成40%</text>
+				<image class="top-foot__image" src="/static/images/hg/mine_proxy_long_arrow.png" mode=""></image>
+				<text class="top-level">分成46%</text>
+			</view>
+		</view>
+		<view class="hr"></view>
+		<view class="main">
+			<view class="main-head">
+				<view class="border-left"></view>
+				<text class="main-title">推广收益</text>
+			</view>
+			<view class="main-list">
+				<view class="main-list__item">
+					<text class="main-list__title">昨日</text>
+					<text class="main-list__value">0</text>
+				</view>
+				<view class="main-list__item main-list__border">
+					<text class="main-list__title">今日</text>
+					<text class="main-list__value">0</text>
+				</view>
+				<view class="main-list__item">
+					<text class="main-list__title">总收入</text>
+					<text class="main-list__value">0</text>
+				</view>
+			</view>
+		</view>
+		<view class="menu-item">
+			<image class="menu-item__icon" src="/static/images/hg/mine_proxy_withdraw.png" mode="aspectFit"></image>
+			<view class="menu-item__right">
+				<text class="menu-item__text">提现</text>
+				<image class="menu-item__arrow" src="/static/images/hg/right_arrow.png" mode=""></image>
+			</view>
+		</view>
+		<view class="menu-item mt-15">
+			<image class="menu-item__icon" src="/static/images/hg/mine_proxy_income_detail.png" mode="aspectFit"></image>
+			<view class="menu-item__right border-bottom__none">
+				<text class="menu-item__text">收益明细</text>
+				<image class="menu-item__arrow" src="/static/images/hg/right_arrow.png" mode=""></image>
+			</view>
+		</view>
+		<view class="hr"></view>
+		<view class="foot">
+			<view class="main-head">
+				<view class="border-left"></view>
+				<text class="main-title">推广数据</text>
+			</view>
+			<view class="foot-main">
+				<view class="foot-item"v-for="(item, i) in agentTotal" :key="i">
+					<text class="foot-item__text">{{ item.title }}</text>
+					<text class="foot-item__text">{{ item.num }}人</text>
+				</view>
+			</view>
+		</view>
+		<view class="menu-item">
+			<image class="menu-item__icon" src="/static/images/hg/mine_proxy_record.png" mode="aspectFit"></image>
+			<view class="menu-item__right">
+				<text class="menu-item__text">推广记录</text>
+				<image class="menu-item__arrow" src="/static/images/hg/right_arrow.png" mode=""></image>
+			</view>
+		</view>
+		<navigator url="/pages/my/invite/invite" hover-class="none" class="menu-item">
+			<image class="menu-item__icon" src="/static/images/hg/mine_proxy_go_promotion.png" mode="aspectFit"></image>
+			<view class="menu-item__right">
+				<text class="menu-item__text">去推广</text>
+				<image class="menu-item__arrow" src="/static/images/hg/right_arrow.png" mode=""></image>
+			</view>
+		</navigator>
+	</view>
+</template>
+
+<script>
+	import { AgentTotal } from '@/common/api.js'
+		
+	export default {
+		data() {
+			return {
+				agentTotal: ''
+			}
+		},
+		onShow() {
+			this._getAgentTotal()
+		},
+		methods: {
+			_getAgentTotal() {
+				AgentTotal().then(({ code, data }) => {
+					if (code === 200) {
+						this.agentTotal = data
+					}
+				})
+			}
+		}
+	}
+</script>
+
+<style>
+	.foot-item__text {
+		font-size: 32rpx;
+	}
+	.foot-item {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		padding: 24rpx 0;
+	}
+	.foot-main {
+		background-color: #f5f5f5;
+		border-radius: 12rpx;
+		padding: 20rpx;
+		margin-top: 20rpx;
+	}
+	.foot {
+		padding: 24rpx;
+	}
+	.mt-15 {
+		margin-top: 15rpx;
+	}
+	.menu-item__text {
+		font-size: 32rpx;
+	}
+	.menu-item__right {
+		flex: 1;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.menu-item {
+		flex-direction: row;
+		align-items: center;
+		height: 90rpx;
+		margin-left: 32rpx;
+	}
+	.menu-item__icon {
+		width: 45rpx;
+		height: 45rpx;
+		margin-right: 20rpx;
+	}
+	.menu-item__right {
+		border-bottom-width: 2rpx;
+		border-bottom-color: #e7e7e7;
+		height: 90rpx;
+		padding-right: 32rpx;
+	}
+	.border-bottom__none {
+		border-bottom-width: 0;
+	}
+	.menu-item__arrow {
+		width: 28rpx;
+		height: 28rpx;
+	}
+	.menu-item__icon {
+		width: 45rpx;
+		height: 45rpx;
+	}
+	.main-list__border {
+		border-left-color: #FFFFFF;
+		border-left-width: 2rpx;
+		border-right-color: #FFFFFF;
+		border-right-width: 2rpx;
+	}
+	.main-list__value {
+		font-weight: bold;
+		font-size: 38rpx;
+		color: #FFFFFF;
+	}
+	.main-list__title {
+		font-weight: bold;
+		font-size: 36rpx;
+		color: #FFFFFF;
+	}
+	.main-list__item {
+		flex: 1;
+		align-items: center;
+		justify-content: center;
+	}
+	.main-list {
+		flex-direction: row;
+		height: 170rpx;
+		background-color: #f583a0;
+		border-radius: 20rpx;
+		padding: 20rpx 0;
+		margin-top: 36rpx;
+	}
+	.main-title {
+		font-size: 32rpx;
+		color: #333;
+	}
+	.main-head {
+		flex-direction: row;
+		align-items: center;
+	}
+	.main {
+		padding: 24rpx;
+	}
+	.border-left {
+		height: 28rpx;
+		width: 10rpx;
+		background-color: #f583a0;
+		margin-right: 10rpx;
+	}
+	.hr {
+		height: 20rpx;
+		background-color: #f5f5f5; 
+	}
+	.top-foot {
+		flex-direction: row;
+	}
+	.top-level__text {
+		font-size: 32rpx;
+		color: #333;
+	}
+	.top-level {
+		font-size: 32rpx;
+		color: #f583a0;
+	}
+	.top-tip {
+		flex-direction: row;
+		margin-top: 24rpx;
+	}
+	.top-foot__image {
+		width: 285rpx;
+		height: 30rpx;
+		margin: 0 15rpx;
+	}
+	.top-image__level {
+		width: 267rpx;
+		height: 60rpx;
+		position: absolute;
+		bottom: 0;
+	}
+	.top-image__avatar {
+		width: 144rpx;
+		height: 144rpx;
+		background-color: #dddddd;
+		border-radius: 50%;
+	}
+	.top-image {
+		width: 267rpx;
+		height: 156rpx;
+		align-items: center;
+	}
+	.top {
+		align-items: center;
+		padding: 60rpx 0;
+	}
+	.top-border {
+		height: 4rpx;
+		background-color: #e9e9e9;
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+	}
+</style>

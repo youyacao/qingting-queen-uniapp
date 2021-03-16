@@ -1,10 +1,10 @@
 <template>
 	<view class="body">
 		<view class="head">
-			<view class="head-item">
+			<navigator url="/pages/my/agent/performance/performance" hover-class="none" class="head-item">
 				<image class="head-item__icon" src="/static/images/hg/dl-1.png" mode="aspectFit"></image>
 				<text class="head-item__text">我的业绩</text>
-			</view>
+			</navigator>
 			<view class="head-item">
 				<image class="head-item__icon" src="/static/images/hg/dl-2.png" mode="aspectFit"></image>
 				<text class="head-item__text">代理英雄榜</text>

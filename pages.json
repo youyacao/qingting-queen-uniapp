@@ -432,6 +432,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/my/agent/performance/performance",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的业绩",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
