@@ -441,6 +441,16 @@
             }
             
         }
+        ,{
+            "path" : "pages/my/agent/records/records",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"backgroundColor": "#F5F5F5"
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

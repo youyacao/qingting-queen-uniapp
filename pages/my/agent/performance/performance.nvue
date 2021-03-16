@@ -58,19 +58,19 @@
 				<text class="main-title">推广数据</text>
 			</view>
 			<view class="foot-main">
-				<view class="foot-item"v-for="(item, i) in agentTotal" :key="i">
+				<view class="foot-item"v-for="(item, i) in agentTotal" :key="i" @tap="_viewRecords(i, item)">
 					<text class="foot-item__text">{{ item.title }}</text>
 					<text class="foot-item__text">{{ item.num }}人</text>
 				</view>
 			</view>
 		</view>
-		<view class="menu-item">
+		<!-- <view class="menu-item">
 			<image class="menu-item__icon" src="/static/images/hg/mine_proxy_record.png" mode="aspectFit"></image>
 			<view class="menu-item__right">
 				<text class="menu-item__text">推广记录</text>
 				<image class="menu-item__arrow" src="/static/images/hg/right_arrow.png" mode=""></image>
 			</view>
-		</view>
+		</view> -->
 		<navigator url="/pages/my/invite/invite" hover-class="none" class="menu-item">
 			<image class="menu-item__icon" src="/static/images/hg/mine_proxy_go_promotion.png" mode="aspectFit"></image>
 			<view class="menu-item__right">
@@ -99,6 +99,11 @@
 					if (code === 200) {
 						this.agentTotal = data
 					}
+				})
+			},
+			_viewRecords(i, item) {
+				uni.navigateTo({
+					url: `/pages/my/agent/records/records?level=${i + 1}&title=${item.title}(${item.num})`
 				})
 			}
 		}
@@ -254,6 +259,7 @@
 	.top {
 		align-items: center;
 		padding: 60rpx 0;
+		margin-top: 4rpx;
 	}
 	.top-border {
 		height: 4rpx;

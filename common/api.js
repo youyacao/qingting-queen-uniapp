@@ -254,3 +254,8 @@ export const AgentTotal = () => {
 export const CommentContentList = (data) => {
 	return post('comment/me', data)
 }
+
+// 代理会员列表
+export const AgentList = (data) => {
+	return post('agentList', data)
+}

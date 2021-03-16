@@ -1,0 +1,128 @@
+<template>
+	<view>
+		<list @loadmore="_loadmore">
+			<cell v-for="(item, i) in list" :key="i">
+				<view class="item">
+					<view class="head">
+						<text class="head-title">邀请会员</text>
+						<text class="content-text">{{ item.username }}</text>
+					</view>
+					<view class="label">
+						<text class="label-title">时间</text>
+						<text class="label-value">{{ item.created_at }}</text>
+					</view>
+				</view>
+			</cell>
+			<cell v-if="init">
+				<text class="alert">正在加载...</text>
+			</cell>
+			<cell v-if="!init && list.length === 0">
+				<text class="alert">暂无数据</text>
+			</cell>
+			<cell v-if="loading">
+				<text class="alert">加载更多中...</text>
+			</cell>
+			<cell v-if="noData && list.length > 10">
+				<text class="alert">没有更多了</text>
+			</cell>
+		</list>
+	</view>
+</template>
+
+<script>
+	import { AgentList } from '@/common/api.js'
+	
+	export default {
+		data() {
+			return {
+				level: 1,
+				list: [],
+				page: 1,
+				loading: false,
+				noData: false,
+				init: true
+			}
+		},
+		onLoad(options) {
+			uni.setNavigationBarTitle({
+				title: `${options.title}`
+			})
+			this.level = Number(options.level)
+			this._getRecrods()
+		},
+		methods: {
+			_loadmore() {
+				if (this.noData) return
+				this.page++
+				this.loading = true
+				this._getRecrods()
+			},
+			_getRecrods() {
+				AgentList({
+					level: this.level,
+					limit: 10,
+					page: this.page
+				}).then(({ code, data }) => {
+					if (code === 200) {
+						const { list, total_page, current_page } = data
+						if (current_page === 1) {
+							this.list = list
+						} else {
+							this.list = this.list.concat(list)
+						}
+						if (total_page === 0 || current_page >= total_page) {
+							this.noData = true
+						}
+					}
+					this.loading = false
+					this.init = false
+				})
+			}
+		}
+	}
+</script>
+
+<style>
+	.alert {
+		text-align: center;
+		color: #808695;
+		padding: 18rpx 0;
+		font-size: 24rpx;
+	}
+	.label {
+		height: 80rpx;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.label-value {
+		font-size: 32rpx;
+		color: #515a6e;
+	}
+	.label-title {
+		font-size: 32rpx;
+		color: #515a6e;
+	}
+	.content-text {
+		color: #515a6e;
+		font-size: 32rpx;
+	}
+	.head-title {
+		font-size: 32rpx;
+		font-weight: bold;
+		color: #17233d;
+	}
+	.head {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		border-bottom-width: 2rpx;
+		border-bottom-color: #f5f5f5;
+		padding: 24rpx 0;
+	}
+	.item {
+		background-color: #FFFFFF;
+		padding: 32rpx;
+		margin-top: 24rpx;
+	}
+</style>

@@ -7,7 +7,8 @@
 					<image class="nav-back__icon" src="/static/images/fanhui.png" mode=""></image>
 				</view>
 				<view class="flex-3 nav-title">邀请好友</view>
-				<view class="flex-1 nav-label">推广记录</view>
+				<view class="flex-1"></view>
+				<!-- <view class="flex-1 nav-label">推广记录</view> -->
 			</view>
 			<view class="text-bg">
 				<image class="text-bg__image" src="/static/images/my/invite-text.png" mode=""></image>
