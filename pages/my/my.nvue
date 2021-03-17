@@ -145,7 +145,7 @@
 				</navigator>
 			</view>
 		</view> -->
-		<view class="menu-item">
+		<view class="menu-item" @tap="_addQQ">
 			<image class="menu-icon" src="/static/images/hg/mine_official_group.jpg" mode="aspectFit"></image>
 			<view class="menu-item__content">
 				<text class="menu-text">官方福利群</text>
@@ -271,7 +271,7 @@
 		},
 		components: { VTabbar },
 		computed: {
-			...mapState(['userinfo']),
+			...mapState(['userinfo', 'config']),
 			...mapGetters(['statusBarHeight'])
 		},
 		onShow() {
@@ -324,6 +324,9 @@
 						url: '/pages/live/create/create'
 					})
 				}
+			},
+			_addQQ() {
+				plus.runtime.openURL(this.config.base_qq)
 			}
 		}
 	}
