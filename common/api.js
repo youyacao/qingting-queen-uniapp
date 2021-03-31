@@ -264,3 +264,13 @@ export const AgentList = (data) => {
 export const AgentInfo = () => {
 	return post('agentInfo')
 }
+
+// user_id 用户信息
+export const UserInfo = (data) => {
+	return post('user/get', data)
+}
+
+// user_id 喜欢视频
+export const LikeVideo = (data) => {
+	return post('like/list', data)
+}

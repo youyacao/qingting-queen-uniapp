@@ -14,8 +14,8 @@
 						<text class="item-content__text">{{ item.content }}</text>
 					</view>
 					<view class="item-images" :class="{'mb-12': i !== _getImages(item.images).length - 1}" v-for="(images, i) in _getImages(item.images)"
-					 :key="`images_${i}`">
-						<view class="item-image__box" :class="{'px-12': _i === 1}" v-for="(src, _i) in images" :key="`image_${_i}`">
+					 :key="i">
+						<view class="item-image__box" :class="{'px-12': _i === 1}" v-for="(src, _i) in images" :key="_i">
 							<image class="item-image" :src="src" mode="aspectFill" @tap="_viewImages(item.images)"></image>
 						</view>
 					</view>

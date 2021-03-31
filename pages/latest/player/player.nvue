@@ -1,6 +1,6 @@
 <template>
 	<view class="body">
-		<player-list :videoList="video_list" :autoplay="true"></player-list>
+		<player-list ref="player" :videoList="video_list" :autoplay="true"></player-list>
 	</view>
 </template>
 
@@ -10,13 +10,27 @@
 	
 	export default {
 		data() {
-			return {}
+			return {
+				status: 0
+			}
 		},
 		computed: {
 			...mapState(['video_list'])
 		},
 		components: { PlayerList },
-		methods: {}
+		onLoad() {
+			this.status++
+		},
+		onShow() {
+			this.status++
+			if (this.status > 2) {
+				this.$refs.player.__play()
+			}
+		},
+		methods: {},
+		onHide() {
+			this.$refs.player.__pause()
+		}
 	}
 </script>
 

@@ -24,7 +24,7 @@
 						<refresh class="refresh" @refresh="onrefresh" :display="refreshing ? 'show' : 'hide'">
 							<text class="indicator-text">正在刷新...</text>
 						</refresh>
-						<cell v-for="(item, index) in list" :key="`list_${index}`">
+						<cell v-for="(item, index) in list" :key="index">
 							<view class="item">
 								<view class="item-head">
 									<image class="item-head__avatar" :src="item.avatar" mode=""></image>
@@ -37,8 +37,8 @@
 									<text class="item-content__text">{{ item.content }}</text>
 								</view>
 								<view class="item-images" :class="{'mb-12': i !== _getImages(item.images).length - 1}" v-for="(images, i) in _getImages(item.images)"
-								 :key="`images_${i}`">
-									<view class="item-image__box" :class="{'px-12': _i === 1}" v-for="(src, _i) in images" :key="`image_${_i}`">
+								 :key="i">
+									<view class="item-image__box" :class="{'px-12': _i === 1}" v-for="(src, _i) in images" :key="_i">
 										<image class="item-image" :src="src" mode="aspectFill" @tap="_viewImages(item.images)"></image>
 									</view>
 								</view>
@@ -85,7 +85,7 @@
 						<refresh class="refresh" @refresh="_onrefresh" :display="refreshing1 ? 'show' : 'hide'">
 							<text class="indicator-text">正在刷新...</text>
 						</refresh>
-						<cell v-for="(item, index) in focusList" :key="`list_${index}`">
+						<cell v-for="(item, index) in focusList" :key="index">
 							<view class="item">
 								<view class="item-head">
 									<image class="item-head__avatar" :src="item.avatar" mode=""></image>
@@ -98,8 +98,8 @@
 									<text class="item-content__text">{{ item.content }}</text>
 								</view>
 								<view class="item-images" :class="{'mb-12': i !== _getImages(item.images).length - 1}" v-for="(images, i) in _getImages(item.images)"
-								 :key="`images_${i}`">
-									<view class="item-image__box" :class="{'px-12': _i === 1}" v-for="(src, _i) in images" :key="`image_${_i}`">
+								 :key="i">
+									<view class="item-image__box" :class="{'px-12': _i === 1}" v-for="(src, _i) in images" :key="_i">
 										<image class="item-image" :src="src" mode="aspectFill"></image>
 									</view>
 								</view>

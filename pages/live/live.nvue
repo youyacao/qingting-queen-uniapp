@@ -4,9 +4,9 @@
 			<cell>
 				<view style="height: 32rpx;"></view>
 			</cell>
-			<cell v-for="(item, index) in list" :key="index">
+			<cell v-for="(item, index) in list">
 				<view class="item-box">
-					<view class="item" v-for="(_item, _index) in item" :key="`item_${_index}`" @tap="_playLive(_item)">
+					<view class="item" v-for="(_item, _index) in item" :key="_index" @tap="_playLive(_item)">
 						<view class="cover-box">
 							<image class="cover" :src="_item.live.thumb" mode="aspectFill"></image>
 						</view>

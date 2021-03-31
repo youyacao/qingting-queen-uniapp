@@ -3,13 +3,27 @@
 		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
 	},
 	"pages": [
-		// {
-		// 	"path": "pages/list-test/list-test",
-		// 	"style": {}
-		// },
 		{
 			"path": "pages/ad/ad",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"app-plus": {
+					"bounce": "none"
+				}
+			}
+		},
+		{
+			"path": "pages/my/user-center/user-center",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom",
+				"app-plus": {
+					"bounce": "none"
+				}
+			}
 		},
 		{
 			"path": "pages/login/login",
@@ -39,28 +53,6 @@
 
 		}, {
 			"path": "pages/home/home",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false,
-				"navigationStyle": "custom",
-				"app-plus": {
-					"bounce": "none"
-				}
-			}
-
-		}, {
-			"path": "components/v-player/v-player",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false,
-				"navigationStyle": "custom",
-				"app-plus": {
-					"bounce": "none"
-				}
-			}
-
-		}, {
-			"path": "components/v-video/v-video",
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false,
@@ -163,15 +155,6 @@
             
         }
         ,{
-            "path" : "components/v-tabbar/v-tabbar",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
             "path" : "pages/live/record/record",
             "style" :                                                                                    
             {
@@ -193,15 +176,6 @@
             
         }
         ,{
-            "path" : "components/v-slider/v-slider",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
             "path" : "pages/my/fans/fans",
             "style" :                                                                                    
             {
@@ -216,19 +190,6 @@
             {
                 "navigationBarTitleText": "推广记录",
                 "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/ad/ad",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false,
-				"navigationStyle": "custom",
-				"app-plus": {
-					"bounce": "none"
-				}
             }
             
         }

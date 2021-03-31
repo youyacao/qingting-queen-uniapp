@@ -1,7 +1,7 @@
 <template>
 	<view class="body">
 		<list :pagingEnabled="true" :show-scrollbar="false" :scrollable="scrollable" @scroll="onScroll">
-			<cell :style="{'height': `${windowHeight}px`}" v-for="(item, index) in videoList" :key="`cell_${index}`">
+			<cell :style="{'height': `${windowHeight}px`}" v-for="(item, index) in videoList" :key="index">
 				<v-video v-if="index > (playIndex - 3) && (playIndex + 3) > index" :src="item.video_url" :video="item" :index="index"
 				 :current="playIndex" :ref="`video_${index}`" @play="onPlay" :videoStyle="videoStyle" @change="sliderChange" @changing="sliderChanging" :autoplay="autoplay"></v-video>
 				<cover-view class="alert-cover__view" v-if="noPlay">
@@ -24,7 +24,7 @@
 				</view>
 				<view class="right">
 					<view class="avatar-box">
-						<view class="avatar-container">
+						<view class="avatar-container" @tap="userCenter(item)">
 							<image class="avatar" :src="item.avatar" mode="aspectFit"></image>
 						</view>
 						<view class="add-container" v-if="item.is_follow === 0">
@@ -57,7 +57,7 @@
 				</view>
 				<view class="list-box">
 					<list @loadmore="loadmore">
-						<cell v-for="(item, index) in commentList" :key="`comment_${index}`">
+						<cell v-for="(item, index) in commentList" :key="index">
 							<view class="comment-item">
 								<image class="comment-item__avatar" :src="item.avatar" mode=""></image>
 								<view class="comment-item__right">
@@ -104,7 +104,7 @@
 		<uni-popup ref="sharePopup" type="bottom" @change="_sharePopupChange">
 			<view class="share-box">
 				<view class="share-content">
-					<view class="share-item" v-for="(item, index) in shareList" :key="`share_${index}`" @tap="_onShare(item)">
+					<view class="share-item" v-for="(item, index) in shareList" :key="index" @tap="_onShare(item)">
 						<image class="share-item__icon" :src="item.icon" mode=""></image>
 						<text class="share-item__label">{{ item.label }}</text>
 					</view>
@@ -217,6 +217,11 @@
 			}
 		},
 		methods: {
+			userCenter(item) {
+				uni.navigateTo({
+					url: `/pages/my/user-center/user-center?user_id=${item.user_id}`
+				})
+			},
 			__play() {
 				if (this.videoContext === null) {
 					this.videoContext = this.$refs['video_'+this.playIndex][0]

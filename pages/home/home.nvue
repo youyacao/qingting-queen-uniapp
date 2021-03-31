@@ -5,7 +5,7 @@
 				<image class="publish-icon" src="/static/images/hg/publish_icon.png" mode=""></image>
 			</navigator>
 			<view class="flex-3 top-center">
-				<view class="top-text__item" :class="{'mr-70': i === 0}" v-for="(nav, i) in navList" :key="`nav_${i}`" @tap="current = i">
+				<view class="top-text__item" :class="{'mr-70': i === 0}" v-for="(nav, i) in navList" :key="i" @tap="current = i">
 					<text class="top-text" :class="{'top-text__active': current === i}">{{ nav }}</text>
 					<view class="top-text__active--border" v-if="current === i"></view>
 				</view>
@@ -46,7 +46,8 @@
 				showZhuan: true,
 				navList: ['推荐', '女神认证'],
 				current: 0,
-				videoList: []
+				videoList: [],
+				pageStatus: 0
 			};
 		},
 		computed: {
@@ -54,6 +55,7 @@
 		},
 		components: { VPlayer, HomePlayer },
 		onLoad() {
+			this.pageStatus++
 			VideoList().then(({ data, code }) => {
 				// console.log(data)
 				if (code === 200) {
@@ -63,7 +65,15 @@
 			this._getVideoList()
 		},
 		onShow() {
+			this.pageStatus++
 			this.setAppHide(false)
+			if (this.pageStatus > 2) {
+				if (this.current === 0) {
+					this.$refs.video1.__play()
+				} else {
+					this.$refs.video2.__play()
+				}
+			}
 		},
 		methods: {
 			_getVideoList() {
@@ -79,12 +89,19 @@
 			_swiperChange({ detail }) {
 				const { current } = detail
 				this.current = current
-				if (current === 0) {
+				if (this.current === 0) {
 					this.$refs.video2.__pause()
 					this.$refs.video1.__play()
 				} else {
 					this.$refs.video1.__pause()
 					this.$refs.video2.__play()
+				}
+			},
+			videoStatus() {
+				if (this.current === 0) {
+					this.$refs.video1.__pause()
+				} else {
+					this.$refs.video2.__pause()
 				}
 			},
 			...mapMutations(['setAppHide']),
@@ -99,6 +116,7 @@
 		},
 		onHide() {
 			this.setAppHide(true)
+			this.videoStatus()
 		}
 	}
 </script>

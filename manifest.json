@@ -1,5 +1,5 @@
 {
-    "name" : "蜻蜓Q系统",
+    "name" : "蜻蜓云社交",
     "appid" : "__UNI__2972880",
     "description" : "蜻蜓Q系统是成都市一颗优雅草打造的蜻蜓系列短视频社交系统之一",
     "versionName" : "2.4.7",
@@ -101,7 +101,7 @@
     "quickapp" : {},
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "",
+        "appid" : "wxd98aaa857c0e6ec3",
         "setting" : {
             "urlCheck" : false
         },

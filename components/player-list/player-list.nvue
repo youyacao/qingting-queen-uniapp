@@ -1,17 +1,9 @@
 <template>
 	<view class="body">
 		<list :pagingEnabled="true" :show-scrollbar="false" :scrollable="scrollable" @scroll="onScroll">
-			<cell :style="{'height': `${windowHeight}px`}" v-for="(item, index) in videoList" :key="`cell_${index}`">
-				<v-video
-					:src="item.video_url" 
-					:video="item"
-					:index="index"
-					:current="playIndex"
-					:ref="`video_${index}`"
-					:videoStyle="videoStyle"
-					:autoplay="autoplay"
-					@play="onPlay"
-					@change="sliderChange"
+			<cell :style="{'height': `${windowHeight}px`}" v-for="(item, index) in videoList" :key="index">
+				<v-video :src="item.video_url" :video="item" :index="index" :current="playIndex" :ref="`video_${index}`"
+					:videoStyle="videoStyle" :autoplay="autoplay" @play="onPlay" @change="sliderChange"
 					@changing="sliderChanging"></v-video>
 				<cover-view class="alert-cover__view" v-if="noPlay">
 					<view class="alert-view">
@@ -24,7 +16,11 @@
 				<view class="bottom">
 					<view class="bottom-author">
 						<!-- <text class="bottom-author__text">@{{ item.nickname || item.username }}</text> -->
-						<text class="bottom-author__text" v-for="(tag, i) in _getTags(item.tags)" :key="`tag_${i}`">#{{ tag }}</text>
+						<view v-if="item.tags">
+							<text class="bottom-author__text" v-for="(tag, i) in _getTags(item.tags)"
+								:key="i">#{{ tag }}</text>
+						</view>
+						<text class="bottom-author__text" v-else>#暂无标签</text>
 					</view>
 					<view class="buttom-title">
 						<text class="bottom-title__text">{{ item.title }}</text>
@@ -32,7 +28,7 @@
 				</view>
 				<view class="right">
 					<view class="avatar-box">
-						<view class="avatar-container">
+						<view class="avatar-container" @tap="userCenter(item)">
 							<image class="avatar" :src="item.avatar" mode="aspectFit"></image>
 						</view>
 						<view class="add-container" v-if="item.is_follow === 0">
@@ -42,9 +38,12 @@
 						</view>
 					</view>
 					<view class="right-menu__item mb-32">
-						<image class="like-icon" src="/static/images/like-red.png" mode="" @tap="_cancelPraise(item)" v-if="item.is_like"></image>
-						<image class="like-icon" src="/static/images/like-white.png" mode="" @tap="_praise(item)" v-else></image>
-						<text class="right-text">{{ item.like_num.length > 3 ? item.like_num_str : item.like_num }}</text>
+						<image class="like-icon" src="/static/images/like-red.png" mode="" @tap="_cancelPraise(item)"
+							v-if="item.is_like"></image>
+						<image class="like-icon" src="/static/images/like-white.png" mode="" @tap="_praise(item)"
+							v-else></image>
+						<text
+							class="right-text">{{ item.like_num.length > 3 ? item.like_num_str : item.like_num }}</text>
 					</view>
 					<view class="right-menu__item mb-32" @tap="_openCommentPopup(item)">
 						<image class="comment-icon" src="/static/images/comment.png" mode=""></image>
@@ -61,27 +60,30 @@
 			<view class="comment-box" :style="{'height': `${windowHeight * 0.7}px`}">
 				<view class="comment-head">
 					<text class="comment-head__text">{{ video && video.comment_num_str }} 条评论</text>
-					<image class="comment-head__icon" src="/static/images/close.png" mode="" @tap="$refs.popup.close()"></image>
+					<image class="comment-head__icon" src="/static/images/close.png" mode="" @tap="$refs.popup.close()">
+					</image>
 				</view>
 				<view class="list-box">
 					<list @loadmore="loadmore">
-						<cell v-for="(item, index) in commentList" :key="`comment_${index}`">
+						<cell v-for="(item, index) in commentList" :key="index">
 							<view class="comment-item">
 								<image class="comment-item__avatar" :src="item.avatar" mode=""></image>
 								<view class="comment-item__right">
 									<view class="comment-item__head">
 										<view class="comment-item__left" @tap="_reply(item)">
-											<text class="comment-item__username">{{ item.nickname || item.username }}</text>
+											<text
+												class="comment-item__username">{{ item.nickname || item.username }}</text>
 											<view class="comment-content">
 												<text class="comment-content__text">{{ item.content }}</text>
 											</view>
 										</view>
 										<view class="comment-like">
-											<image class="comment-like__icon" src="/static/images/dianzan-red.png" mode="" @tap="_cancelCommentPraise(item)"
-											 v-if="item.is_like"></image>
-											<image class="comment-like__icon" src="/static/images/dianzan-white.png" mode="" @tap="_commentPraise(item)"
-											 v-else></image>
-											<text class="comment-like__text">{{ item.like_num.length > 3 ? item.like_num_str : item.like_num }}</text>
+											<image class="comment-like__icon" src="/static/images/dianzan-red.png"
+												mode="" @tap="_cancelCommentPraise(item)" v-if="item.is_like"></image>
+											<image class="comment-like__icon" src="/static/images/dianzan-white.png"
+												mode="" @tap="_commentPraise(item)" v-else></image>
+											<text
+												class="comment-like__text">{{ item.like_num.length > 3 ? item.like_num_str : item.like_num }}</text>
 										</view>
 									</view>
 									<view class="comment-foot">
@@ -103,16 +105,17 @@
 					</list>
 				</view>
 				<view class="comment-input__box">
-					<input class="comment-input" v-model="comment" type="text" placeholder="有爱评论,说点好听的～" :adjust-position="false"
-					 @confirm="_commentSubmit" />
-					<image class="comment-btn__icon" src="/static/images/send.png" mode="" @tap="_commentSubmit"></image>
+					<input class="comment-input" v-model="comment" type="text" placeholder="有爱评论,说点好听的～"
+						:adjust-position="false" @confirm="_commentSubmit" />
+					<image class="comment-btn__icon" src="/static/images/send.png" mode="" @tap="_commentSubmit">
+					</image>
 				</view>
 			</view>
 		</uni-popup>
 		<uni-popup ref="sharePopup" type="bottom" @change="_sharePopupChange">
 			<view class="share-box">
 				<view class="share-content">
-					<view class="share-item" v-for="(item, index) in shareList" :key="`share_${index}`" @tap="_onShare(item)">
+					<view class="share-item" v-for="(item, index) in shareList" :key="index" @tap="_onShare(item)">
 						<image class="share-item__icon" :src="item.icon" mode=""></image>
 						<text class="share-item__label">{{ item.label }}</text>
 					</view>
@@ -227,16 +230,36 @@
 			}
 		},
 		mounted() {
-			this.videoContext = this.$refs['video_'+this.playIndex][0]
+			this.videoContext = this.$refs['video_' + this.playIndex][0]
 			this.videoContext.play()
 		},
 		methods: {
-			sliderChange({value}){
-				this.$emit('change', { value: value })
+			userCenter(item) {
+				uni.navigateTo({
+					url: `/pages/my/user-center/user-center?user_id=${item.user_id}`
+				})
+			},
+			__play() {
+				if (this.videoContext === null) {
+					this.videoContext = this.$refs['video_' + this.playIndex][0]
+				}
+				this.videoContext.play()
+			},
+			__pause() {
+				this.videoContext.pause()
+			},
+			sliderChange({
+				value
+			}) {
+				this.$emit('change', {
+					value: value
+				})
 				this.scrollable = true
 			},
-			sliderChanging(e){
-				this.$emit('changing', { type: 'slider' })
+			sliderChanging(e) {
+				this.$emit('changing', {
+					type: 'slider'
+				})
 				this.scrollable = false
 			},
 			_getTags(tags) {
@@ -292,8 +315,10 @@
 						})
 					}
 				})
-				
-				downloadTask.onProgressUpdate(({ progress }) => {
+
+				downloadTask.onProgressUpdate(({
+					progress
+				}) => {
 					this.progress = progress
 				})
 			},
@@ -474,69 +499,70 @@
 				// 	}
 				// }
 				var index = Math.abs(e.contentOffset.y / this.bodyHeight)
-								const intVaule = Math.round(Math.abs(e.contentOffset.y / this.bodyHeight))
-								
-								if((index + 0.1) > intVaule){
-									index = intVaule
-								}
-								
-								if((index - 1) > this.playIndex || (index + 1) < this.playIndex){
-									if(this.videoContext){
-										this.videoContext.stop()
-										this.playIndex = -1
-									}
-								}
-								if(index == intVaule && index != this.playIndex){
-									if(this.videoList.length>=10 && (this.videoList.length - index) <= 5 && (index - this.last_get_index) > 5){
-										// this.last_get_index = index
-										// this.page++
-										// if(this.totalPage && this.totalPage<this.page){
-										// 	return
-										// }
-										this.getVideoList()
-									}
-									if(this.videoContext){
-										this.videoContext.stop()
-									}
-									// this.isPause = false
-									// this.pageHide = false
-									this.playIndex = index
-									this.$nextTick(() => {
-										if(this.playIndex == index) this.playVideo()
-									});
-								}
+				const intVaule = Math.round(Math.abs(e.contentOffset.y / this.bodyHeight))
+
+				if ((index + 0.1) > intVaule) {
+					index = intVaule
+				}
+
+				if ((index - 1) > this.playIndex || (index + 1) < this.playIndex) {
+					if (this.videoContext) {
+						this.videoContext.stop()
+						this.playIndex = -1
+					}
+				}
+				if (index == intVaule && index != this.playIndex) {
+					if (this.videoList.length >= 10 && (this.videoList.length - index) <= 5 && (index - this
+							.last_get_index) > 5) {
+						// this.last_get_index = index
+						// this.page++
+						// if(this.totalPage && this.totalPage<this.page){
+						// 	return
+						// }
+						this.getVideoList()
+					}
+					if (this.videoContext) {
+						this.videoContext.stop()
+					}
+					// this.isPause = false
+					// this.pageHide = false
+					this.playIndex = index
+					this.$nextTick(() => {
+						if (this.playIndex == index) this.playVideo()
+					});
+				}
 			},
-			playVideo(){
+			playVideo() {
 				console.log('play')
-							try{
-								this.videoContext = this.$refs['video_'+this.playIndex][0]
-								if(!this.videoContext){
-									this.retryTimes++
-									//试10次后放弃
-									if(this.retryTimes>10){
-										this.retryTimes = 0
-										return
-									}
-									//1秒钟后再试一下
-									setTimeout(this.playVideo,1000)
-									return
-								}
-								// if(this.videoContext.length){
-								// 	this.videoContext =  this.videoContext[0]
-								// }
-								
-								// if(this.isPause || this.pageHide) return
-								this.retryTimes = 0
-								if(this.playingIndex == -1 && !this.autoplay){
-									this.autoplay = true
-									return
-								}
-								this.videoContext.play()
-							} catch(e) {
-								console.log("获取播放器对象出错",e)
-							}
-							
-						},
+				try {
+					this.videoContext = this.$refs['video_' + this.playIndex][0]
+					if (!this.videoContext) {
+						this.retryTimes++
+						//试10次后放弃
+						if (this.retryTimes > 10) {
+							this.retryTimes = 0
+							return
+						}
+						//1秒钟后再试一下
+						setTimeout(this.playVideo, 1000)
+						return
+					}
+					// if(this.videoContext.length){
+					// 	this.videoContext =  this.videoContext[0]
+					// }
+
+					// if(this.isPause || this.pageHide) return
+					this.retryTimes = 0
+					if (this.playingIndex == -1 && !this.autoplay) {
+						this.autoplay = true
+						return
+					}
+					this.videoContext.play()
+				} catch (e) {
+					console.log("获取播放器对象出错", e)
+				}
+
+			},
 			onPlay(event) {
 				this.videoRef = this.$refs[`video_${this.playIndex}`][0]
 				this.videoContext = event
@@ -564,6 +590,9 @@
 			playIndex(index) {
 				this.video = this.videoList[index]
 			}
+		},
+		onHide() {
+			console.log('onHide-----')
 		}
 	}
 </script>
@@ -572,11 +601,13 @@
 	.right-menu__item {
 		align-items: center;
 	}
+
 	.alert-cover__view {
 		flex: 1;
 		align-items: center;
 		justify-content: center;
 	}
+
 	.alert-btn1 {
 		height: 58rpx;
 		line-height: 58rpx;
@@ -587,6 +618,7 @@
 		font-weight: bold;
 		font-size: 32rpx;
 	}
+
 	.alert-btn {
 		margin-bottom: 20rpx;
 		height: 58rpx;
@@ -598,35 +630,39 @@
 		font-weight: bold;
 		font-size: 32rpx;
 	}
+
 	.alert-tip {
 		font-size: 32rpx;
 		color: #FFFFFF;
 		padding: 20rpx 0;
 	}
+
 	.alert-title {
 		color: #FFFFFF;
 		font-size: 36rpx;
 		text-align: center;
 	}
+
 	.alert-view {
 		width: 345rpx;
 	}
+
 	.share-item__label {
 		margin-top: 12rpx;
 		font-size: 28rpx;
 	}
-	
+
 	.share-item {
 		flex: 1;
 		align-items: center;
 		justify-content: center;
 	}
-	
+
 	.share-item__icon {
 		width: 80rpx;
 		height: 80rpx;
 	}
-	
+
 	.share-content {
 		padding: 20rpx;
 		flex-direction: row;
@@ -634,7 +670,7 @@
 		border-radius: 12rpx;
 		margin-bottom: 24rpx;
 	}
-	
+
 	.share-cancel {
 		height: 88rpx;
 		background-color: #FFFFFF;
@@ -643,10 +679,11 @@
 		align-items: center;
 		justify-content: center;
 	}
-	
+
 	.share-box {
 		padding: 24rpx 12rpx;
 	}
+
 	.comment-tip__text {
 		text-align: center;
 		color: #808080;

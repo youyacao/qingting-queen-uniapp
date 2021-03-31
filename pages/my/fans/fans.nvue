@@ -11,7 +11,7 @@
 		<swiper class="swiper" :current="current" @change="change">
 			<swiper-item>
 				<list @loadmore="floadmore">
-					<cell v-for="(item, index) in list" :key="`flist_${index}`">
+					<cell v-for="(item, index) in list" :key="index">
 						<view class="item">
 							<image class="avatar" :src="item.avatar" mode=""></image>
 							<view class="right">
@@ -45,7 +45,7 @@
 			</swiper-item>
 			<swiper-item>
 				<list @loadmore="floadmore">
-					<cell v-for="(item, index) in flist" :key="`flist_${index}`">
+					<cell v-for="(item, index) in flist" :key="index">
 						<view class="item">
 							<image class="avatar" :src="item.avatar" mode=""></image>
 							<view class="right">
