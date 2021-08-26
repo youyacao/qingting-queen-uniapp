@@ -2,6 +2,17 @@
 
 #### 介绍
 蜻蜓Queen系列产品延续蜻蜓s系统以短视频社交为主，蜻蜓Q系统引入粉丝群，粉丝团功能开启加强用户粘性，社交图文打赏，任务，观影卷等模式，开放作者加v认证机制等，蜻蜓系统支持森林AI算法系统。蜻蜓系统逐步全面开源，如果对您有帮助，希望给个小星星鼓励，感谢支持。
+
+#### 截图
+
+![](https://doc.youyacao.com/server/index.php?s=/api/attachment/visitFile/sign/9c6f613c1f24a9dc5613397ee1ec0858)
+
+
+
+![](https://doc.youyacao.com/server/index.php?s=/api/attachment/visitFile/sign/eb7b9ba4e93bc410f36f6d56b394d1f4)
+
+![](https://doc.youyacao.com/server/index.php?s=/api/attachment/visitFile/sign/4108f21c132b8515006065b18b45f341)
+
 #### 蜻蜓系列软件架构
 
 vue + nuve +uniapp +flutter + java + php +laravel
