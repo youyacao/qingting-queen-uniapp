@@ -19,7 +19,7 @@ vue + nuve +uniapp +flutter + java + php +laravel
 
 node.js +springboot2.2+springmvc+druid+mybatis+mangoDB+mysql+shiro-redis+redis+activemq
 
-此库为蜻蜓q前端，蜻蜓q前端使用vue+nuve+uniapp
+此库为蜻蜓q前端，蜻蜓q前端使用weex+vue+nuve+uniapp
  
  
  其他版本请关注松鼠/蜻蜓系统管网 
