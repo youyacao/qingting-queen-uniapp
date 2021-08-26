@@ -13,6 +13,15 @@
 
 ![](https://doc.youyacao.com/server/index.php?s=/api/attachment/visitFile/sign/4108f21c132b8515006065b18b45f341)
 
+
+#### 演示下载地址
+
+演示地址一：
+[https://test.down.yizhanapp.cn/zyeKVV](https://test.down.yizhanapp.cn/zyeKVV)
+演示地址二：
+[https://tap.dierna.com/qingtingQueen](https://tap.dierna.com/qingtingQueen)
+
+
 #### 蜻蜓系列软件架构
 
 vue + nuve +uniapp +flutter + java + php +laravel
