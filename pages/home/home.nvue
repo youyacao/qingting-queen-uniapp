@@ -15,7 +15,7 @@
 			</view>
 		</view>
 		<view class="top-zhuan" :style="{'top': statusBarHeight + 60}" v-if="showZhuan">
-			<image class="top-zhuan__icon" src="/static/images/hg/zhuan.png" mode="" @tap="_jumpZhuan"></image>
+			<image class="top-zhuan__icon" src="/static/images/hg/zhuan.gif" mode="" @tap="_jumpZhuan"></image>
 			<image class="top-close__icon" src="/static/images/hg/short_video_close.png" mode="" @tap="_closeZhuan"></image>
 		</view>
 		<swiper class="swiper" :disable-touch="disabled" :current="current" @change="_swiperChange">

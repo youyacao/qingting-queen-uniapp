@@ -245,7 +245,7 @@
 		color: $uni-text-color;
 	}
 	.popup-confirm__btn {
-		background-color: #08d9d6;
+		background-color: #2C405A;
 		color: #FFFFFF;
 		margin-left: 24rpx;
 	}

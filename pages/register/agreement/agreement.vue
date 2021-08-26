@@ -1,6 +1,6 @@
 <template>
 	<view class="body">
-		<web-view :webview-styles="webviewStyles" src="https://songshu.youyacao.com/detail/218.html"></web-view>
+		<web-view :webview-styles="webviewStyles" src="https://songshu.youyacao.com/detail/225.html"></web-view>
 	</view>
 </template>
 
