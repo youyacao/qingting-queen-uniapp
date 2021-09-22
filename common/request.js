@@ -77,10 +77,12 @@ http.interceptors.request.use((config) => {
 
 // 请求之后
 http.interceptors.response.use((response) => {
+	const routes = getCurrentPages()
+	const current_route = routes[routes.length - 1].route
 	const {
 		code
 	} = response.data
-	if (code === 500) {
+	if (code === 500 && current_route !== 'pages/login/login') {
 		uni.navigateTo({
 			url: '/pages/login/login'
 		})

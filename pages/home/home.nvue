@@ -80,7 +80,6 @@
 				VList({
 					is_auth: 'YES'
 				}).then(({ data, code }) => {
-					console.log(data)
 					if (code === 200) {
 						this.videoList = data.list
 					}

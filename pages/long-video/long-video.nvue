@@ -28,7 +28,7 @@
 			</view>
 		</view>
 		<swiper class="swiper" :current="current" @change="_change" v-if="navList">
-			<swiper-item v-for="swiper in navList.children.length + 1" >
+			<swiper-item v-for="(swiper, i) in navList.children.length + 1" :key="i">
 				<list class="list" show-scrollbar="false" @loadmore="_loadmore">
 					<cell class="row" v-for="(row, i) in list[current]">
 						<view class="item" v-for="(item, index) in row" :key="item.id" :class="{'odd': index === 0, 'even': index === 1}">
