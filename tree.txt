@@ -1,0 +1,157 @@
+.
+|-- App.vue
+|-- LICENSE
+|-- README.md
+|-- common
+|   |-- APPUpdate.js
+|   |-- api.js
+|   |-- common.js
+|   |-- config.js
+|   |-- crypto-js.js
+|   |-- request.js
+|   `-- test.js
+|-- components
+|   |-- home-player
+|   |   `-- home-player.nvue
+|   |-- player-list
+|   |   `-- player-list.nvue
+|   |-- tki-qrcode
+|   |   |-- qrcode.js
+|   |   `-- tki-qrcode.vue
+|   |-- uni-popup
+|   |   |-- message.js
+|   |   |-- popup.js
+|   |   |-- uni-popup-dialog.vue
+|   |   |-- uni-popup-message.vue
+|   |   |-- uni-popup-share.vue
+|   |   `-- uni-popup.vue
+|   |-- uni-transition
+|   |   `-- uni-transition.vue
+|   |-- v-player
+|   |   `-- v-player.nvue
+|   |-- v-slider
+|   |   `-- v-slider.vue
+|   |-- v-tabbar
+|   |   `-- v-tabbar.nvue
+|   `-- v-video
+|       `-- v-video.nvue
+|-- js_sdk
+|   |-- luch-request
+|   |   `-- luch-request
+|   |       |-- adapters
+|   |       |   `-- index.js
+|   |       |-- core
+|   |       |   |-- InterceptorManager.js
+|   |       |   |-- Request.js
+|   |       |   |-- buildFullPath.js
+|   |       |   |-- defaults.js
+|   |       |   |-- dispatchRequest.js
+|   |       |   |-- mergeConfig.js
+|   |       |   `-- settle.js
+|   |       |-- helpers
+|   |       |   |-- buildURL.js
+|   |       |   |-- combineURLs.js
+|   |       |   `-- isAbsoluteURL.js
+|   |       |-- index.js
+|   |       `-- utils.js
+|   |-- wa-permission
+|   |   `-- permission.js
+|   `-- zhouWei-APPUpdate
+|       `-- APPUpdate
+|           |-- APPUpdate.md
+|           `-- index.js
+|-- main.js
+|-- manifest.json
+|-- package-lock.json
+|-- package.json
+|-- pages
+|   |-- ad
+|   |   `-- ad.vue
+|   |-- home
+|   |   `-- home.nvue
+|   |-- latest
+|   |   |-- latest.nvue
+|   |   `-- player
+|   |       `-- player.nvue
+|   |-- list-test
+|   |   `-- list-test.nvue
+|   |-- live
+|   |   |-- create
+|   |   |   `-- create.vue
+|   |   |-- live.nvue
+|   |   |-- player
+|   |   |   `-- player.nvue
+|   |   |-- pusher
+|   |   |   `-- pusher.nvue
+|   |   `-- record
+|   |       `-- record.nvue
+|   |-- login
+|   |   `-- login.vue
+|   |-- long-video
+|   |   `-- long-video.nvue
+|   |-- message
+|   |   |-- message.nvue
+|   |   `-- post
+|   |       `-- post.vue
+|   |-- my
+|   |   |-- agent
+|   |   |   |-- agent.nvue
+|   |   |   |-- performance
+|   |   |   |   `-- performance.nvue
+|   |   |   `-- records
+|   |   |       `-- records.nvue
+|   |   |-- article-list
+|   |   |   `-- article-list.nvue
+|   |   |-- comment-community
+|   |   |   `-- comment-community.nvue
+|   |   |-- comment-list
+|   |   |   `-- comment-list.nvue
+|   |   |-- comment-video
+|   |   |   `-- comment-video.nvue
+|   |   |-- download-records
+|   |   |   `-- download-records.nvue
+|   |   |-- fans
+|   |   |   `-- fans.nvue
+|   |   |-- invite
+|   |   |   `-- invite.vue
+|   |   |-- like
+|   |   |   `-- like.nvue
+|   |   |-- like-message
+|   |   |   `-- like-message.nvue
+|   |   |-- like-video
+|   |   |   `-- like-video.nvue
+|   |   |-- message
+|   |   |   `-- message.nvue
+|   |   |-- my.nvue
+|   |   |-- play-records
+|   |   |   `-- play-records.nvue
+|   |   |-- promotion-record
+|   |   |   `-- promotion-record.nvue
+|   |   |-- setting
+|   |   |   `-- setting.vue
+|   |   |-- task
+|   |   |   `-- task.nvue
+|   |   |-- user-center
+|   |   |   `-- user-center.vue
+|   |   |-- video-list
+|   |   |   `-- video-list.nvue
+|   |   `-- vip
+|   |       `-- vip.nvue
+|   |-- register
+|   |   |-- agreement
+|   |   |   `-- agreement.vue
+|   |   `-- register.vue
+|   |-- reply
+|   |   `-- reply.nvue
+|   |-- short-video
+|   |   `-- short-video.nvue
+|   |-- test
+|   |   `-- test.nvue
+|   `-- upload-video
+|       `-- upload-video.vue
+|-- pages.json
+|-- tree.txt
+|-- uni.scss
+`-- yarn.lock
+
+63 directories, 91 files

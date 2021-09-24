@@ -1,3 +1,6 @@
+
+
+
 <template>
 	<view class="box" @touchmove="touchM" @touchstart="bgtouchS" @touchend="touchE">
 		<view style="height: 20rpx;flex: 1;">
