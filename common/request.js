@@ -70,6 +70,7 @@ http.interceptors.request.use((config) => {
 	} catch (e) {
 		// error
 	}
+	console.log(config)
 	return config
 }, config => {
 	return Promise.reject(config)

@@ -1,0 +1,136 @@
+<template>
+	<view class="safe-area-inset-bottom register-edit">
+		<u-select v-model="show_sex" :list="sex_list" @confirm="confirmSex"></u-select>
+		<u-calendar v-model="show_brithday" mode="date" @change="dateChange"></u-calendar>
+		<u-card :border="false" :foot-border-top="false" :show-head="false" padding="40">
+			<u-form :model="form" ref="uForm" label-width="130" slot="body">
+				<u-form-item label="用户名" prop="name" required>
+					<u-input v-model="form.name" />
+				</u-form-item>
+				<u-form-item label="简介" prop="intro" required>
+					<u-input v-model="form.intro" type="textarea" />
+				</u-form-item>
+				<u-form-item label="性别" prop="sex" required>
+					<u-input v-model="form.sex" type="select" @tap="show_sex = true" />
+				</u-form-item>
+				<u-form-item label="生日" prop="birthday" required>
+					<u-input v-model="form.birthday" type="select" @tap="show_brithday = true" />
+				</u-form-item>
+			</u-form>
+		</u-card>
+		<view class="register-edit__foot">
+			<u-button class="register-edit__btn" type="primary" :ripple="true" @click="submit">确认</u-button>
+		</view>
+	</view>
+</template>
+
+<script>
+	import {
+		EditUserInfo
+	} from '@/common/api.js'
+
+	export default {
+		data() {
+			return {
+				form: {
+					name: '',
+					intro: '',
+					sex: '',
+					birthday: ''
+				},
+				show_sex: false,
+				sex_list: [{
+						value: 0,
+						label: '保密'
+					},
+					{
+						value: 1,
+						label: '男'
+					},
+					{
+						value: 2,
+						label: '女'
+					}
+				],
+				sex: '',
+				show_brithday: false,
+				rules: {
+					name: [{
+						required: true,
+						message: '请输入用户名',
+						trigger: ['blur', 'change'],
+					}],
+					intro: [{
+						required: true,
+						min: 5,
+						message: '简介不能少于5个字',
+						trigger: 'change'
+					}],
+					sex: [{
+						required: true,
+						message: '请选择性别',
+						trigger: 'change'
+					}],
+					birthday: [{
+						required: true,
+						message: '请选择生日',
+						trigger: 'change'
+					}]
+				}
+			}
+		},
+		onReady() {
+			this.$refs.uForm.setRules(this.rules);
+		},
+		methods: {
+			confirmSex(val) {
+				const {
+					value,
+					label
+				} = val[0]
+				this.sex = value
+				this.form.sex = label
+			},
+			dateChange(date) {
+				const {
+					result
+				} = date
+				this.form.birthday = result
+			},
+			submit() {
+				this.$refs.uForm.validate(valid => {
+					if (valid) {
+						const { name: nickname, sex, birthday, intro: desc } = this.form
+						EditUserInfo({
+							nickname,
+							sex,
+							birthday,
+							desc
+						}).then(({ code, message }) => {
+							console.log(code, message)
+						})
+					}
+				})
+			}
+		}
+	}
+</script>
+
+<style lang="scss">
+	.register-edit__foot {
+		margin-top: 60rpx;
+		padding: 0 30rpx;
+	}
+
+	.register-edit__btn {
+		// margin-top: 30rpx;
+	}
+
+	.register-edit {
+		// padding: 15px;
+	}
+
+	page {
+		background-color: $u-bg-color;
+	}
+</style>

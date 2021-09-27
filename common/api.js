@@ -274,3 +274,8 @@ export const UserInfo = (data) => {
 export const LikeVideo = (data) => {
 	return post('like/list', data)
 }
+
+// 编辑用户信息
+export const EditUserInfo = (data) => {
+	return post('complete', data)
+}

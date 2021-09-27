@@ -112,8 +112,13 @@
 					code: this.captcha,
 					password: this.password,
 					refcode: this.invitationCode
-				}).then(({ code, msg }) => {
+				}).then(({ code, msg, data: { token } }) => {
 					if (code === 200) {
+						try {
+						    uni.setStorageSync('TOKEN', token)
+						} catch (e) {
+						    // error
+						}
 						this.$refs.uToast.show({
 							title: msg,
 							type: 'success'

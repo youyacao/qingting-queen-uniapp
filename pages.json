@@ -412,6 +412,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/register/edit",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "完善资料",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
