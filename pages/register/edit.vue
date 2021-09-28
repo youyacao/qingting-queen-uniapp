@@ -100,14 +100,20 @@
 			submit() {
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
-						const { name: nickname, sex, birthday, intro: desc } = this.form
+						const { name: nickname, birthday, intro: desc } = this.form
 						EditUserInfo({
 							nickname,
-							sex,
 							birthday,
-							desc
-						}).then(({ code, message }) => {
-							console.log(code, message)
+							desc,
+							sex: this.sex
+						}).then(({ code, msg }) => {
+							uni.showToast({
+								title: msg,
+								icon: 'none'
+							})
+							if (code === 200) {
+								uni.navigateBack()
+							}
 						})
 					}
 				})

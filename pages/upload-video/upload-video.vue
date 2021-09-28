@@ -10,7 +10,6 @@
 	 */
  -->
 
-
 <template>
 	<view class="body">
 		<view class="head">
@@ -289,6 +288,7 @@
 	.select-left {
 		display: flex;
 		align-items: center;
+		color: #333;
 	}
 	.select-left__right {
 		width: 45rpx;
@@ -326,7 +326,7 @@
 	}
 	.textarea {
 		flex: 1;
-		color: #FFFFFF;
+		color: #333;
 	}
 	.video-box {
 		height: 200rpx;
@@ -346,5 +346,6 @@
 	}
 	.body {
 		height: 100vh;
+		background-color: $u-bg-color;
 	}
 </style>

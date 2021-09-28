@@ -59,8 +59,8 @@ const store = new Vuex.Store({
 				}
 			})
 		},
-		getConfig({ commit }) {
-			Config({ key: 'base' }).then(({ code, data }) => {
+		getConfig({ commit }, key = 'base') {
+			Config({ key }).then(({ code, data }) => {
 				if (code === 200) {
 					commit('setConfig', data)
 				}

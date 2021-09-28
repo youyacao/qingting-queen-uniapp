@@ -2,6 +2,7 @@
 	// #ifdef APP-PLUS
 	import APPUpdate from "@/js_sdk/zhouWei-APPUpdate/APPUpdate"
 	// #endif
+	import { Config } from '@/common/api.js'
 
 	export default {
 		onLaunch: function() {
@@ -24,6 +25,15 @@
 		},
 		onShow: function() {
 			console.log('App Show')
+			Config({ key: 'safe' }).then(({ code, data }) => {
+				if (code === 200) {
+					try {
+					    uni.setStorageSync('SECURITY', data)
+					} catch (e) {
+					    // error
+					}
+				}
+			})
 		},
 		onHide: function() {
 			console.log('App Hide')
