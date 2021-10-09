@@ -444,6 +444,7 @@
 			_change({
 				detail
 			}) {
+				this.comment_page = 1
 				const {
 					current
 				} = detail
