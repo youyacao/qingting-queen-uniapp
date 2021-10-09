@@ -60,9 +60,9 @@
 										<image class="item-foot__icon like-icon" src="/static/images/dianzan-white.png" mode="aspectFit" v-else @tap="_like(item, index)"></image>
 										<text class="item-foot__text">{{ item.like_num.length > 3 ? item.like_num_str : item.like_num }}</text>
 									</view>
-									<view class="item-foot__col">
+									<view class="item-foot__col" @tap="_comment(item, index, 0)">
 										<image class="item-foot__icon" src="/static/images/comment-icon.png" mode="aspectFit"></image>
-										<text class="item-foot__text">{{ item.comment_num_str }}</text>
+										<text class="item-foot__text">{{ item.comment_num }}</text>
 									</view>
 									<view class="item-foot__col">
 										<image class="item-foot__icon" src="/static/images/share-icon.png" mode="aspectFit"></image>
@@ -121,9 +121,9 @@
 										<image class="item-foot__icon like-icon" src="/static/images/dianzan-white.png" mode="aspectFit" v-else @tap="_like(item, index)"></image>
 										<text class="item-foot__text">{{ item.like_num.length > 3 ? item.like_num_str : item.like_num }}</text>
 									</view>
-									<view class="item-foot__col">
+									<view class="item-foot__col" @tap="_comment(item, index, 1)">
 										<image class="item-foot__icon" src="/static/images/comment-icon.png" mode="aspectFit"></image>
-										<text class="item-foot__text">{{ item.comment_num_str }}</text>
+										<text class="item-foot__text">{{ item.comment_num }}</text>
 									</view>
 									<view class="item-foot__col">
 										<image class="item-foot__icon" src="/static/images/share-icon.png" mode="aspectFit"></image>
@@ -167,6 +167,43 @@
 				<image class="shang-icon" src="/static/images/shang.png" mode=""></image>
 			</view>
 		</uni-popup>
+		<uni-popup ref="comment_popup" type="bottom">
+			<view class="comment_box" :style="{'height': windowHeight - 260 + 'px'}">
+				<view class="comment_head">
+					<text class="comment-head_text">{{ comment_item.comment_num }}条评论</text>
+					<image class="comment-head_close" src="@/static/icons8-delete-48.png" mode="" @tap="_closeCommentPopup"></image>
+				</view>
+				<list class="comment_list" @loadmore="_commentLoadmore">
+					<cell v-for="item in comment_list" :key="item.id">
+						<view class="comment_item">
+							<image class="comment-item_avatar" :src="item.avatar" mode="" v-if="item.avatar"></image>
+							<image class="comment-item_avatar" src="@/static/default_avatar.png" mode="" v-else></image>
+							<view class="comment-item_content">
+								<view class="comment-item_content-left">
+									<text class="comment-item_username">{{ item.nickname }}</text>
+									<text class="comment-item_content-text">{{ item.content }}</text>
+									<view class="comment-item_time">
+										<text class="comment-item_time-text">{{ item.mtime }}</text>
+										<text class="comment-item_btn">回复</text>
+									</view>
+								</view>
+								<view class="comment-item_content-right">
+									<image class="comment-kudos_icon" src="@/static/icons8-love-48.png" mode="" v-if="item.is_like === 1"></image>
+									<image class="comment-kudos_icon" src="@/static/icons8-love-48-grey.png" mode="" v-else></image>
+									<text class="comment-item_kudos">{{ item.like_num }}</text>
+								</view>
+							</view>
+						</view>
+					</cell>
+					<cell v-if="comment_list.length === 0 && comment_init">
+						<text class="comment-no_text">暂无评论，来抢沙发</text>
+					</cell>
+				</list>
+				<view class="comment-input_box">
+					<input class="comment_input" type="text" v-model="comment_content" placeholder="留下你的精彩评论吧" @confirm="_commentConfirm" />
+				</view>
+			</view>
+		</uni-popup>
 		<view class="nav-box">
 			<v-tabbar></v-tabbar>
 		</view>
@@ -179,7 +216,9 @@
 		FocusArticleList,
 		Praise,
 		CancelPraise,
-		Reward
+		Reward,
+		Comment,
+		CommentList
 	} from '@/common/api.js'
 	import {
 		toTwoArray
@@ -202,14 +241,87 @@
 				refreshing: false,
 				refreshing1: false,
 				userId: '',
-				reward: ''
+				reward: '',
+				comment_content: '',
+				comment_item: '',
+				comment_page: 1,
+				comment_list: [],
+				comment_loading: false,
+				comment_init: false,
+				comment_last_page: false,
+				comment_index: '',
+				comment_type: 0
 			};
 		},
 		components: { VTabbar },
 		computed: {
-			...mapGetters(['statusBarHeight'])
+			...mapGetters(['statusBarHeight', 'windowHeight'])
 		},
 		methods: {
+			_commentLoadmore() {
+				if (this.comment_last_page) return
+				this.comment_page++
+				this._getCommentList()
+			},
+			// 评论列表
+			_getCommentList() {
+				this.comment_last_page = false
+				CommentList({
+					type: 2,
+					vid: this.comment_item.id,
+					page: this.comment_page,
+					limit: 10
+				}).then(({ code, data }) => {
+					this.comment_init = true
+					if (code === 200) {
+						const { total_page, current_page, list } = data
+						if (current_page === 1) {
+							this.comment_list = list
+						} else {
+							this.comment_list = this.comment_list.concat(list)
+						}
+						if (current_page >= total_page) {
+							this.comment_last_page = true
+						}
+					}
+					console.log(data)
+				})
+			},
+			// 评论
+			_commentConfirm() {
+				const { id } = this.comment_item
+				Comment({
+					type: 2,
+					vid: id,
+					content: this.comment_content
+				}).then(({ code, msg }) => {
+					uni.showToast({
+						title: msg,
+						icon: 'none'
+					})
+					if (code === 200) {
+						this._getCommentList()
+						this.comment_content = ''
+						if (this.comment_type === 0) {
+							this.list[this.comment_index].comment_num++
+						} else {
+							this.focusList[this.comment_index].comment_num++
+						}
+					}
+				})
+			},
+			_closeCommentPopup() {
+				this.$refs.comment_popup.close()
+			},
+			_comment(item, index, type) {
+				this.comment_type = type
+				this.comment_index = index
+				this.comment_list = []
+				this.comment_init = false
+				this.comment_item = item
+				this._getCommentList()
+				this.$refs.comment_popup.open()
+			},
 			_cancelPopup() {
 				this.$refs.popup.close()
 			},
@@ -409,6 +521,103 @@
 </script>
 
 <style lang="scss" scoped>
+	.comment-no_text {
+		color: #909399;
+		font-size: 28rpx;
+		text-align: center;
+	}
+	.comment-kudos_icon {
+		width: 40rpx;
+		height: 40rpx;
+	}
+	.comment-item_kudos {
+		color: #909399;
+		font-size: 28rpx;
+		text-align: center;
+	}
+	.comment-item_btn {
+		padding-left: 35rpx;
+	}
+	.comment-item_time {
+		flex-direction: row;
+	}
+	.comment-item_content-left {
+		flex: 1;
+		padding-right: 40rpx;
+	}
+	.comment-item_content {
+		flex-direction: row;
+		flex: 1;
+	}
+	.comment-item_btn {
+		color: #909399;
+		font-size: 28rpx;
+	}
+	.comment-item_time-text {
+		color: #909399;
+		font-size: 28rpx;
+	}
+	.comment-item_content-text {
+		color: #303133;
+		font-size: 32rpx;
+		padding-top: 10rpx;
+		padding-bottom: 15rpx;
+	}
+	.comment-item_username {
+		color: #606266;
+		font-size: 28rpx;
+	}
+	.comment_item {
+		padding: 0 30rpx;
+		margin-bottom: 30rpx;
+		flex-direction: row;
+	}
+	.comment-item_avatar {
+		width: 80rpx;
+		height: 80rpx;
+		border-radius: 50%;
+		margin-right: 20rpx;
+	}
+	.comment-head_close {
+		position: absolute;
+		right: 30rpx;
+		width: 24rpx;
+		height: 24rpx;
+	}
+	.comment-head_text {
+		font-size: 26rpx;
+	}
+	.comment_head {
+		height: 80rpx;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+	}
+	.comment_input {
+		height: 80rpx;
+		border-radius: 40rpx;
+		background-color: #f3f3f3;
+		font-size: 28rpx;
+		flex: 1;
+		padding: 0 24rpx;
+	}
+	.comment-input_box {
+		border-top-width: 1rpx;
+		border-top-color: #e8e8e8;
+		height: 110rpx;
+		padding: 20rpx;
+		align-items: center;
+		flex-direction: row;
+	}
+	.comment_list {
+		flex: 1;
+	}
+	.comment_box {
+		background-color: #FFFFFF;
+		border-top-left-radius: 16rpx;
+		border-top-right-radius: 16rpx;
+		overflow: hidden;
+	}
 	.shang-confirm {
 		flex: 1;
 		text-align: center;
