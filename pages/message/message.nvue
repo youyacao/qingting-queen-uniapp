@@ -10,13 +10,6 @@
 	 */
  -->
 
-
-
-
-
-
-
-
 <template>
 	<view class="body">
 		<view class="head" :style="{'padding-top': `${statusBarHeight}px`}">

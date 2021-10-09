@@ -136,7 +136,9 @@
 							title: msg,
 							type: 'success'
 						})
-						uni.navigateBack()
+						uni.reLaunch({
+							url: '/pages/register/edit'
+						})
 					} else {
 						this.$refs.uToast.show({
 							title: msg,

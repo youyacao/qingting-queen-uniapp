@@ -4,6 +4,9 @@
 		<u-calendar v-model="show_brithday" mode="date" @change="dateChange"></u-calendar>
 		<u-card :border="false" :foot-border-top="false" :show-head="false" padding="40">
 			<u-form :model="form" ref="uForm" label-width="130" slot="body">
+				<view class="upload-box">
+					<u-upload ref="uUpload" :action="action" :file-list="fileList" :auto-upload="false" max-count="1" upload-text="上传头像"></u-upload>
+				</view>
 				<u-form-item label="用户名" prop="name" required>
 					<u-input v-model="form.name" />
 				</u-form-item>
@@ -26,12 +29,15 @@
 
 <script>
 	import {
-		EditUserInfo
+		EditUserInfo,
+		UploadImage
 	} from '@/common/api.js'
 
 	export default {
 		data() {
 			return {
+				action: '',
+				fileList: [],
 				form: {
 					name: '',
 					intro: '',
@@ -79,6 +85,10 @@
 				}
 			}
 		},
+		onLoad(options) {
+			const { type } = options
+			if (type === 'change') {}
+		},
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
 		},
@@ -112,7 +122,9 @@
 								icon: 'none'
 							})
 							if (code === 200) {
-								uni.navigateBack()
+								uni.reLaunch({
+									url: '/pages/home/home'
+								})
 							}
 						})
 					}
@@ -123,6 +135,11 @@
 </script>
 
 <style lang="scss">
+	.upload-box {
+		padding-bottom: 15px;
+		display: flex;
+		justify-content: center;
+	}
 	.register-edit__foot {
 		margin-top: 60rpx;
 		padding: 0 30rpx;
