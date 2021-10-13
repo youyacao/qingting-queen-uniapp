@@ -421,6 +421,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/message/commentDetail/commentDetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

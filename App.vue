@@ -45,6 +45,9 @@
 </script>
 
 <style lang="scss">
+	page {
+		background-color: #f3f4f6;
+	}
 	/*每个页面公共css */
 	// #ifndef APP-PLUS-NVUE
 	@import "uview-ui/index.scss"

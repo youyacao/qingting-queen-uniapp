@@ -174,7 +174,7 @@
 					<image class="comment-head_close" src="@/static/icons8-delete-48.png" mode="" @tap="_closeCommentPopup"></image>
 				</view>
 				<list class="comment_list" @loadmore="_commentLoadmore">
-					<cell v-for="item in comment_list" :key="item.id">
+					<cell v-for="(item, index) in comment_list" :key="item.id">
 						<view class="comment_item">
 							<image class="comment-item_avatar" :src="item.avatar" mode="" v-if="item.avatar"></image>
 							<image class="comment-item_avatar" src="@/static/default_avatar.png" mode="" v-else></image>
@@ -184,12 +184,16 @@
 									<text class="comment-item_content-text">{{ item.content }}</text>
 									<view class="comment-item_time">
 										<text class="comment-item_time-text">{{ item.mtime }}</text>
-										<text class="comment-item_btn">回复</text>
+										<text class="comment-item_btn" @tap="_commentDetail(item)">回复</text>
+									</view>
+									<view class="comment-reply" v-if="item.reply_num > 0">
+										<view class="comment-reply_line"></view>
+										<text class="comment-reply_text" @tap="_commentDetail(item)">查看{{ item.reply_num }}条回复 ></text>
 									</view>
 								</view>
-								<view class="comment-item_content-right">
-									<image class="comment-kudos_icon" src="@/static/icons8-love-48.png" mode="" v-if="item.is_like === 1"></image>
-									<image class="comment-kudos_icon" src="@/static/icons8-love-48-grey.png" mode="" v-else></image>
+								<view class="comment-item_content-right" @tap="_commentLike(item, index)">
+									<image class="comment-kudos_icon" src="@/static/images/dianzan-red.png" mode="" v-if="item.is_like === 1"></image>
+									<image class="comment-kudos_icon" src="@/static/images/dianzan-white.png" mode="" v-else></image>
 									<text class="comment-item_kudos">{{ item.like_num }}</text>
 								</view>
 							</view>
@@ -200,7 +204,7 @@
 					</cell>
 				</list>
 				<view class="comment-input_box">
-					<input class="comment_input" type="text" v-model="comment_content" placeholder="留下你的精彩评论吧" @confirm="_commentConfirm" />
+					<input class="comment_input" :adjust-position="false" type="text" v-model="comment_content" placeholder="留下你的精彩评论吧" @confirm="_commentConfirm" />
 				</view>
 			</view>
 		</uni-popup>
@@ -218,7 +222,9 @@
 		CancelPraise,
 		Reward,
 		Comment,
-		CommentList
+		CommentList,
+		CommentPraise,
+		CancelCommentPraise
 	} from '@/common/api.js'
 	import {
 		toTwoArray
@@ -258,6 +264,33 @@
 			...mapGetters(['statusBarHeight', 'windowHeight'])
 		},
 		methods: {
+			_commentDetail(item) {
+				uni.navigateTo({
+					url: `/pages/message/commentDetail/commentDetail?item=${encodeURIComponent(JSON.stringify(item))}`
+				})
+			},
+			_commentLike({ id, is_like }, index) {
+				console.log(id, is_like, index)
+				if (is_like === 1) {
+					CancelCommentPraise({
+						comment_id: id
+					}).then(({ code }) => {
+						if (code === 200) {
+							this.comment_list[index].is_like = 0
+							this.comment_list[index].like_num--
+						}
+					})
+				} else {
+					CommentPraise({
+						comment_id: id
+					}).then(({ code }) => {
+						if (code === 200) {
+							this.comment_list[index].is_like = 1
+							this.comment_list[index].like_num++
+						}
+					})
+				}
+			},
 			_commentLoadmore() {
 				if (this.comment_last_page) return
 				this.comment_page++
@@ -284,7 +317,6 @@
 							this.comment_last_page = true
 						}
 					}
-					console.log(data)
 				})
 			},
 			// 评论
@@ -522,6 +554,21 @@
 </script>
 
 <style lang="scss" scoped>
+	.comment-reply_text {
+		color: #909399;
+		font-size: 28rpx;
+	}
+	.comment-reply_line {
+		width: 42rpx;
+		height: 2rpx;
+		background-color: #e5e5e5;
+		margin-right: 20rpx;
+	}
+	.comment-reply {
+		flex-direction: row;
+		align-items: center;
+		margin-top: 25rpx;
+	}
 	.comment-no_text {
 		color: #909399;
 		font-size: 28rpx;
