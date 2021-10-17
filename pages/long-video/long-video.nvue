@@ -9,9 +9,6 @@
 	 * 正版系统查询系统 zhengban.youyacao.com
 	 */
  -->
-
-
-
 <template>
 	<view class="body">
 		<view class="top">
@@ -30,10 +27,12 @@
 				<image class="nav-icon" src="/static/images/hg/film_edit.png" mode=""></image>
 			</view>
 			<view class="search">
-				<view class="search-l">
-					<image class="search-l__icon" src="/static/images/hg/film_search.png" mode=""></image>
-					<text class="search-l__text">搜作者、番号、标题等</text>
-				</view>
+				<navigator url="/pages/search/search" hover-class="none">
+					<view class="search-l">
+						<image class="search-l__icon" src="/static/images/hg/film_search.png" mode=""></image>
+						<text class="search-l__text">搜作者、番号、标题等</text>
+					</view>
+				</navigator>
 				<view class="search-r">
 					<image class="search-r__icon" src="/static/images/hg/film_recommend_collect.png" mode="aspectFit"></image>
 					<image class="search-r__icon" src="/static/images/hg/mine_browse_record.png" mode="aspectFit"></image>

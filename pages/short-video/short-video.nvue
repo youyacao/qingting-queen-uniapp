@@ -9,9 +9,6 @@
 	 * 正版系统查询系统 zhengban.youyacao.com
 	 */
  -->
-
-
-
 <template>
 	<view class="body">
 		<view class="top">
@@ -29,12 +26,14 @@
 				</scroll-view>
 				<image class="nav-icon" src="/static/images/hg/film_edit.png" mode=""></image>
 			</view>
-			<view class="search">
-				<view class="search-l">
-					<image class="search-l__icon" src="/static/images/hg/film_search.png" mode=""></image>
-					<text class="search-l__text">搜短视频</text>
+			<navigator url="/pages/search/search" hover-class="none">
+				<view class="search">
+					<view class="search-l">
+						<image class="search-l__icon" src="/static/images/hg/film_search.png" mode=""></image>
+						<text class="search-l__text">搜短视频</text>
+					</view>
 				</view>
-			</view>
+			</navigator>
 		</view>
 		<swiper class="swiper" :current="current" @change="_change" v-if="navList">
 			<swiper-item v-for="(swiper, _index) in navList.children.length + 1" :key="_index">
