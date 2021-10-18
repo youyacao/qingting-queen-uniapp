@@ -11,8 +11,20 @@
  -->
 <template>
 	<view class="body">
+		<uni-popup ref="popup" type="top">
+			<view class="top-menu_box" :style="{'padding-top': `${statusBarHeight}px`}">
+				<view class="top-menu_title-box">
+					<text class="top-menu_title">全部频道</text>
+					<text class="top-menu_subtitle">点击进入频道</text>
+				</view>
+				<view class="top-menu">
+					<text class="top-menu_item" @tap="_tapNav({}, 0)">推荐</text>
+					<text class="top-menu_item" v-for="(item, index) in navList.children" @tap="_tapNav(item, index + 1)">{{ item.name }}</text>
+				</view>
+			</view>
+		</uni-popup>
 		<view class="top">
-			<view :style="{'height':statusBarHeight}"></view>
+			<view :style="{'height': statusBarHeight}"></view>
 			<view class="nav">
 				<scroll-view scroll-x="true" class="nav-l" v-if="navList">
 					<view class="nav-item" @tap="_tapNav({}, 0)">
@@ -24,7 +36,7 @@
 						<view class="nav-text__active" :class="{'bg-pink': i + 1 === current}"></view>
 					</view>
 				</scroll-view>
-				<image class="nav-icon" src="/static/images/hg/film_edit.png" mode=""></image>
+				<image class="nav-icon" src="/static/images/hg/film_edit.png" mode="" @tap="open"></image>
 			</view>
 			<view class="search">
 				<navigator url="/pages/search/search" hover-class="none">
@@ -34,9 +46,15 @@
 					</view>
 				</navigator>
 				<view class="search-r">
-					<image class="search-r__icon" src="/static/images/hg/film_recommend_collect.png" mode="aspectFit"></image>
-					<image class="search-r__icon" src="/static/images/hg/mine_browse_record.png" mode="aspectFit"></image>
-					<image class="search-r__icon" src="/static/images/hg/mine_cache.png" mode="aspectFit"></image>
+					<navigator url="/pages/my/like/like" hover-class="none">
+						<image class="search-r__icon" src="/static/images/hg/film_recommend_collect.png" mode="aspectFit"></image>
+					</navigator>
+					<navigator url="/pages/my/play-records/play-records" hover-class="none">
+						<image class="search-r__icon" src="/static/images/hg/mine_browse_record.png" mode="aspectFit"></image>
+					</navigator>
+					<navigator url="/pages/my/download-records/download-records" hover-class="none">
+						<image class="search-r__icon" src="/static/images/hg/mine_cache.png" mode="aspectFit"></image>
+					</navigator>
 				</view>
 			</view>
 		</view>
@@ -103,6 +121,12 @@
 		},
 		methods: {
 			...mapMutations(['setVideoList']),
+			open() {
+				this.$refs.popup.open()
+			},
+			close() {
+				this.$refs.popup.close()
+			},
 			_getCategory () {
 				Categories().then(({ code, data }) => {
 					if (code === 200) {
@@ -124,6 +148,7 @@
 			},
 			_tapNav(nav, i) {
 				this.current = i
+				this.close()
 			},
 			_change({ detail }) {
 				this.current = detail.current
@@ -192,7 +217,36 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
+	.top-menu_subtitle {
+		font-size: 24rpx;
+		color: #909399;
+	}
+	.top-menu_title-box {
+		flex-direction: row;
+		align-items: center;
+		padding: 30rpx 30rpx 0;
+	}
+	.top-menu_item {
+		font-size: 28rpx;
+		padding: 20rpx 30rpx;
+		border-radius: 8rpx;
+		background-color: #f3f4f6;
+		margin-right: 20rpx;
+		margin-bottom: 20rpx;
+	}
+	.top-menu_title {
+		font-size: 36rpx;
+		margin-right: 20rpx;
+	}
+	.top-menu_box {
+		background-color: #FFFFFF;
+	}
+	.top-menu {
+		flex-direction: row;
+		flex-wrap: wrap;
+		padding: 30rpx;
+	}
 	.alert {
 		text-align: center;
 		color: #999999;

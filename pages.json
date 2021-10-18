@@ -440,6 +440,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/my/qqGroup/qqGroup",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "群二维码",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

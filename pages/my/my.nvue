@@ -339,7 +339,10 @@
 				}
 			},
 			_addQQ() {
-				plus.runtime.openURL(this.config.base_qq)
+				uni.navigateTo({
+					url: '/pages/my/qqGroup/qqGroup'
+				})
+				// plus.runtime.openURL(this.config.base_qq)
 			}
 		}
 	}
