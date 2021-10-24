@@ -449,6 +449,24 @@
             }
             
         }
+        ,{
+            "path" : "pages/my/recharge/recharge",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "充值中心",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/my/withdrawal/withdrawal",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "提现",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

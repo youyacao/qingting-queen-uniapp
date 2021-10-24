@@ -293,3 +293,8 @@ export const LikeVideo = (data) => {
 export const EditUserInfo = (data) => {
 	return post('complete', data)
 }
+
+// 提现
+export const withdrawal = (data) => {
+	return post('withdraw', data)
+}

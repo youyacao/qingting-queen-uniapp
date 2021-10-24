@@ -178,6 +178,26 @@
 				</view>
 			</view>
 		</view>
+		<view class="border-bottom"></view>
+		<navigator url="/pages/my/recharge/recharge" hover-class="none" class="menu-item">
+			<image class="menu-icon" src="/static/income-one.png" mode="aspectFit"></image>
+			<view class="menu-item__content">
+				<text class="menu-text">充值</text>
+				<view class="menu-item__right">
+					<image class="right-arrow" src="/static/images/hg/right_arrow.png" mode="aspectFit"></image>
+				</view>
+			</view>
+		</navigator>
+		<view class="border-bottom"></view>
+		<navigator url="/pages/my/withdrawal/withdrawal" hover-class="none" class="menu-item">
+			<image class="menu-icon" src="/static/expenses-one.png" mode="aspectFit"></image>
+			<view class="menu-item__content">
+				<text class="menu-text">提现</text>
+				<view class="menu-item__right">
+					<image class="right-arrow" src="/static/images/hg/right_arrow.png" mode="aspectFit"></image>
+				</view>
+			</view>
+		</navigator>
 		<view class="hr"></view>
 		<navigator url="/pages/my/task/task" hover-class="none" class="menu-item">
 			<image class="menu-icon" src="/static/images/hg/mine_task_center.png" mode="aspectFit"></image>
