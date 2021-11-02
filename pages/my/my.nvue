@@ -9,8 +9,6 @@
 	 * 正版系统查询系统 zhengban.youyacao.com
 	 */
  -->
-
-
 <template>
 	<view class="body">
 		<view class="user">
@@ -22,7 +20,7 @@
 			</view>
 			<view class="user-container">
 				<navigator class="avatar-box" url="/pages/register/edit">
-					<image class="avatar" :src="userinfo.avatar" mode=""></image>
+					<image class="avatar" :src="userinfo.avatar" mode="aspectFit"></image>
 					<image class="vip" src="/static/images/vip.png" mode="" v-if="userinfo.is_vip"></image>
 				</navigator>
 				<view>

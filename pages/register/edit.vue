@@ -5,7 +5,7 @@
 		<u-card :border="false" :foot-border-top="false" :show-head="false" padding="40">
 			<u-form :model="form" ref="uForm" label-width="130" slot="body">
 				<view class="upload-box">
-					<u-upload ref="uUpload" :action="action" :file-list="fileList" :auto-upload="false" max-count="1" upload-text="上传头像"></u-upload>
+					<u-upload ref="uUpload" :action="action" :file-list="fileList" :auto-upload="false" max-count="1" upload-text="上传头像" @on-change="uploadChange"></u-upload>
 				</view>
 				<u-form-item label="用户名" prop="name" required>
 					<u-input v-model="form.name" />
@@ -22,7 +22,7 @@
 			</u-form>
 		</u-card>
 		<view class="register-edit__foot">
-			<u-button class="register-edit__btn" type="primary" :ripple="true" @click="submit">确认</u-button>
+			<u-button class="register-edit__btn" type="primary" :ripple="true" @click="uploadImage">确认</u-button>
 		</view>
 	</view>
 </template>
@@ -32,11 +32,13 @@
 		EditUserInfo,
 		UploadImage
 	} from '@/common/api.js'
+	import { mapMutations } from 'vuex'
+	import { UPLOAD_URL } from '@/common/config.js'
 
 	export default {
 		data() {
 			return {
-				action: '',
+				action: UPLOAD_URL,
 				fileList: [],
 				form: {
 					name: '',
@@ -82,7 +84,9 @@
 						message: '请选择生日',
 						trigger: 'change'
 					}]
-				}
+				},
+				avatar: '',
+				is_upload_fail: false
 			}
 		},
 		onLoad(options) {
@@ -93,6 +97,22 @@
 			this.$refs.uForm.setRules(this.rules);
 		},
 		methods: {
+			...mapMutations(['setPath']),
+			uploadChange(res) {
+				console.log(JSON.parse(res.data))
+				const { code, data, msg } = JSON.parse(res.data)
+				if (code === 200) {
+					const { url } = data
+					this.avatar = url
+					this.submit()
+				} else {
+					this.is_upload_fail = true
+					uni.showToast({
+						title: msg,
+						icon: 'none'
+					})
+				}
+			},
 			confirmSex(val) {
 				const {
 					value,
@@ -107,25 +127,35 @@
 				} = date
 				this.form.birthday = result
 			},
-			submit() {
+			uploadImage() {
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
-						const { name: nickname, birthday, intro: desc } = this.form
-						EditUserInfo({
-							nickname,
-							birthday,
-							desc,
-							sex: this.sex
-						}).then(({ code, msg }) => {
-							uni.showToast({
-								title: msg,
-								icon: 'none'
-							})
-							if (code === 200) {
-								uni.reLaunch({
-									url: '/pages/home/home'
-								})
-							}
+						if (this.is_upload_fail) {
+							this.$refs.uUpload.reUpload()
+						} else {
+							this.$refs.uUpload.upload()
+						}
+					}
+				})
+			},
+			submit() {
+				console.log(this.avatar)
+				const { name: nickname, birthday, intro: desc } = this.form
+				EditUserInfo({
+					nickname,
+					birthday,
+					desc,
+					sex: this.sex,
+					avatar: this.avatar
+				}).then(({ code, msg }) => {
+					uni.showToast({
+						title: msg,
+						icon: 'none'
+					})
+					if (code === 200) {
+						this.setPath('/pages/home/home')
+						uni.reLaunch({
+							url: '/pages/home/home'
 						})
 					}
 				})

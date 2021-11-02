@@ -62,7 +62,9 @@
 				username: '',
 				password: '',
 				loading: false,
-				checked: true
+				checked: true,
+				// 是否强制用户名登录
+				flag: 1
 			};
 		},
 		methods: {
@@ -96,7 +98,8 @@
 				this.loading = true
 				Login({
 					username: this.username,
-					password: this.password
+					password: this.password,
+					flag: this.flag
 				}).then(({ code, msg, data }) => {
 					uni.showToast({
 						title: msg,

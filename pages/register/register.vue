@@ -124,7 +124,9 @@
 				const data = {
 					code: this.captcha,
 					password: this.password,
-					refcode: this.invitationCode
+					refcode: this.invitationCode,
+					autoSignUp: 1,
+					flag: 0
 				}
 				switch (this.type) {
 					case 0:
@@ -134,6 +136,7 @@
 						break
 					default:
 						data.username = this.username
+						data.flag = 1
 				}
 				if (!this.checked) {
 					return uni.showToast({

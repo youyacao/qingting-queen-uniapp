@@ -1,4 +1,5 @@
 export const BASE_URL = 'https://qingtingapi.youyacao.com/api/v1/'
+export const UPLOAD_URL = 'https://qingtingapi.youyacao.com/api/v1/upload'
 // export const BASE_URL = 'https://oldqingtingapi.youyacao.com/api/v1/'
 
 //  * All rights Reserved, Designed By www.youyacao.com <br>
