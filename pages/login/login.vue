@@ -9,10 +9,6 @@
 	 * 正版系统查询系统 zhengban.youyacao.com
 	 */
  -->
-
-
-
-
 <template>
 	<view class="body">
 		<view class="head">

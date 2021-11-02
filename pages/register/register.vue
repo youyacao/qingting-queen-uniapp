@@ -9,8 +9,6 @@
 	 * 正版系统查询系统 zhengban.youyacao.com
 	 */
  -->
-
-
 <template>
 	<view class="body">
 		<view class="head">
@@ -22,7 +20,7 @@
 					<image class="form-item__icon" src="/static/images/account.png" mode=""></image>
 					<input class="form-item__input" type="text" placeholder="手机号/邮箱" v-model="username" />
 				</view>
-				<view class="form-item">
+				<view class="form-item" v-if="need_validation_code">
 					<view class="form-item__left">
 						<image class="form-item__icon" src="/static/images/captch.png" mode=""></image>
 						<input class="form-item__input" type="number" placeholder="验证码" v-model="captcha" />
@@ -35,7 +33,7 @@
 				</view>
 				<view class="form-item">
 					<image class="form-item__icon" src="/static/images/invete.png" mode=""></image>
-					<input class="form-item__input" type="text" placeholder="邀请码" v-model="invitationCode" />
+					<input class="form-item__input" type="text" placeholder="邀请码(选填)" v-model="invitationCode" />
 				</view>
 				<view class="form-item__btn" @tap="_submit">注册</view>
 				<view class="form-item__other">
@@ -87,8 +85,9 @@
 				captcha: '',
 				password: '',
 				invitationCode: '',
-				type: 1,
-				checked: true
+				type: 0,
+				checked: true,
+				need_validation_code: false,
 			};
 		},
 		methods: {
@@ -100,11 +99,19 @@
 				}
 			},
 			_submit() {
-				if (!this.captcha) {
+				if (!this.captcha && this.need_validation_code) {
 					return this.$refs.uToast.show({
 						title: '请输入验证码',
 						type: 'warning'
 					})
+				}
+				if (!this.need_validation_code) {
+					if (!this.username) {
+						return this.$refs.uToast.show({
+							title: '请输入手机号/邮箱',
+							type: 'warning'
+						})
+					}
 				}
 				if (!this.password) {
 					return this.$refs.uToast.show({
@@ -120,13 +127,15 @@
 				}
 				Register({
 					username: this.username,
-					phone: this.type === 1 ? this.username : '',
+					phone: this.type === 1 && this.need_validation_code ? this.username : '',
 					email: this.type === 0 ? this.username : '',
 					code: this.captcha,
 					password: this.password,
 					refcode: this.invitationCode
-				}).then(({ code, msg, data: { token } }) => {
+				}).then(({ code, msg, data }) => {
+					console.log(code, msg, data)
 					if (code === 200) {
+						const { token } = data
 						try {
 						    uni.setStorageSync('TOKEN', token)
 						} catch (e) {
