@@ -85,7 +85,7 @@
 				captcha: '',
 				password: '',
 				invitationCode: '',
-				// 1 手机号 2 邮箱
+				// 1 手机号 0 邮箱
 				type: 0,
 				checked: true,
 				// 是否需要验证码
