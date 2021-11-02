@@ -85,8 +85,8 @@
 				captcha: '',
 				password: '',
 				invitationCode: '',
-				// 1 手机号 0 邮箱
-				type: 0,
+				// 1 手机号 0 邮箱 2 用户名
+				type: 2,
 				checked: true,
 				// 是否需要验证码
 				need_validation_code: false,
@@ -121,20 +121,28 @@
 						type: 'warning'
 					})
 				}
+				const data = {
+					code: this.captcha,
+					password: this.password,
+					refcode: this.invitationCode
+				}
+				switch (this.type) {
+					case 0:
+						break
+					case 1:
+						data.phone = this.username
+						break
+					default:
+						data.username = this.username
+				}
 				if (!this.checked) {
 					return uni.showToast({
 						title: '请同意用户使用协议',
 						icon: 'none'
 					})
 				}
-				Register({
-					username: this.username,
-					phone: this.type === 1 && this.need_validation_code ? this.username : '',
-					email: this.type === 0 ? this.username : '',
-					code: this.captcha,
-					password: this.password,
-					refcode: this.invitationCode
-				}).then(({ code, msg, data }) => {
+				console.log(data)
+				Register(data).then(({ code, msg, data }) => {
 					console.log(code, msg, data)
 					if (code === 200) {
 						const { token } = data
