@@ -19,7 +19,7 @@
 				</navigator>
 			</view>
 			<view class="user-container">
-				<navigator class="avatar-box" url="/pages/register/edit">
+				<navigator class="avatar-box" url="/pages/register/edit?is_edit=true">
 					<image class="avatar" :src="userinfo.avatar" mode="aspectFit"></image>
 					<image class="vip" src="/static/images/vip.png" mode="" v-if="userinfo.is_vip"></image>
 				</navigator>
@@ -27,6 +27,7 @@
 					<text class="nickname">{{ userinfo.nickname || userinfo.username }}</text>
 					<!-- <text class="id">ID: {{ userinfo.username }}</text> -->
 					<text class="desc">{{ userinfo.desc || '这个人很懒，什么也没有留下' }}</text>
+					<text class="view-number">免费观看次数: {{ this.userinfo.is_vip === 1 ? this.userinfo.vip_share_free_num : this.userinfo.share_free_num }}</text>
 				</view>
 			</view>
 		</view>
@@ -367,6 +368,11 @@
 </script>
 
 <style lang="scss" scoped>
+	.view-number {
+		font-size: 28rpx;
+		color: #909399;
+		margin-top: 8rpx;
+	}
 	.color-grey {
 		color: #a9a9a9;
 	}

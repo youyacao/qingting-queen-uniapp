@@ -16,7 +16,8 @@ const store = new Vuex.Store({
 			nickname: '',
 			desc: '',
 			is_vip: 0,
-			refcode: 'fMJzUY'
+			refcode: 'fMJzUY',
+			birthday: ''
 		},
 		path: '/pages/home/home',
 		pusherMode: 0,

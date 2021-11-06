@@ -9,7 +9,6 @@
 	 * 正版系统查询系统 zhengban.youyacao.com
 	 */
  -->
-
 <template>
 	<view class="body">
 		<view class="head" :style="{'padding-top': `${statusBarHeight}px`}">
@@ -500,6 +499,7 @@
 						total_page,
 						list
 					} = data
+					console.log(list)
 					if (current_page === 1) {
 						this.list = list
 					} else {
@@ -788,7 +788,7 @@
 
 	.item-content__text {
 		font-size: 32rpx;
-		color: #FFFFFF;
+		color: #303133;
 	}
 
 	.item {

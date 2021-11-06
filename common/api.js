@@ -67,6 +67,11 @@ export const VideoPlayback = (data) => {
 	return post('video/view', data)
 }
 
+// 观看次数扣除
+export const NumberDeductions = () => {
+	return post('user/decShareNum')
+}
+
 // 直播列表
 export const LiveList = (data) => {
 	return post('live/list', data)

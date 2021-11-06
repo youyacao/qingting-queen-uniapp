@@ -107,13 +107,13 @@
 					})
 					this.loading = false
 					if (code === 200) {
+						this.updateUserinfo()
 						const { token } = data
 						try {
 						    uni.setStorageSync('TOKEN', token)
 						} catch (e) {
 						    // error
 						}
-						this.updateUserinfo()
 						uni.navigateBack()
 					}
 				})

@@ -1,13 +1,13 @@
 <template>
 	<view class="safe-area-inset-bottom register-edit">
-		<u-select v-model="show_sex" :list="sex_list" @confirm="confirmSex"></u-select>
+		<u-select v-model="show_sex" :list="sex_list" @confirm="confirmSex" :default-value="default_sex_value"></u-select>
 		<u-calendar v-model="show_brithday" mode="date" @change="dateChange"></u-calendar>
 		<u-card :border="false" :foot-border-top="false" :show-head="false" padding="40">
 			<u-form :model="form" ref="uForm" label-width="130" slot="body">
 				<view class="upload-box">
-					<u-upload ref="uUpload" :action="action" :file-list="fileList" :auto-upload="false" max-count="1" upload-text="上传头像" @on-change="uploadChange"></u-upload>
+					<u-upload ref="uUpload" :show-progress="false" :action="action" :file-list="fileList" :auto-upload="false" max-count="1" upload-text="上传头像" @on-change="uploadChange" :on-list-change="onListChange"></u-upload>
 				</view>
-				<u-form-item label="用户名" prop="name" required>
+				<u-form-item label="昵称" prop="name" required>
 					<u-input v-model="form.name" />
 				</u-form-item>
 				<u-form-item label="简介" prop="intro" required>
@@ -32,7 +32,7 @@
 		EditUserInfo,
 		UploadImage
 	} from '@/common/api.js'
-	import { mapMutations } from 'vuex'
+	import { mapMutations, mapState } from 'vuex'
 	import { UPLOAD_URL } from '@/common/config.js'
 
 	export default {
@@ -86,20 +86,45 @@
 					}]
 				},
 				avatar: '',
-				is_upload_fail: false
+				is_upload_fail: false,
+				default_sex_value: [''],
+				is_upload: false
 			}
 		},
 		onLoad(options) {
-			const { type } = options
+			const { type, is_edit } = options
 			if (type === 'change') {}
+			if (is_edit) {
+				this.is_edit = true
+			}
+		},
+		computed: {
+			...mapState(['userinfo'])
 		},
 		onReady() {
-			this.$refs.uForm.setRules(this.rules);
+			this.$refs.uForm.setRules(this.rules)
+			if (this.is_edit) {
+				const { avatar, nickname, desc, sex, birthday } = this.userinfo
+				this.avatar = avatar
+				this.fileList.push({
+					url: avatar
+				})
+				this.form.name = nickname
+				this.form.intro = desc
+				this.default_sex_value[0] = sex
+				this.form.sex = this.sex_list[sex].label
+				this.form.birthday = birthday
+			}
 		},
 		methods: {
 			...mapMutations(['setPath']),
+			onListChange(lists) {
+				if (lists.length > 0) {
+					this.is_upload = true
+				}
+			},
 			uploadChange(res) {
-				console.log(JSON.parse(res.data))
+				console.log(res)
 				const { code, data, msg } = JSON.parse(res.data)
 				if (code === 200) {
 					const { url } = data
@@ -130,16 +155,19 @@
 			uploadImage() {
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
-						if (this.is_upload_fail) {
-							this.$refs.uUpload.reUpload()
+						if (this.is_upload) {
+							if (this.is_upload_fail) {
+								this.$refs.uUpload.reUpload()
+							} else {
+								this.$refs.uUpload.upload()
+							}
 						} else {
-							this.$refs.uUpload.upload()
+							this.submit()
 						}
 					}
 				})
 			},
 			submit() {
-				console.log(this.avatar)
 				const { name: nickname, birthday, intro: desc } = this.form
 				EditUserInfo({
 					nickname,

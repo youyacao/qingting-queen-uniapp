@@ -9,11 +9,6 @@
 	 * 正版系统查询系统 zhengban.youyacao.com
 	 */
  -->
-
-
-
-
-
 <template>
 	<view class="body">
 		<view class="top" :style="{'top': statusBarHeight}">
@@ -31,7 +26,8 @@
 			</view>
 		</view>
 		<view class="top-zhuan" :style="{'top': statusBarHeight + 60}" v-if="showZhuan">
-			<image class="top-zhuan__icon" src="/static/images/hg/zhuan.gif" mode="" @tap="_jumpZhuan"></image>
+			<image class="top-zhuan__icon" :src="config.base_ad_url" mode="aspectFit" @tap="_jumpZhuan" v-if="config.base_ad_url"></image>
+			<image class="top-zhuan__icon" src="/static/images/hg/zhuan.gif" mode="aspectFit" @tap="_jumpZhuan" v-else></image>
 			<image class="top-close__icon" src="/static/images/hg/short_video_close.png" mode="" @tap="_closeZhuan"></image>
 		</view>
 		<swiper class="swiper" :disable-touch="disabled" :current="current" @change="_swiperChange">
@@ -49,7 +45,7 @@
 </template>
 
 <script>
-	import { mapGetters, mapMutations } from 'vuex'
+	import { mapGetters, mapMutations, mapState, mapActions} from 'vuex'
 	import { VideoList, VList } from '@/common/api.js'
 	import VPlayer from '@/components/v-player/v-player'
 	import HomePlayer from '@/components/home-player/home-player.nvue'
@@ -67,7 +63,8 @@
 			};
 		},
 		computed: {
-			...mapGetters(['windowHeight', 'statusBarHeight'])
+			...mapGetters(['windowHeight', 'statusBarHeight']),
+			...mapState(['config'])
 		},
 		components: { VPlayer, HomePlayer },
 		onLoad() {
@@ -79,6 +76,7 @@
 				}
 			})
 			this._getVideoList()
+			this.updateUserinfo()
 		},
 		onShow() {
 			this.pageStatus++
@@ -92,6 +90,8 @@
 			}
 		},
 		methods: {
+			...mapMutations(['setAppHide']),
+			...mapActions(['updateUserinfo']),
 			_getVideoList() {
 				VList({
 					is_auth: 'YES'
@@ -119,7 +119,6 @@
 					this.$refs.video2.__pause()
 				}
 			},
-			...mapMutations(['setAppHide']),
 			_closeZhuan() {
 				this.showZhuan = false
 			},

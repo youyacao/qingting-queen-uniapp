@@ -1,4 +1,3 @@
-
 <!-- 
 	/**
 	 * All rights Reserved, Designed By www.youyacao.com <br>
@@ -10,8 +9,6 @@
 	 * 正版系统查询系统 zhengban.youyacao.com
 	 */
  -->
-
-
 <template>
 	<view class="body">
 		<!-- <image class="poster" :src="video.thumb" mode="aspectFill" :style="{'width': `${windowWidth}px`, 'height': `${windowHeight}px`}"
@@ -32,7 +29,8 @@
 	} from 'vuex'
 	import {
 		VideoPlayback,
-		AddView
+		AddView,
+		NumberDeductions
 	} from '@/common/api.js'
 
 	export default {
@@ -53,7 +51,7 @@
 		},
 		computed: {
 			...mapGetters(['windowHeight', 'windowWidth']),
-			...mapState(['appHide', 'path'])
+			...mapState(['appHide', 'path', 'userinfo'])
 		},
 		props: {
 			video: {
@@ -132,8 +130,24 @@
 				}, 5000)
 				this.$emit('play', this.videoContext)
 			},
+			// 播放
 			play() {
 				if (this.videoContext) {
+					if (this.userinfo.is_vip === 1) {
+						if (this.userinfo.vip_share_free_num === 0) {
+							return uni.showToast({
+								title: '免费观看次数已用完',
+								icon: 'none'
+							})
+						}
+					} else {
+						if (this.userinfo.share_free_num === 0) {
+							return uni.showToast({
+								title: '免费观看次数已用完',
+								icon: 'none'
+							})
+						}
+					}
 					this.videoContext.play()
 				} else {
 					this._createVideoContext()
@@ -142,6 +156,9 @@
 					vid: this.video.id
 				}).then(res => {
 					// console.log(res)
+				})
+				NumberDeductions().then(({ code, msg }) => {
+					console.log(code, msg)
 				})
 			},
 			onTap() {
