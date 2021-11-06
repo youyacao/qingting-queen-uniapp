@@ -161,12 +161,13 @@
 				})
 				NumberDeductions().then(({ code, msg }) => {
 					console.log(code, msg)
+					const userinfo = { ...this.userinfo }
 					if (this.userinfo.is_vip === 1) {
-						this.userinfo.vip_share_free_num--
+						userinfo.vip_share_free_num--
 					} else {
-						this.userinfo.share_free_num--
+						userinfo.share_free_num--
 					}
-					this.setUserinfo(this.userinfo)
+					this.setUserinfo(userinfo)
 				})
 			},
 			onTap() {
