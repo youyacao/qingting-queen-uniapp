@@ -25,7 +25,8 @@
 <script>
 	import {
 		mapGetters,
-		mapState
+		mapState,
+		mapMutations
 	} from 'vuex'
 	import {
 		VideoPlayback,
@@ -78,6 +79,7 @@
 			this._createVideoContext()
 		},
 		methods: {
+			...mapMutations(['setUserinfo']),
 			_createVideoContext() {
 				this.videoContext = uni.createVideoContext('video', this)
 				if (this.index === this.current && this.autoplay) {
@@ -159,6 +161,12 @@
 				})
 				NumberDeductions().then(({ code, msg }) => {
 					console.log(code, msg)
+					if (this.userinfo.is_vip === 1) {
+						this.userinfo.vip_share_free_num--
+					} else {
+						this.userinfo.share_free_num--
+					}
+					this.setUserinfo(this.userinfo)
 				})
 			},
 			onTap() {
