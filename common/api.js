@@ -303,3 +303,13 @@ export const EditUserInfo = (data) => {
 export const withdrawal = (data) => {
 	return post('withdraw', data)
 }
+
+// vip商品列表
+export const vipShop = () => {
+	return post('vipShop')
+}
+
+// 余额购买vip
+export const payVip = (data) => {
+	return post('pay/vip', data)
+}

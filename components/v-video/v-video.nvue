@@ -83,7 +83,17 @@
 			_createVideoContext() {
 				this.videoContext = uni.createVideoContext('video', this)
 				if (this.index === this.current && this.autoplay) {
-					this.play()
+					try {
+						const TOKEN = uni.getStorageSync('TOKEN')
+						if (TOKEN) {
+							this.play()
+						} else {
+							uni.showToast({
+								title: '请登录后观看',
+								icon: 'none'
+							})
+						}
+					} catch(err) {}
 				}
 			},
 			pause() {

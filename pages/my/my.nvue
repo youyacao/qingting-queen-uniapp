@@ -339,6 +339,9 @@
 								title: msg,
 								icon: 'none'
 							})
+							if (code === 200) {
+								this.updateUserinfo()
+							}
 						})
 					}
 				})

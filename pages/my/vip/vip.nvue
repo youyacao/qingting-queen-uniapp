@@ -9,9 +9,6 @@
 	 * 正版系统查询系统 zhengban.youyacao.com
 	 */
  -->
-
-
-
 <template>
 	<view class="body">
 		<image class="top-bg" src="/static/images/hg/vip-top-bg.png" mode=""></image>
@@ -20,16 +17,16 @@
 			<view class="top-content">
 				<view class="top-item" v-for="(item, i) in vipList" :key="i" :class="{'top-item__active': active === i}" @tap="active = i">
 					<view class="top-item__head">
-						<text class="top-item__title" :class="{'color-yellow': active === i}">{{ item.title }}</text>
+						<text class="top-item__title" :class="{'color-yellow': active === i}">{{ item.name }}</text>
 						<view class="top-item__head-r">
 							<image class="top-item__head-r--checked" src="/static/images/hg/vip-checked.png" mode="" v-if="active === i"></image>
 							<view class="top-item__head-r--unchecked" v-else></view>
 						</view>
 					</view>
 					<text class="top-item__price" :class="{'color-yellow': active === i}">￥{{ item.price }}</text>
-					<view class="top-renewal" :class="{'top-renewal__active': active === i}">
-						<text class="top-renewal__text">每次续费￥{{ item.renewal }}</text>
-					</view>
+					<!-- <view class="top-renewal" :class="{'top-renewal__active': active === i}">
+						<text class="top-renewal__text"></text>
+					</view> -->
 				</view>
 			</view>
 		</view>
@@ -47,52 +44,67 @@
 			</view>
 		</view>
 		<view class="foot">
-			<text class="foot-text">立即支付></text>
+			<text class="foot-text" @tap="pay">立即支付></text>
 		</view>
 	</view>
 </template>
 
 <script>
+	import { vipShop, payVip } from '@/common/api.js'
+	
 	export default {
 		data() {
 			return {
-				vipList: [
-					{
-						title: '年卡',
-						price: 199,
-						renewal: 98
-					},
-					{
-						title: '半年卡',
-						price: 99,
-						renewal: 68
-					},
-					{
-						title: '月卡',
-						price: 30,
-						renewal: 15
-					}
-				],
+				vipList: [],
 				active: 0,
 				payTypeList: [
+					// {
+					// 	logo: '',
+					// 	title: '支付宝'
+					// },
+					// {
+					// 	logo: '',
+					// 	title: '微信'
+					// },
+					// {
+					// 	logo: '',
+					// 	title: '银行卡'
+					// },
 					{
 						logo: '',
-						title: '支付宝'
-					},
-					{
-						logo: '',
-						title: '微信'
-					},
-					{
-						logo: '',
-						title: '银行卡'
+						title: '余额'
 					}
 				],
 				payType: 0
 			}
 		},
+		onLoad() {
+			this.vipShop()
+		},
 		methods: {
-			
+			vipShop() {
+				vipShop().then(({ code, data }) => {
+					if (code === 200) {
+						this.vipList = data
+					}
+				})
+			},
+			pay() {
+				uni.showLoading()
+				payVip({
+					shop_id: this.vipList[this.active].id,
+					pay_type: 'AMOUNT'
+				}).then(({ code, msg }) => {
+					uni.hideLoading()
+					uni.showToast({
+						title: msg,
+						icon: 'none'
+					})
+					if (code === 200) {
+						uni.navigateBack()
+					}
+				})
+			}
 		}
 	}
 </script>
@@ -201,7 +213,7 @@
 		border-radius: 50%;
 	}
 	.top-item__price {
-		font-size: 32rpx;
+		font-size: 36rpx;
 		font-weight: 500;
 		color: #999999;
 	}
@@ -227,7 +239,7 @@
 		width: 210rpx;
 		height: 167rpx;
 		padding: 15rpx;
-		justify-content: space-between;
+		justify-content: space-around;
 		background-color: #F5F5F5;
 		border-radius: 10px;
 	}
