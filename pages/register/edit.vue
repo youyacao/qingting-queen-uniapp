@@ -5,7 +5,7 @@
 		<u-card :border="false" :foot-border-top="false" :show-head="false" padding="40">
 			<u-form :model="form" ref="uForm" label-width="130" slot="body">
 				<view class="upload-box">
-					<u-upload ref="uUpload" :show-progress="false" :action="action" :file-list="fileList" :auto-upload="false" max-count="1" upload-text="上传头像" @on-change="uploadChange" :on-list-change="onListChange"></u-upload>
+					<u-upload ref="uUpload" :show-progress="false" :action="action" :file-list="fileList" :auto-upload="false" max-count="1" upload-text="上传头像" @on-change="uploadChange" @on-choose-complete="onChooseComplete"></u-upload>
 				</view>
 				<u-form-item label="昵称" prop="name" required>
 					<u-input v-model="form.name" />
@@ -97,6 +97,7 @@
 			if (is_edit) {
 				this.is_edit = true
 			}
+			console.log(this.userinfo)
 		},
 		computed: {
 			...mapState(['userinfo'])
@@ -106,9 +107,11 @@
 			if (this.is_edit) {
 				const { avatar, nickname, desc, sex, birthday } = this.userinfo
 				this.avatar = avatar
-				this.fileList.push({
-					url: avatar
-				})
+				if (avatar) {
+					this.fileList.push({
+						url: avatar
+					})
+				}
 				this.form.name = nickname
 				this.form.intro = desc
 				this.default_sex_value[0] = sex
@@ -118,7 +121,7 @@
 		},
 		methods: {
 			...mapMutations(['setPath']),
-			onListChange(lists) {
+			onChooseComplete(lists) {
 				if (lists.length > 0) {
 					this.is_upload = true
 				}
@@ -168,6 +171,7 @@
 				})
 			},
 			submit() {
+				uni.showLoading()
 				const { name: nickname, birthday, intro: desc } = this.form
 				EditUserInfo({
 					nickname,
@@ -176,14 +180,26 @@
 					sex: this.sex,
 					avatar: this.avatar
 				}).then(({ code, msg }) => {
-					uni.showToast({
-						title: msg,
-						icon: 'none'
-					})
+					uni.hideLoading()
 					if (code === 200) {
-						this.setPath('/pages/home/home')
-						uni.reLaunch({
-							url: '/pages/home/home'
+						uni.showToast({
+							title: msg,
+							icon: 'none',
+							success: () => {
+								if (this.is_edit) {
+									uni.navigateBack()
+								} else {
+									this.setPath('/pages/home/home')
+									uni.reLaunch({
+										url: '/pages/home/home'
+									})
+								}
+							}
+						})
+					} else {
+						uni.showToast({
+							title: msg,
+							icon: 'none'
 						})
 					}
 				})
