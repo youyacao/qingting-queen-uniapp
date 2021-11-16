@@ -13,7 +13,7 @@
 	<view class="body">
 		<!-- <image class="poster" :src="video.thumb" mode="aspectFill" :style="{'width': `${windowWidth}px`, 'height': `${windowHeight}px`}"
 		 v-if="!isPlay && !isPause"></image> -->
-		<video id="video" class="video" :controls="controls" :show-center-play-btn="false" :src="video.video_url"
+		<video id="video" class="video" :controls="controls" :poster="video.thumb" :show-center-play-btn="false" :src="video.video_url"
 		 :show-loading="false" :enable-progress-gesture="false" :loop="true" @play="onPlay" @pause="onPause" @tap="onTap" @timeupdate="timeUpdate"></video>
 		<view class="play-icon__box" v-if="isPause" @tap="onTap">
 			<image class="play-icon" src="/static/images/play-icon.png" mode=""></image>
@@ -130,7 +130,15 @@
 				this.detail = detail
 				this.sliderValue = this.detail.currentTime / this.detail.duration * 100
 			},
-			onPlay() {
+			async onPlay() {
+				const canPlay = await this.canPlay()
+				if (!canPlay) {
+					this.videoContext.stop()
+					return uni.showToast({
+						title: '免费观看次数已用完',
+						icon: 'none'
+					})
+				}
 				this.isPause = false
 				this.changing = false
 				clearTimeout(this.addViewTimer)
@@ -142,23 +150,30 @@
 				}, 5000)
 				this.$emit('play', this.videoContext)
 			},
-			// 播放
-			play() {
-				if (this.videoContext) {
+			canPlay() {
+				return new Promise((resolve, reject) => {
 					if (this.userinfo.is_vip === 1) {
 						if (this.userinfo.vip_share_free_num === 0) {
-							return uni.showToast({
-								title: '免费观看次数已用完',
-								icon: 'none'
-							})
+							resolve(false)
 						}
+						resolve(true)
 					} else {
 						if (this.userinfo.share_free_num === 0) {
-							return uni.showToast({
-								title: '免费观看次数已用完',
-								icon: 'none'
-							})
+							resolve(false)
 						}
+						resolve(true)
+					}
+				})
+			},
+			// 播放
+			async play() {
+				if (this.videoContext) {
+					const canPlay = await this.canPlay()
+					if (!canPlay) {
+						return uni.showToast({
+							title: '免费观看次数已用完',
+							icon: 'none'
+						})
 					}
 					this.videoContext.play()
 				} else {

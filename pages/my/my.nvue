@@ -104,9 +104,9 @@
 			<view class="balance-left">
 				<image class="balance-left__bg" src="/static/images/hg/mine_balance_flag.png" mode=""></image>
 				<view class="balance-left__content">
-					<text class="balance-left__title">余额</text>
+					<text class="balance-left__title">金币</text>
 					<view class="balance-left__foot">
-						<text class="balance-left__value">￥{{ userinfo.amount || 0 }}</text>
+						<text class="balance-left__value">{{ userinfo.gold || 0 }}</text>
 						<text class="balance-left__label">充值/提现></text>
 					</view>
 				</view>

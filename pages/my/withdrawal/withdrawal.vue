@@ -91,13 +91,19 @@
 					amount: this.amount,
 					remark: `提现方式: ${this.pay_type}, 提现账号: ${this.account}`
 				}).then(({ code, msg }) => {
+					if (code === 200) {
+						uni.showToast({
+							title: msg,
+							icon: 'none',
+							success() {
+								uni.navigateBack()
+							}
+						})
+					}
 					uni.showToast({
 						title: msg,
 						icon: 'none'
 					})
-					if (code === 200) {
-						uni.navigateBack()
-					}
 				})
 			}
 		}
