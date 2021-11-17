@@ -152,15 +152,12 @@
 			},
 			canPlay() {
 				return new Promise((resolve, reject) => {
-					if (this.userinfo.is_vip === 1) {
-						if (this.userinfo.vip_share_free_num === 0) {
+					if (this.userinfo.is_vip !== 1) {
+						if (this.userinfo.share_free_num === 0) {
 							resolve(false)
 						}
 						resolve(true)
 					} else {
-						if (this.userinfo.share_free_num === 0) {
-							resolve(false)
-						}
 						resolve(true)
 					}
 				})
