@@ -93,7 +93,7 @@
 				uni.showLoading()
 				payVip({
 					shop_id: this.vipList[this.active].id,
-					pay_type: 'AMOUNT'
+					pay_type: 'GOLD'
 				}).then(({ code, msg }) => {
 					uni.hideLoading()
 					uni.showToast({

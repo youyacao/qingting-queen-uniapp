@@ -18,7 +18,9 @@
 			<view class="form-body">
 				<view class="form-item">
 					<image class="form-item__icon" src="/static/images/account.png" mode=""></image>
-					<input class="form-item__input" type="text" placeholder="手机号/邮箱" v-model="username" />
+					<input class="form-item__input" type="text" placeholder="手机号" v-model="username" />
+				<!-- 	<input class="form-item__input" type="text" placeholder="手机号" v-model="username" /> -->
+					
 				</view>
 				<view class="form-item">
 					<image class="form-item__icon" src="/static/images/password.png" mode=""></image>
@@ -64,7 +66,7 @@
 				loading: false,
 				checked: true,
 				// 是否强制用户名登录
-				flag: 1
+				flag: 0
 			};
 		},
 		methods: {

@@ -1,0 +1,121 @@
+<!-- 
+	/**
+	 * All rights Reserved, Designed By www.youyacao.com <br>
+	 * @Description:观影券的页面 <br>
+	 * @version 蜻蜓Q系统  <br>
+	 * @author:成都市一颗优雅草科技有限公司  <br>
+	 * 注意：使用我司开源源代码请遵循license文件的协议仅供个人非盈利使用，禁止用于其他的商业用途
+	 * 需要商业用途或者定制开发等可访问songshu.youyacao.com  联系QQ:2853810243 422108995 23625059584
+	 * 正版系统查询系统 zhengban.youyacao.com
+	 */
+ -->
+
+
+
+<template>
+	<view class="body">
+		
+		<view class="post">
+			<view class="post-content">
+				<image class="post-icon" src="/static/images/hg/dl-5.png" mode=""></image>
+				
+				
+				<text class="post-text">后台对应配置环节：</text>
+			</view>
+		</view>
+		<image class="bg" src="/static/images/my/coupons123.jpg" mode=""></image>
+		<view class="foot">
+			<text class="foot-title mb-42">介绍</text>
+			<text class="foot-text mb-42">1.自主配置新用户可免费获得多少观影次数。</text>
+			<text class="foot-text mb-42">2.可自主配置每邀请一个用户获得多少观影次数。</text>
+		
+		</view>
+	</view>
+</template>
+
+<script>
+	import { AgentTotal } from '@/common/api.js'
+	
+	export default {
+		data() {
+			return {}
+		},
+		onShow() {},
+		methods: {}
+	}
+</script>
+
+<style>
+	.foot-link__text {
+		font-size: 32rpx;
+		text-align: center;
+		text-decoration: underline;
+		color: #ff6699;
+	}
+	.mb-42 {
+		margin-bottom: 42rpx;
+	}
+	.foot-text {
+		font-size: 32rpx;
+	}
+	.foot-title {
+		font-size: 32rpx;
+		font-weight: bold;
+	}
+	.foot {
+		background-color: #f3f3f6;
+		padding: 32rpx;
+	}
+	.bg {
+		width: 750rpx;
+		height: 2637rpx;
+	}
+	.post-text {
+		flex: 1;
+		lines: 1;
+		text-overflow: ellipsis;
+		font-size: 28rpx;
+		color: #FFFFFF;
+	}
+	.post-icon {
+		width: 32rpx;
+		height: 34rpx;
+		margin-right: 10rpx;
+	}
+	.post-content {
+		height: 80rpx;
+		border-radius: 40rpx;
+		background-color: #f44942;
+		padding: 0 20rpx;
+		flex-direction: row;
+		align-items: center;
+	}
+	.post {
+		padding: 0 32rpx;
+	}
+	.head-item__text {
+		font-size: 32rpx;
+		font-weight: bold;
+	}
+	.head-item {
+		flex: 1;
+		align-items: center;
+	}
+	.head {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-around;
+		margin-top: 30rpx; 
+	}
+	.head-item__icon {
+		width: 72rpx;
+		height: 72rpx;
+		margin-bottom: 24rpx;
+	}
+	.banner {
+		width: 750rpx;
+		height: 276rpx;
+		margin-top: 46rpx;
+		margin-bottom: 40rpx;
+	}
+</style>

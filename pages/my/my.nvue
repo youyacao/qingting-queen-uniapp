@@ -41,7 +41,7 @@
 					<text class="head-item__value">{{ userinfo.my_follow_num || 0 }}</text>
 					<text class="head-item__label">关注</text>
 				</view>
-				<view class="head-item">
+				<view class="head-item" @tap="_tomessage">
 					<text class="head-item__value">{{ userinfo.like_num || 0 }}</text>
 					<text class="head-item__label">获赞</text>
 				</view>
@@ -53,25 +53,31 @@
 		</view>
 		<view class="top">
 			<view class="top-head">
-				<text class="top-head__text">观影权限</text>
-				<image class="top-head__icon" src="/static/images/hg/common_help.png" mode=""></image>
+				<text class="top-head__text" @tap="_toCoupons" >观影权限</text>
+				<image class="top-head__icon" src="/static/images/hg/common_help.png" mode="" @tap="_toCoupons"></image>
 			</view>
+			
+			
+			
+			
 			<view class="top-main">
 				<view class="top-main__item">
 					<image class="top-main__item--bg" src="/static/images/hg/mine_viewing_ticket_bg.png" mode=""></image>
-					<view class="top-main__item--content">
+					<view class="top-main__item--content" @tap="_toCoupons">
 						<text class="top-main__item--value">0/10</text>
 						<text class="top-main__item--label">今日观影券</text>
 					</view>
 				</view>
 				<view class="top-main__item">
 					<image class="top-main__item--bg" src="/static/images/hg/mine_download_ticket_bg.png" mode=""></image>
-					<view class="top-main__item--content">
+					<view class="top-main__item--content" @tap="_toCoupons" >
 						<text class="top-main__item--value">0/10</text>
 						<text class="top-main__item--label">今日下载券</text>
 					</view>
 				</view>
 			</view>
+			
+			
 			<navigator url="/pages/my/invite/invite" hover-class="none" class="top-foot__item">
 				<image class="top-foot__item--bg" src="/static/images/hg/mine_promotion_entrance_bg.webp" mode=""></image>
 				<view class="top-foot__item--box">
@@ -107,7 +113,7 @@
 					<text class="balance-left__title">金币</text>
 					<view class="balance-left__foot">
 						<text class="balance-left__value">{{ userinfo.gold || 0 }}</text>
-						<text class="balance-left__label">充值/提现></text>
+						<text class="balance-left__label">个金币></text>
 					</view>
 				</view>
 			</view>
@@ -280,10 +286,11 @@
 			<image class="right-arrow" src="/static/images/hg/right_arrow.png" mode="aspectFit"></image>
 		</navigator> -->
 		<view style="margin-top: 50rpx;margin-bottom: 50px;">
-			<text class="copy">系统开发商：一颗优雅草科技-蜻蜓S系统（直播）</text>
+			<text class="copy">系统开发商：一颗优雅草科技-蜻蜓Q系统</text>
 			<text class="copy">官网：songshu.youyacao.com</text>
 			<text class="copy">本系统所有内容仅供功能演示不做其他一切商业用途</text>
 			<text class="copy">服务器：腾讯云  内容识别：知道创宇 美颜剪辑：涂图科技</text>
+			<text class="copy">官方售前客服企业Q:2853810243</text>
 		</view>
 		<view class="nav-box">
 			<v-tabbar></v-tabbar>
@@ -317,6 +324,16 @@
 			_toPromotion() {
 				uni.navigateTo({
 					url: '/pages/my/promotion-record/promotion-record'
+				})
+			},
+            _toCoupons() {
+				uni.navigateTo({
+					url: '/pages/my/invite/Coupons'
+				})
+			},
+			_tomessage() {
+				uni.navigateTo({
+					url: '/pages/my/message/message'
 				})
 			},
 			_activation() {

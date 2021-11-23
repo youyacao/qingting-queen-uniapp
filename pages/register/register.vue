@@ -18,7 +18,9 @@
 			<view class="form-body">
 				<view class="form-item">
 					<image class="form-item__icon" src="/static/images/account.png" mode=""></image>
-					<input class="form-item__input" type="text" placeholder="手机号/邮箱" v-model="username" />
+		
+							<input class="form-item__input" type="text" placeholder="手机号" v-model="username" />
+					
 				</view>
 				<view class="form-item" v-if="need_validation_code">
 					<view class="form-item__left">
@@ -86,10 +88,10 @@
 				password: '',
 				invitationCode: '',
 				// 1 手机号 0 邮箱 2 用户名
-				type: 2,
+				type: 1,
 				checked: true,
 				// 是否需要验证码
-				need_validation_code: false,
+				need_validation_code: true,
 			};
 		},
 		methods: {

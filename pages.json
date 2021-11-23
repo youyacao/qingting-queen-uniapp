@@ -402,6 +402,15 @@
             }
             
         }
+		,{
+		    "path" : "pages/my/invite/Coupons",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "观影券介绍",
+		        "enablePullDownRefresh": false
+		    }
+		    
+		}	
         ,{
             "path" : "pages/my/agent/records/records",
             "style" :                                                                                    
@@ -470,7 +479,7 @@
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "皇冠视频",
+		"navigationBarTitleText": "蜻蜓Q系统",
 		"navigationBarBackgroundColor": "#FFFFFF",
 		"backgroundColor": "#FFFFFF"
 	}
